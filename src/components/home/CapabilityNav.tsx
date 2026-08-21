@@ -1,20 +1,36 @@
-import type { Capability } from "@/data/capabilities";
+import type { Capability, CapabilityId } from "@/data/capabilities";
 
 type CapabilityNavProps = {
   items: Capability[];
+  activeId: CapabilityId;
+  onActivate: (id: CapabilityId) => void;
 };
 
-export function CapabilityNav({ items }: CapabilityNavProps) {
+export function CapabilityNav({
+  items,
+  activeId,
+  onActivate,
+}: CapabilityNavProps) {
   return (
     <nav className="capability-nav" aria-label="作品领域">
-      {items.map((item, index) => (
-        <label className="capability-item" key={item.id}>
+      {items.map((item) => (
+        <label
+          className="capability-item"
+          key={item.id}
+          onPointerEnter={(event) => {
+            if (event.pointerType === "mouse") {
+              onActivate(item.id);
+            }
+          }}
+          onFocus={() => onActivate(item.id)}
+        >
           <input
             className="capability-control"
             type="radio"
             name="capability"
             value={item.id}
-            defaultChecked={index === 0}
+            checked={activeId === item.id}
+            onChange={() => onActivate(item.id)}
           />
           <span className="capability-index">{item.index}</span>
           <span className="capability-label">{item.label}</span>
