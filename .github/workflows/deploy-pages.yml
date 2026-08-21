@@ -3,6 +3,7 @@ name: Deploy BEIMU to GitHub Pages
 on:
   push:
     branches:
+      - main
       - feature/home-stage-p2
   workflow_dispatch:
 
