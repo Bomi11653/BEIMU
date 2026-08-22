@@ -1,5 +1,7 @@
 # BEIMU P3｜分类目录与作品入口执行方案
 
+详细开发步骤、组件拆分、验收节点与工作量见 [`p3-category-directory-development-plan.md`](./p3-category-directory-development-plan.md)。
+
 ## 目标
 
 在现有全屏作品集首页之后增加一个四分类目录，并延续 BEIMU 的黑色电影感、透明玻璃导航和全屏媒体体验。
