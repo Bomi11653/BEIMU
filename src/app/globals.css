@@ -112,7 +112,7 @@ button {
   top: clamp(1.4rem, 2vw, 2rem);
   left: 50%;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   width: min(82vw, 74rem);
   min-height: 3.5rem;
   overflow: hidden;
@@ -125,6 +125,12 @@ button {
     0 14px 42px rgba(0, 0, 0, 0.12);
   -webkit-backdrop-filter: blur(18px) saturate(145%);
   backdrop-filter: blur(18px) saturate(145%);
+}
+
+.stage-video-placeholder {
+  background:
+    radial-gradient(circle at 50% 72%, rgba(38, 61, 72, 0.22), transparent 38%),
+    #05080a;
 }
 
 .capability-item {

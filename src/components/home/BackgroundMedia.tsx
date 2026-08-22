@@ -37,9 +37,18 @@ export function BackgroundMedia({ media }: BackgroundMediaProps) {
     const frame = window.requestAnimationFrame(() => {
       const video = videoRefs.current[nextLayer];
 
-      if (!video) {
+      if (media.kind === "placeholder") {
+        activeLayerRef.current = nextLayer;
+        setActiveLayer(nextLayer);
+
+        window.setTimeout(() => {
+          const hiddenLayer = nextLayer === 0 ? 1 : 0;
+          videoRefs.current[hiddenLayer]?.pause();
+        }, 950);
         return;
       }
+
+      if (!video) return;
 
       video.load();
 
@@ -80,22 +89,31 @@ export function BackgroundMedia({ media }: BackgroundMediaProps) {
   return (
     <div className="stage-media" aria-hidden="true">
       {layers.map((layer, index) => (
-        <video
-          className={`stage-video${activeLayer === index ? " is-active" : ""}`}
-          key={`${index}-${layer.id}`}
-          ref={(node) => {
-            videoRefs.current[index] = node;
-          }}
-          autoPlay={index === 0}
-          muted
-          loop
-          playsInline
-          preload={activeLayer === index ? "auto" : "metadata"}
-          poster={layer.poster}
-          style={{ objectPosition: layer.objectPosition }}
-        >
-          <source src={layer.src} type="video/mp4" />
-        </video>
+        layer.kind === "video" ? (
+          <video
+            className={`stage-video${activeLayer === index ? " is-active" : ""}`}
+            key={`${index}-${layer.id}`}
+            ref={(node) => {
+              videoRefs.current[index] = node;
+            }}
+            autoPlay={index === 0}
+            muted
+            loop
+            playsInline
+            preload={activeLayer === index ? "auto" : "metadata"}
+            poster={layer.poster}
+            style={{ objectPosition: layer.objectPosition }}
+          >
+            <source src={layer.src} type="video/mp4" />
+          </video>
+        ) : (
+          <div
+            className={`stage-video stage-video-placeholder${
+              activeLayer === index ? " is-active" : ""
+            }`}
+            key={`${index}-${layer.id}`}
+          />
+        )
       ))}
       <div className="bottom-blur" />
     </div>

@@ -18,11 +18,12 @@ export function PortfolioStage() {
   const [activeMedia, setActiveMedia] = useState<CapabilityMedia>(
     initialCapability.media[0],
   );
-  const mediaCursorRef = useRef<Record<CapabilityId, number>>({
-    "3d": 0,
-    ai: 0,
-    media: 0,
-  });
+  const mediaCursorRef = useRef<Record<CapabilityId, number>>(
+    Object.fromEntries(capabilities.map((item) => [item.id, 0])) as Record<
+      CapabilityId,
+      number
+    >,
+  );
   const userHasInteractedRef = useRef(false);
 
   const activateCapability = useCallback(
