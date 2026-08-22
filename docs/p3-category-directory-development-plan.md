@@ -284,6 +284,8 @@ AI 开发：
 
 ### 节点 A｜P3.3 Stage 基础
 
+状态：已完成（2026-08-22）。
+
 - 完成 HomeStage 与输入状态机
 - EdgeRevealNav 与 activeStage 连接
 - 暂不加入复杂分类视觉

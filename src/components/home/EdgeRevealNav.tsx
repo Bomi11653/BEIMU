@@ -57,6 +57,17 @@ export function EdgeRevealNav({
 
   const isRevealed = !compact || revealed;
 
+  useEffect(() => {
+    clearCollapseTimer();
+    focusWithinRef.current = false;
+
+    const frame = window.requestAnimationFrame(() => {
+      setRevealed(!compact);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [clearCollapseTimer, compact]);
+
   const handlePointerEnter = (event: PointerEvent<HTMLElement>) => {
     if (event.pointerType === "mouse") reveal();
   };
