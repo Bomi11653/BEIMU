@@ -10,7 +10,7 @@ import {
   useStageNavigation,
   type HomeStageIndex,
 } from "@/hooks/useStageNavigation";
-import { CategoryDirectoryShell } from "./CategoryDirectoryShell";
+import { CategoryDirectory } from "./CategoryDirectory";
 import { EdgeRevealNav } from "./EdgeRevealNav";
 import { PortfolioStage } from "./PortfolioStage";
 
@@ -85,7 +85,11 @@ export function HomeStage() {
       data-stage-transitioning={isTransitioning ? "true" : "false"}
     >
       <PortfolioStage media={activeMedia} isActive={activeStage === 0} />
-      <CategoryDirectoryShell isActive={activeStage === 1} />
+      <CategoryDirectory
+        isActive={activeStage === 1}
+        activeCategoryId={activeId}
+        onActivateCategory={activateCapability}
+      />
 
       <EdgeRevealNav
         items={capabilities}
