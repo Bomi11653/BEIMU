@@ -1,18 +1,20 @@
 import type { Capability, CapabilityId } from "@/data/capabilities";
 
 type CapabilityNavProps = {
+  id?: string;
   items: Capability[];
   activeId: CapabilityId;
   onActivate: (id: CapabilityId) => void;
 };
 
 export function CapabilityNav({
+  id,
   items,
   activeId,
   onActivate,
 }: CapabilityNavProps) {
   return (
-    <nav className="capability-nav" aria-label="作品领域">
+    <nav id={id} className="capability-nav" aria-label="作品领域">
       {items.map((item) => (
         <label
           className="capability-item"

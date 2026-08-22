@@ -107,16 +107,96 @@ button {
   padding: clamp(1.5rem, 3.1vw, 3rem) clamp(1.5rem, 5.1vw, 5rem);
 }
 
-.capability-nav {
+.edge-reveal-nav {
+  --edge-nav-offset: clamp(1.4rem, 2vw, 2rem);
+  --edge-nav-visible: 0.5rem;
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(var(--edge-nav-offset) + 3.5rem);
+  pointer-events: none;
+}
+
+.edge-reveal-nav-panel {
   position: absolute;
-  top: clamp(1.4rem, 2vw, 2rem);
+  z-index: 1;
+  top: var(--edge-nav-offset);
+  left: 50%;
+  width: min(82vw, 74rem);
+  pointer-events: auto;
+  transform: translateX(-50%);
+  transform-origin: center top;
+  transition:
+    transform 520ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 420ms ease;
+  will-change: transform;
+}
+
+.edge-reveal-nav.is-compact:not(.is-revealed) .edge-reveal-nav-panel {
+  opacity: 0.88;
+  transform: translate(
+    -50%,
+    calc(-100% - var(--edge-nav-offset) + var(--edge-nav-visible))
+  );
+}
+
+.edge-reveal-nav-sensor {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2rem;
+  pointer-events: auto;
+}
+
+.edge-reveal-nav-handle {
+  position: absolute;
+  z-index: 3;
+  top: 0;
   left: 50%;
   display: grid;
+  width: 4rem;
+  height: 1.5rem;
+  padding: 0;
+  place-items: center;
+  transform: translateX(-50%);
+  border: 0;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.edge-reveal-nav-handle span {
+  width: 2.25rem;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.76);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.28);
+  transition:
+    width 320ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 220ms ease;
+}
+
+.edge-reveal-nav.is-revealed .edge-reveal-nav-handle span {
+  width: 1.25rem;
+  opacity: 0.48;
+}
+
+.edge-reveal-nav-handle:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.95);
+  outline-offset: -2px;
+  border-radius: 999px;
+}
+
+.capability-nav {
+  display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  width: min(82vw, 74rem);
+  width: 100%;
   min-height: 3.5rem;
   overflow: hidden;
-  transform: translateX(-50%);
   border: 1px solid rgba(255, 255, 255, 0.38);
   border-radius: 999px;
   background: rgba(4, 16, 24, 0.16);
@@ -282,9 +362,16 @@ button {
     padding: 1rem;
   }
 
-  .capability-nav {
-    top: 1rem;
+  .edge-reveal-nav {
+    --edge-nav-offset: 1rem;
+    height: 4.25rem;
+  }
+
+  .edge-reveal-nav-panel {
     width: calc(100vw - 2rem);
+  }
+
+  .capability-nav {
     min-height: 3.25rem;
   }
 

@@ -7,13 +7,19 @@ import {
   type CapabilityMedia,
 } from "@/data/capabilities";
 import { BackgroundMedia } from "./BackgroundMedia";
-import { CapabilityNav } from "./CapabilityNav";
+import { EdgeRevealNav } from "./EdgeRevealNav";
 import { IdentityBlock } from "./IdentityBlock";
 
 const AUTO_ADVANCE_MS = 8500;
 const initialCapability = capabilities[0];
 
-export function PortfolioStage() {
+type PortfolioStageProps = {
+  navigationCompact?: boolean;
+};
+
+export function PortfolioStage({
+  navigationCompact = false,
+}: PortfolioStageProps) {
   const [activeId, setActiveId] = useState<CapabilityId>(initialCapability.id);
   const [activeMedia, setActiveMedia] = useState<CapabilityMedia>(
     initialCapability.media[0],
@@ -73,10 +79,12 @@ export function PortfolioStage() {
       <BackgroundMedia media={activeMedia} />
 
       <div className="stage-content">
-        <CapabilityNav
+        <EdgeRevealNav
+          key={navigationCompact ? "edge" : "full"}
           items={capabilities}
           activeId={activeId}
           onActivate={activateCapability}
+          compact={navigationCompact}
         />
 
         <IdentityBlock />
