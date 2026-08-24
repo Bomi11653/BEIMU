@@ -1,0 +1,205 @@
+.route-transition-overlay {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  overflow: hidden;
+  color: var(--text-primary);
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.route-transition-overlay:not(.is-off) {
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.route-transition-panel {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50.1%;
+  background:
+    radial-gradient(circle at 50% 100%, rgba(29, 42, 50, 0.18), transparent 42%),
+    #03070a;
+  will-change: transform;
+}
+
+.route-transition-panel-top {
+  top: 0;
+  transform: translateY(-101%);
+}
+
+.route-transition-panel-bottom {
+  bottom: 0;
+  transform: translateY(101%);
+}
+
+.route-transition-copy {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: min(34rem, calc(100vw - 3rem));
+  justify-items: center;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.route-transition-copy p,
+.route-transition-copy h2,
+.route-transition-copy span {
+  margin: 0;
+  opacity: 0;
+  transform: translateY(0.9rem);
+}
+
+.route-transition-copy p,
+.route-transition-copy span {
+  color: var(--text-tertiary);
+  font-family: var(--font-latin);
+  font-size: var(--type-micro);
+  letter-spacing: 0.18em;
+}
+
+.route-transition-copy h2 {
+  margin: 0.9rem 0 0.65rem;
+  font-size: var(--type-page-title);
+  font-weight: 350;
+  letter-spacing: var(--tracking-title);
+  line-height: var(--leading-title);
+}
+
+.route-transition-copy i {
+  position: relative;
+  width: min(12rem, 46vw);
+  height: 1px;
+  margin-top: 1.55rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.route-transition-copy i::after {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.82);
+  content: "";
+  transform: translateX(-101%);
+}
+
+.route-transition-overlay.is-closing .route-transition-panel-top {
+  animation: route-shutter-close-top 620ms cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+
+.route-transition-overlay.is-closing .route-transition-panel-bottom {
+  animation: route-shutter-close-bottom 620ms cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+
+.route-transition-overlay.is-closing .route-transition-copy p,
+.route-transition-overlay.is-closing .route-transition-copy h2,
+.route-transition-overlay.is-closing .route-transition-copy span,
+.route-transition-overlay.is-closed .route-transition-copy p,
+.route-transition-overlay.is-closed .route-transition-copy h2,
+.route-transition-overlay.is-closed .route-transition-copy span {
+  animation: route-copy-in 520ms var(--ease-editorial) 300ms both;
+}
+
+.route-transition-overlay.is-closing .route-transition-copy h2,
+.route-transition-overlay.is-closed .route-transition-copy h2 {
+  animation-delay: 350ms;
+}
+
+.route-transition-overlay.is-closing .route-transition-copy span,
+.route-transition-overlay.is-closed .route-transition-copy span {
+  animation-delay: 400ms;
+}
+
+.route-transition-overlay.is-closing .route-transition-copy i::after,
+.route-transition-overlay.is-closed .route-transition-copy i::after {
+  animation: route-progress 840ms cubic-bezier(0.65, 0, 0.35, 1) 280ms both;
+}
+
+.route-transition-overlay.is-closed .route-transition-panel {
+  transform: translateY(0);
+}
+
+.route-transition-overlay.is-opening .route-transition-panel-top {
+  animation: route-shutter-open-top 780ms cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+
+.route-transition-overlay.is-opening .route-transition-panel-bottom {
+  animation: route-shutter-open-bottom 780ms cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+
+.route-transition-overlay.is-opening .route-transition-copy {
+  animation: route-copy-out 280ms ease both;
+}
+
+@keyframes route-shutter-close-top {
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes route-shutter-close-bottom {
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes route-shutter-open-top {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-101%);
+  }
+}
+
+@keyframes route-shutter-open-bottom {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(101%);
+  }
+}
+
+@keyframes route-copy-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes route-copy-out {
+  to {
+    opacity: 0;
+    transform: translateY(-0.65rem);
+  }
+}
+
+@keyframes route-progress {
+  0% {
+    transform: translateX(-101%);
+  }
+  62% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(101%);
+  }
+}
+
+@media (max-width: 700px) {
+  .route-transition-copy h2 {
+    margin-top: 0.75rem;
+    font-size: var(--type-project-title);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-transition-overlay {
+    display: none;
+  }
+}
