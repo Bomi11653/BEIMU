@@ -3,6 +3,8 @@ import "@fontsource-variable/inter";
 import "@fontsource-variable/noto-sans-sc";
 import "./globals.css";
 import "../styles/p5.css";
+import "../styles/route-transition.css";
+import { RouteTransitionProvider } from "@/components/transitions/RouteTransitionProvider";
 
 export const metadata: Metadata = {
   title: "郑荣成 — BEIMU",
@@ -24,7 +26,7 @@ export default function RootLayout({
         <a className="skip-link" href="#main-content">
           跳到主要内容
         </a>
-        {children}
+        <RouteTransitionProvider>{children}</RouteTransitionProvider>
       </body>
     </html>
   );
