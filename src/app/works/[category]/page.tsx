@@ -53,7 +53,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       data-route-focus
       tabIndex={-1}
     >
-      <div className="work-category-scroll">
+      <div
+        className="work-category-scroll"
+        tabIndex={0}
+        aria-label={`${category.labelZh}作品页面`}
+      >
         <section className="work-category-hero">
           {poster && (
             <div

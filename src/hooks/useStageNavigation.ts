@@ -8,13 +8,14 @@ import {
   type RefObject,
 } from "react";
 
-export type HomeStageIndex = 0 | 1;
+export type HomeStageIndex = 0 | 1 | 2;
 export type StageDirection = "forward" | "backward";
 
 const WHEEL_THRESHOLD = 48;
 const TOUCH_THRESHOLD = 48;
 const TRANSITION_LOCK_MS = 900;
 const REDUCED_MOTION_LOCK_MS = 180;
+const LAST_STAGE: HomeStageIndex = 2;
 
 type UseStageNavigationOptions = {
   activeStage: HomeStageIndex;
@@ -44,6 +45,22 @@ const normalizeWheelDelta = (event: WheelEvent) => {
   return event.deltaY;
 };
 
+const getStageScrollContainer = (target: EventTarget | null) => {
+  if (!(target instanceof HTMLElement)) return null;
+
+  return target.closest<HTMLElement>("[data-stage-scroll]");
+};
+
+const canScrollInDirection = (element: HTMLElement, delta: number) => {
+  const maxScroll = element.scrollHeight - element.clientHeight;
+
+  if (maxScroll <= 1) return false;
+  if (delta > 0) return element.scrollTop < maxScroll - 1;
+  if (delta < 0) return element.scrollTop > 1;
+
+  return false;
+};
+
 export function useStageNavigation({
   activeStage,
   onStageChange,
@@ -52,7 +69,11 @@ export function useStageNavigation({
   const [direction, setDirection] = useState<StageDirection>("forward");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const wheelDeltaRef = useRef(0);
-  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const touchStartRef = useRef<{
+    x: number;
+    y: number;
+    scrollContainer: HTMLElement | null;
+  } | null>(null);
   const lockUntilRef = useRef(0);
   const unlockTimerRef = useRef<number | null>(null);
 
@@ -98,6 +119,12 @@ export function useStageNavigation({
       }
 
       const delta = normalizeWheelDelta(event);
+      const scrollContainer = getStageScrollContainer(event.target);
+
+      if (scrollContainer && canScrollInDirection(scrollContainer, delta)) {
+        wheelDeltaRef.current = 0;
+        return;
+      }
 
       if (Math.sign(delta) !== Math.sign(wheelDeltaRef.current)) {
         wheelDeltaRef.current = 0;
@@ -109,7 +136,12 @@ export function useStageNavigation({
         return;
       }
 
-      goToStage(wheelDeltaRef.current > 0 ? 1 : 0);
+      const nextStage = Math.min(
+        LAST_STAGE,
+        Math.max(0, activeStage + (wheelDeltaRef.current > 0 ? 1 : -1)),
+      ) as HomeStageIndex;
+
+      goToStage(nextStage);
       wheelDeltaRef.current = 0;
     };
 
@@ -120,7 +152,11 @@ export function useStageNavigation({
       }
 
       const touch = event.touches[0];
-      touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+      touchStartRef.current = {
+        x: touch.clientX,
+        y: touch.clientY,
+        scrollContainer: getStageScrollContainer(event.target),
+      };
     };
 
     const handleTouchEnd = (event: TouchEvent) => {
@@ -140,7 +176,21 @@ export function useStageNavigation({
         return;
       }
 
-      goToStage(deltaY < 0 ? 1 : 0);
+      const scrollDelta = -deltaY;
+
+      if (
+        start.scrollContainer &&
+        canScrollInDirection(start.scrollContainer, scrollDelta)
+      ) {
+        return;
+      }
+
+      const nextStage = Math.min(
+        LAST_STAGE,
+        Math.max(0, activeStage + (deltaY < 0 ? 1 : -1)),
+      ) as HomeStageIndex;
+
+      goToStage(nextStage);
     };
 
     const resetTouch = () => {
@@ -158,14 +208,24 @@ export function useStageNavigation({
         return;
       }
 
-      if (["ArrowDown", "PageDown", "End"].includes(event.key)) {
+      if (event.key === "End") {
         event.preventDefault();
-        goToStage(1);
+        goToStage(LAST_STAGE);
       }
 
-      if (["ArrowUp", "PageUp", "Home"].includes(event.key)) {
+      if (["ArrowDown", "PageDown"].includes(event.key)) {
+        event.preventDefault();
+        goToStage(Math.min(LAST_STAGE, activeStage + 1) as HomeStageIndex);
+      }
+
+      if (event.key === "Home") {
         event.preventDefault();
         goToStage(0);
+      }
+
+      if (["ArrowUp", "PageUp"].includes(event.key)) {
+        event.preventDefault();
+        goToStage(Math.max(0, activeStage - 1) as HomeStageIndex);
       }
     };
 
@@ -182,7 +242,7 @@ export function useStageNavigation({
       target.removeEventListener("touchcancel", resetTouch);
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [goToStage, targetRef]);
+  }, [activeStage, goToStage, targetRef]);
 
   useEffect(
     () => () => {

@@ -13,6 +13,7 @@ import {
 import { CategoryDirectory } from "./CategoryDirectory";
 import { EdgeRevealNav } from "./EdgeRevealNav";
 import { PortfolioStage } from "./PortfolioStage";
+import { ProfileContactStage } from "./ProfileContactStage";
 
 const AUTO_ADVANCE_MS = 8500;
 const initialCapability = capabilities[0];
@@ -74,7 +75,7 @@ export function HomeStage() {
     targetRef: rootRef,
   });
 
-  const nextStage = activeStage === 0 ? 1 : 0;
+  const nextStage = (activeStage === 2 ? 0 : activeStage + 1) as HomeStageIndex;
 
   return (
     <main
@@ -91,12 +92,13 @@ export function HomeStage() {
         activeCategoryId={activeId}
         onActivateCategory={activateCapability}
       />
+      <ProfileContactStage isActive={activeStage === 2} />
 
       <EdgeRevealNav
         items={capabilities}
         activeId={activeId}
         onActivate={activateCapability}
-        compact={activeStage === 1}
+        compact={activeStage !== 0}
       />
 
       <button
@@ -104,11 +106,23 @@ export function HomeStage() {
         type="button"
         onClick={() => goToStage(nextStage)}
         disabled={isTransitioning}
-        aria-label={activeStage === 0 ? "进入作品目录" : "返回个人介绍"}
+        aria-label={
+          activeStage === 0
+            ? "进入作品目录"
+            : activeStage === 1
+              ? "进入个人介绍与联系方式"
+              : "返回首页介绍"
+        }
       >
-        <span>{activeStage === 0 ? "02" : "01"}</span>
-        <span>{activeStage === 0 ? "SCROLL TO EXPLORE" : "BACK TO INTRO"}</span>
-        <span aria-hidden="true">{activeStage === 0 ? "↓" : "↑"}</span>
+        <span>{activeStage === 0 ? "02" : activeStage === 1 ? "03" : "01"}</span>
+        <span>
+          {activeStage === 0
+            ? "SCROLL TO EXPLORE"
+            : activeStage === 1
+              ? "ABOUT & CONTACT"
+              : "BACK TO INTRO"}
+        </span>
+        <span aria-hidden="true">{activeStage === 2 ? "↑" : "↓"}</span>
       </button>
     </main>
   );
