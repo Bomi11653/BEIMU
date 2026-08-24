@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type {
   FocusEvent,
+  MouseEvent,
   PointerEvent,
   RefCallback,
 } from "react";
@@ -18,8 +19,16 @@ type CategoryCardProps = {
     id: PortfolioCategory["id"],
     event: PointerEvent<HTMLAnchorElement>,
   ) => void;
+  onPointerDown: (
+    id: PortfolioCategory["id"],
+    event: PointerEvent<HTMLAnchorElement>,
+  ) => void;
   onFocus: (id: PortfolioCategory["id"]) => void;
   onBlur: (event: FocusEvent<HTMLAnchorElement>) => void;
+  onNavigate: (
+    category: PortfolioCategory,
+    event: MouseEvent<HTMLAnchorElement>,
+  ) => void;
 };
 
 export function CategoryCard({
@@ -28,8 +37,10 @@ export function CategoryCard({
   isMediaActive,
   registerCard,
   onPointerEnter,
+  onPointerDown,
   onFocus,
   onBlur,
+  onNavigate,
 }: CategoryCardProps) {
   const isAwaitingAsset = category.contentStatus === "awaiting-asset";
 
@@ -43,8 +54,10 @@ export function CategoryCard({
       data-category-id={category.id}
       aria-label={`查看${category.labelZh}作品列表`}
       onPointerEnter={(event) => onPointerEnter(category.id, event)}
+      onPointerDown={(event) => onPointerDown(category.id, event)}
       onFocus={() => onFocus(category.id)}
       onBlur={onBlur}
+      onClick={(event) => onNavigate(category, event)}
     >
       <CategoryPreviewMedia
         media={category.previewMedia[0]}

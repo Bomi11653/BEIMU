@@ -78,6 +78,7 @@ export function HomeStage() {
 
   return (
     <main
+      id="main-content"
       ref={rootRef}
       className="home-stage"
       data-active-stage={activeStage}

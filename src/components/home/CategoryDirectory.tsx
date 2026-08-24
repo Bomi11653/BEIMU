@@ -5,28 +5,29 @@ import {
   useEffect,
   useRef,
   useState,
-  useSyncExternalStore,
   type FocusEvent,
+  type MouseEvent,
   type PointerEvent,
 } from "react";
+import { useRouter } from "next/navigation";
 import {
   portfolioCategories,
+  type PortfolioCategory,
   type PortfolioCategoryId,
 } from "@/data/portfolioCategories";
 import { CategoryCard } from "./CategoryCard";
+import {
+  CategoryTransitionOverlay,
+  type CategoryTransitionRect,
+} from "./CategoryTransitionOverlay";
 
-const MOBILE_LAYOUT_QUERY = "(max-width: 760px), (hover: none)";
+const CATEGORY_TRANSITION_MS = 760;
 
-const subscribeToMobileLayout = (callback: () => void) => {
-  const query = window.matchMedia(MOBILE_LAYOUT_QUERY);
-  query.addEventListener("change", callback);
-  return () => query.removeEventListener("change", callback);
+type CategoryTransitionState = {
+  category: PortfolioCategory;
+  rect: CategoryTransitionRect;
+  isExpanded: boolean;
 };
-
-const getMobileLayoutSnapshot = () =>
-  window.matchMedia(MOBILE_LAYOUT_QUERY).matches;
-
-const getServerMobileLayoutSnapshot = () => false;
 
 type CategoryDirectoryProps = {
   isActive: boolean;
@@ -39,20 +40,19 @@ export function CategoryDirectory({
   activeCategoryId,
   onActivateCategory,
 }: CategoryDirectoryProps) {
+  const router = useRouter();
   const [isInteractionActive, setIsInteractionActive] = useState(false);
+  const [transition, setTransition] =
+    useState<CategoryTransitionState | null>(null);
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef(new Map<PortfolioCategoryId, HTMLAnchorElement>());
-  const intersectionRatiosRef = useRef(new Map<PortfolioCategoryId, number>());
-  const isMobileLayout = useSyncExternalStore(
-    subscribeToMobileLayout,
-    getMobileLayoutSnapshot,
-    getServerMobileLayoutSnapshot,
-  );
+  const transitionTimerRef = useRef<number | null>(null);
+  const transitionFrameRef = useRef<number | null>(null);
 
   const activeSlot = portfolioCategories.findIndex(
     (category) => category.id === activeCategoryId,
   );
-  const gridActiveSlot = isInteractionActive && !isMobileLayout
+  const gridActiveSlot = isInteractionActive
     ? String(activeSlot)
     : "none";
 
@@ -67,70 +67,18 @@ export function CategoryDirectory({
     [],
   );
 
-  useEffect(() => {
-    const viewport = viewportRef.current;
+  useEffect(
+    () => () => {
+      if (transitionTimerRef.current !== null) {
+        window.clearTimeout(transitionTimerRef.current);
+      }
 
-    if (!viewport || !isMobileLayout) return;
-
-    const intersectionRatios = intersectionRatiosRef.current;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const id = entry.target.getAttribute(
-            "data-category-id",
-          ) as PortfolioCategoryId | null;
-
-          if (id) {
-            intersectionRatios.set(
-              id,
-              entry.isIntersecting ? entry.intersectionRatio : 0,
-            );
-          }
-        });
-
-        const [mostVisible] = [...intersectionRatios.entries()].sort(
-          (a, b) => b[1] - a[1],
-        );
-
-        if (mostVisible && mostVisible[1] >= 0.45) {
-          onActivateCategory(mostVisible[0]);
-        }
-      },
-      {
-        root: viewport,
-        rootMargin: "0px -10% 0px -10%",
-        threshold: [0.35, 0.45, 0.6, 0.75, 0.9],
-      },
-    );
-
-    cardRefs.current.forEach((card) => observer.observe(card));
-
-    return () => {
-      observer.disconnect();
-      intersectionRatios.clear();
-    };
-  }, [isMobileLayout, onActivateCategory]);
-
-  useEffect(() => {
-    if (!isMobileLayout || !isActive) return;
-
-    const card = cardRefs.current.get(activeCategoryId);
-
-    if (!card) return;
-
-    const frame = window.requestAnimationFrame(() => {
-      card.scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? "auto"
-          : "smooth",
-        block: "nearest",
-        inline: "center",
-      });
-    });
-
-    return () => window.cancelAnimationFrame(frame);
-  }, [activeCategoryId, isActive, isMobileLayout]);
+      if (transitionFrameRef.current !== null) {
+        window.cancelAnimationFrame(transitionFrameRef.current);
+      }
+    },
+    [],
+  );
 
   const handlePointerEnter = (
     id: PortfolioCategoryId,
@@ -138,6 +86,14 @@ export function CategoryDirectory({
   ) => {
     if (event.pointerType !== "mouse") return;
     setIsInteractionActive(true);
+    onActivateCategory(id);
+  };
+
+  const handlePointerDown = (
+    id: PortfolioCategoryId,
+    event: PointerEvent<HTMLAnchorElement>,
+  ) => {
+    if (event.pointerType === "mouse") return;
     onActivateCategory(id);
   };
 
@@ -159,11 +115,67 @@ export function CategoryDirectory({
     setIsInteractionActive(false);
   };
 
+  const handleNavigate = (
+    category: PortfolioCategory,
+    event: MouseEvent<HTMLAnchorElement>,
+  ) => {
+    if (transition) {
+      event.preventDefault();
+      return;
+    }
+
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return;
+    }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    event.preventDefault();
+    onActivateCategory(category.id);
+
+    const bounds = event.currentTarget.getBoundingClientRect();
+    setTransition({
+      category,
+      rect: {
+        top: bounds.top,
+        left: bounds.left,
+        width: bounds.width,
+        height: bounds.height,
+      },
+      isExpanded: false,
+    });
+
+    transitionFrameRef.current = window.requestAnimationFrame(() => {
+      transitionFrameRef.current = window.requestAnimationFrame(() => {
+        setTransition((current) =>
+          current ? { ...current, isExpanded: true } : current,
+        );
+        transitionFrameRef.current = null;
+      });
+    });
+
+    transitionTimerRef.current = window.setTimeout(() => {
+      router.push(category.route, { scroll: false });
+      transitionTimerRef.current = null;
+    }, CATEGORY_TRANSITION_MS);
+  };
+
   return (
     <section
       className="home-stage-layer category-directory"
+      data-transitioning={transition ? "true" : "false"}
       aria-hidden={!isActive}
       aria-labelledby="work-directory-title"
+      aria-busy={transition ? true : undefined}
       inert={!isActive ? true : undefined}
     >
       <header className="category-directory-header">
@@ -194,17 +206,19 @@ export function CategoryDirectory({
                 category={category}
                 isActive={
                   activeCategoryId === category.id &&
-                  (isMobileLayout || isInteractionActive)
+                  isInteractionActive
                 }
                 isMediaActive={
                   isActive &&
                   activeCategoryId === category.id &&
-                  (isMobileLayout || isInteractionActive)
+                  !transition
                 }
                 registerCard={(node) => registerCard(category.id, node)}
                 onPointerEnter={handlePointerEnter}
+                onPointerDown={handlePointerDown}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
+                onNavigate={handleNavigate}
               />
             </div>
           ))}
@@ -214,6 +228,14 @@ export function CategoryDirectory({
       <p className="category-directory-status" aria-live="polite">
         {String(activeSlot + 1).padStart(2, "0")} / 04
       </p>
+
+      {transition && (
+        <CategoryTransitionOverlay
+          category={transition.category}
+          rect={transition.rect}
+          isExpanded={transition.isExpanded}
+        />
+      )}
     </section>
   );
 }
