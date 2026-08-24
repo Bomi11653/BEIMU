@@ -22,8 +22,11 @@
 
 .capability-nav {
   border: 0;
-  background: rgba(4, 8, 11, 0.42);
-  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.2);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 .capability-item {
@@ -31,9 +34,15 @@
 }
 
 .capability-item:has(.capability-control:checked) {
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.075);
-  box-shadow: inset 0 0 24px rgba(255, 255, 255, 0.035);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.capability-item:has(.capability-control:checked) .capability-index,
+.capability-item:has(.capability-control:checked) .capability-label {
+  color: #fff;
+  opacity: 1;
 }
 
 .capability-underline {
@@ -88,14 +97,14 @@
   left: 50%;
   width: min(52rem, 62vw);
   min-height: 3.25rem;
-  overflow: hidden;
+  overflow: visible;
   transform: translateX(-50%);
   border: 0;
-  border-radius: 999px;
-  background: rgba(4, 8, 11, 0.44);
-  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.2);
-  -webkit-backdrop-filter: blur(20px) saturate(135%);
-  backdrop-filter: blur(20px) saturate(135%);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 .work-category-tabs a {
@@ -109,15 +118,18 @@
 .work-category-tabs a:hover,
 .work-category-tabs a:focus-visible,
 .work-category-tabs a[aria-current="page"] {
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.075);
+  border-radius: 0;
+  background: transparent;
+  color: #fff;
 }
 
 .work-category-tabs a:focus-visible,
 .capability-item:has(.capability-control:focus-visible),
 .profile-section-nav button:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.92);
-  outline-offset: -3px;
+  outline: 0;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.45rem;
 }
 
 .project-file-browser {
@@ -364,14 +376,14 @@
   width: min(40rem, 54vw);
   min-height: 3.25rem;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  overflow: hidden;
+  overflow: visible;
   transform: translateX(-50%);
   border: 0;
-  border-radius: 999px;
-  background: rgba(4, 8, 11, 0.44);
-  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.2);
-  -webkit-backdrop-filter: blur(20px) saturate(135%);
-  backdrop-filter: blur(20px) saturate(135%);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 .profile-section-nav button {
@@ -392,7 +404,7 @@
 
 .profile-section-nav button:hover,
 .profile-section-nav button.is-active {
-  background: rgba(255, 255, 255, 0.075);
+  background: transparent;
   color: #fff;
 }
 
@@ -605,15 +617,18 @@
 .platform-directory {
   position: relative;
   display: grid;
+  height: 100vh;
+  height: 100dvh;
   min-height: 100vh;
   min-height: 100dvh;
-  grid-template-columns: minmax(17rem, 0.62fr) minmax(38rem, 1.38fr);
-  gap: clamp(3rem, 7vw, 8rem);
+  grid-template-columns: minmax(16rem, 0.5fr) minmax(35rem, 1.5fr);
+  gap: clamp(2rem, 4vw, 4.5rem);
   align-items: center;
   padding:
-    clamp(8rem, 13vh, 10rem)
-    clamp(3rem, 5vw, 5rem)
-    clamp(5rem, 8vh, 7rem);
+    clamp(5.75rem, 9vh, 7rem)
+    clamp(2.5rem, 4vw, 4rem)
+    clamp(2rem, 4vh, 3rem);
+  overflow: hidden;
   border-bottom: 0;
 }
 
@@ -654,9 +669,9 @@
 
 .contact-meta-list {
   display: grid;
-  gap: 1.8rem;
-  margin-top: clamp(3rem, 7vh, 5rem);
-  padding-top: 2.2rem;
+  gap: clamp(0.9rem, 1.8vh, 1.35rem);
+  margin-top: clamp(2rem, 4vh, 3rem);
+  padding-top: clamp(1.25rem, 2.5vh, 1.8rem);
   border-top: 1px solid rgba(255, 255, 255, 0.22);
 }
 
@@ -673,10 +688,10 @@
 
 .contact-platform-canvas {
   display: grid;
-  min-height: clamp(44rem, 86vh, 54rem);
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  grid-template-rows: repeat(15, minmax(2.2rem, 1fr));
-  gap: 0.7rem;
+  min-height: 0;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, auto));
+  gap: clamp(1rem, 2vw, 1.6rem);
   align-self: center;
 }
 
@@ -701,33 +716,33 @@ a.contact-platform-card {
 }
 
 .contact-platform-email {
-  grid-column: 1 / 6;
-  grid-row: 1 / 6;
-  transform: rotate(-0.6deg);
+  grid-column: 1 / 3;
+  grid-row: 1;
+  transform: none;
 }
 
 .contact-platform-github {
-  grid-column: 7 / 13;
-  grid-row: 2 / 7;
-  transform: rotate(0.5deg);
+  grid-column: 3 / 5;
+  grid-row: 1;
+  transform: none;
 }
 
 .contact-platform-xiaohongshu {
-  grid-column: 1 / 6;
-  grid-row: 6 / 11;
-  transform: rotate(-0.35deg);
+  grid-column: 5 / 7;
+  grid-row: 1;
+  transform: none;
 }
 
 .contact-platform-wechat {
-  grid-column: 6 / 13;
-  grid-row: 7 / 11;
-  transform: rotate(0.25deg);
+  grid-column: 1 / 4;
+  grid-row: 2;
+  transform: none;
 }
 
 .contact-platform-behance {
-  grid-column: 3 / 10;
-  grid-row: 12 / 16;
-  transform: rotate(0.45deg);
+  grid-column: 4 / 7;
+  grid-row: 2;
+  transform: none;
 }
 
 /* Shared editorial type roles across the existing site. */
@@ -783,6 +798,7 @@ a.contact-platform-card {
 .contact-platform-preview {
   position: relative;
   min-height: 0;
+  aspect-ratio: 16 / 9;
   margin: 0;
   overflow: hidden;
   border-radius: 1rem;
@@ -838,7 +854,7 @@ a.contact-platform-card:focus-visible {
 .contact-resume-status {
   position: absolute;
   right: clamp(3rem, 5vw, 5rem);
-  bottom: clamp(2rem, 4vh, 3.5rem);
+  bottom: clamp(1rem, 2vh, 1.5rem);
   display: flex;
   gap: 1rem;
   padding-top: 1rem;
@@ -871,10 +887,10 @@ a.contact-platform-card:focus-visible {
   }
 
   .platform-directory {
-    grid-template-columns: minmax(15rem, 0.55fr) minmax(28rem, 1.45fr);
-    gap: 2.5rem;
-    padding-right: 2rem;
-    padding-left: 2rem;
+    grid-template-columns: minmax(13rem, 0.48fr) minmax(28rem, 1.52fr);
+    gap: 1.75rem;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
   }
 }
 
@@ -1001,47 +1017,110 @@ a.contact-platform-card:focus-visible {
   }
 
   .platform-directory {
-    display: block;
-    min-height: auto;
-    padding: 7rem 1rem 7rem;
+    display: grid;
+    height: 100dvh;
+    min-height: 40rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 1.25rem;
+    align-content: start;
+    padding: 5rem 0.8rem 1rem;
   }
 
   .contact-introduction {
-    padding: 0 0.25rem;
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 0.45rem 1rem;
+    align-items: start;
+    padding: 0 0.2rem;
+  }
+
+  .contact-introduction > p:first-child,
+  .contact-introduction-rule,
+  .contact-introduction h2,
+  .contact-introduction > p:nth-of-type(2) {
+    grid-column: 1;
+  }
+
+  .contact-introduction-rule {
+    margin: 0.7rem 0 0.9rem;
+  }
+
+  .contact-introduction h2 {
+    font-size: var(--type-section-title);
+  }
+
+  .contact-introduction > p:nth-of-type(2) {
+    margin-top: 0.4rem;
   }
 
   .contact-meta-list {
-    margin-top: 3rem;
+    grid-column: 2;
+    grid-row: 1 / 5;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .contact-meta-list div {
+    gap: 0.25rem;
+  }
+
+  .contact-meta-list dd {
+    font-size: var(--type-label);
   }
 
   .contact-platform-canvas {
     display: grid;
     min-height: 0;
-    grid-template-columns: 1fr;
-    grid-template-rows: none;
-    gap: 2.5rem;
-    margin-top: 4.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 0.7rem;
+    margin-top: 0;
+    align-self: stretch;
   }
 
   .contact-platform-card,
   .contact-platform-email,
   .contact-platform-github,
   .contact-platform-xiaohongshu,
-  .contact-platform-wechat,
-  .contact-platform-behance {
+  .contact-platform-wechat {
     grid-column: auto;
     grid-row: auto;
     transform: none;
   }
 
+  .contact-platform-behance {
+    width: calc(50% - 0.35rem);
+    grid-column: 1 / -1;
+    grid-row: auto;
+    justify-self: center;
+    transform: none;
+  }
+
   .contact-platform-preview {
-    min-height: 13rem;
+    min-height: 0;
+    aspect-ratio: 16 / 8.5;
+    border-radius: 0.65rem;
+  }
+
+  .contact-platform-caption {
+    gap: 0.5rem;
+    margin-top: 0.35rem;
+  }
+
+  .contact-platform-caption > span:last-child {
+    gap: 0.1rem;
+  }
+
+  .contact-platform-caption strong {
+    font-size: var(--type-label);
   }
 
   .contact-resume-status {
-    position: static;
-    justify-content: space-between;
-    margin-top: 4.5rem;
+    display: none;
   }
 }
 

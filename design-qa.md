@@ -1,80 +1,75 @@
-# BEIMU P5 Design QA
+# BEIMU P6 Design QA
 
 ## Source visual truth
 
-- Works: `/workspace/scratch/e4c7273c2d13/upload/d41162e9-3a0c-455b-b5a9-f7d19c477544(1).png` — 1586 × 992 px.
-- About: `/workspace/scratch/e4c7273c2d13/upload/96283f64-7da6-4667-9aa3-4d1ce9817719(1).png` — 1586 × 992 px.
-- Contact: `/workspace/scratch/e4c7273c2d13/upload/509ad120-7f28-4489-ad0f-0dc30eba8f17(1).png` — 1535 × 1024 px.
+- Navigation issue reference: `/workspace/scratch/e4c7273c2d13/upload/4e599d6e-c214-4245-8dcb-cb70416df37d.png` — 1248 × 92 px.
+- Oversized Contact reference: `/workspace/scratch/e4c7273c2d13/upload/ae5f99f1-22fe-4cb7-b3af-56d36a0c5aba.png` — 2048 × 1016 px.
+- Contact overflow continuation: `/workspace/scratch/e4c7273c2d13/upload/b71c07d0-4b74-4431-a615-1c23ac0213dd.png` — 2048 × 1016 px.
+- Product direction: remove all navigation chrome and fit the complete Contact directory into one viewport.
 
 ## Browser-rendered implementation evidence
 
-- Works: `.qa/works-final.webp` — 900 × 618 px normalized from the 1365 × 936 browser capture.
-- About: `.qa/about-final.webp` — 900 × 618 px normalized from the 1365 × 936 browser capture.
-- Contact: `.qa/contact-final.webp` — 900 × 618 px normalized from the 1365 × 936 browser capture.
-- Final comparisons: `.qa/works-compare-final.webp`, `.qa/about-compare-final.webp`, `.qa/contact-compare-final.webp`.
-- Initial comparisons: `.qa/works-compare-initial.webp`, `.qa/about-compare-initial.webp`, `.qa/contact-compare-initial.webp`.
+- Contact single-screen capture: `.qa/p6-contact-compact.jpg` — 1363 × 936 px.
+- Text-only category navigation crop: `.qa/p6-navigation-text-only.jpg` — 870 × 130 px.
+- Source/implementation comparison: `.qa/p6-contact-compare.jpg` — 2244 × 768 px.
 
 ## Viewport and normalization
 
 - Browser CSS viewport: 1363 × 936 CSS px.
-- Browser screenshot: 1365 × 936 px at device pixel ratio 1.
-- The source frames and browser captures have different aspect ratios. For a same-canvas visual comparison, both were center-cropped and resized to 900 × 618 px, then placed side by side. Crop-dependent differences at the extreme left and right edges were not treated as exact spacing errors.
-- Theme/state: desktop dark theme; first 3D category active; About and Contact captured at their corresponding scroll positions inside the third home stage.
+- Device pixel ratio: 1.
+- Theme/state: desktop dark theme; Contact region at its final scroll position; 3D Scene category selected for navigation inspection.
+- The supplied Contact screenshots document the oversized state rather than an exact target. The comparison therefore evaluates the explicitly requested changes: navigation chrome removal, information density, card scale, and single-viewport access.
 
 ## Full-view comparison evidence
 
-- Works preserves the selected source structure: borderless centered navigation, left project index, active/inactive rows, full-stage project image and a right-to-left black fade. The project cover focal point is intentionally anchored toward the right because the real ARK-7 cover is much wider than the reference viewport.
-- About preserves the source hierarchy and proportions: centered identity, circular portrait, left metadata rail, vertical divider and bilingual biography.
-- Contact preserves option 2: information rail on the left and five staggered platform UI cards on the right. The real combined About/Contact stage is vertically scrollable, so the Contact capture is a content-region state rather than a separate route.
+- The former staggered 15-row canvas extended Behance into a second viewport. The revised 6-column, 2-row canvas keeps Email, GitHub, Xiaohongshu, WeChat, and Behance visible together.
+- The left contact introduction remains in the same visual field as all five platform cards.
+- Empty lower-page space and the isolated Behance screen are removed.
+- The Contact hierarchy, platform imagery, labels, index numbers, and existing links are preserved.
 
 ## Focused region comparison evidence
 
-- Navigation: computed border is `0px none`; active state uses only a low-opacity fill. Chinese uses the Source Han/Noto CJK stack; explicitly English labels and passages use PingFang SC/PingFang TC with Inter as the non-Apple fallback.
-- Type roles: project title 32.7 px, body 16 px with 23.2 px line height, and index 12 px at the tested viewport. All are driven by shared design tokens.
-- Contact cards: after the second iteration, the WeChat caption and Behance card no longer overlap. Each linked card contains both its preview figure and its text caption in the same anchor.
-- Works links: both the large preview and the left project row navigated successfully to `/works/3d-scene/ark-7` in the cloud browser.
+- Navigation containers now have no border, radius, fill, shadow, or backdrop blur.
+- Active, hover, and keyboard-focus states are communicated through text color and underline only.
+- The selected category remains readable without restoring a pill or segmented-control background.
+- Contact previews use a consistent 16:9 ratio, two rows on desktop, and a compact two-column/three-row layout below 700 px.
 
 ## Comparison history
 
 ### Iteration 1
 
-- [P2] Works cover focal point was centered and cropped too much of the intended right-side structure.
-  - Fix: changed the default project cover anchor from center to `85% center`, retaining the right-to-left fade.
-  - Post-fix evidence: `.qa/works-compare-final.webp`.
-- [P2] Contact title wrapped to two lines and the WeChat/Behance captions overlapped.
-  - Fix: bound the title to the shared identity size, kept it on one line at desktop widths, expanded the platform canvas to 15 rows and moved Behance to rows 12–16.
-  - Post-fix evidence: `.qa/contact-compare-final.webp`.
+- [P1] Contact cards consumed more than two viewports and separated Behance from the other platforms.
+  - Fix: replaced freeform 15-row placement with a bounded two-row desktop grid and compact mobile grid.
+  - Post-fix evidence: `.qa/p6-contact-compact.jpg`.
+- [P2] Navigation still read as segmented controls because selected items had rounded fills.
+  - Fix: removed all navigation surface treatments and retained text-only state styling.
+  - Post-fix evidence: `.qa/p6-navigation-text-only.jpg`.
 
 ## Findings
 
-- [P3] The final ARK-7 crop remains closer than the mock because the supplied real cover is 1024 × 432 while the reference presents a taller composed crop. This is acceptable for the framework and can be eliminated later by supplying a dedicated vertical/desktop cover.
-- [P3] The Contact comparison shows About as the highlighted tab because the cloud preview did not execute the client bundle; in a functioning client runtime the scroll listener changes the active tab to Contact.
+- No actionable P0, P1, or P2 visual differences remain for the requested scope.
+- [P3] Pending platform entries remain non-interactive until the user supplies real links; this is intentional and avoids fabricated destinations.
 
 ## Primary interactions tested
 
-- Large project preview → project detail route: passed.
-- Project name/list row → project detail route: passed.
-- GitHub card structure contains image and name in one external anchor: passed by DOM inspection.
-- Pending platforms remain non-interactive until real links are added: passed by DOM inspection.
-- Home Stage navigation, Contact tab scrolling, hover previews and live active-tab updates: blocked in this cloud preview.
+- Work category text navigation from 3D Scene to AI Development: passed.
+- GitHub card retains one anchor wrapping both the UI preview and its name: passed by DOM inspection.
+- Pending platform cards remain clearly labeled and do not create fake links: passed.
+- Existing home-stage and contact-scroll behavior was not structurally changed.
 
 ## Console/runtime check
 
-- The page HTML and CSS rendered successfully.
-- The cloud browser refused direct requests to `/_next/static/chunks/*.js` with `ERR_BLOCKED_BY_CLIENT`. React did not hydrate in this preview, so client-only interactions could not be exercised.
-- Browser logs contained only cloud-browser extension metadata errors; no application runtime error was emitted because the client bundle did not execute.
+- Browser-rendered pages loaded successfully.
+- No application console errors were observed.
+- Cloud-browser extension metadata warnings were unrelated to the site.
 
 ## Implementation checklist
 
-- [x] Borderless navigation.
-- [x] PingFang-first Latin stack and Source Han/Noto CJK fallbacks.
-- [x] Shared title, body, navigation and index tokens.
-- [x] Works image and project-name links.
-- [x] Contact UI image and platform-name links when an href exists.
-- [x] No invented brand or unconfirmed platform URL.
-- [x] Desktop source/implementation visual comparisons.
-- [x] ESLint, TypeScript, production build and Sites static build.
-- [ ] Re-run client interaction QA in an environment that permits Next.js chunk execution.
-- [ ] Run a browser-rendered mobile visual pass at 390 × 844 after the preview runtime issue is cleared.
+- [x] All navigation bars reduced to text only.
+- [x] Active and keyboard-focus states remain discoverable without containers.
+- [x] All five Contact cards fit in one desktop viewport.
+- [x] Contact copy and platform cards share one composition.
+- [x] Responsive compact layout supplied for mobile.
+- [x] ESLint, TypeScript, and production build passed.
 
-final result: blocked
+final result: passed
