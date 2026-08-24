@@ -43,8 +43,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   if (!category) notFound();
 
-  const poster = category.previewMedia[0]?.poster;
-
   return (
     <main
       id="main-content"
@@ -54,43 +52,18 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       tabIndex={-1}
     >
       <div
-        className="work-category-scroll"
+        className="work-category-scroll work-category-file-view"
         tabIndex={0}
         aria-label={`${category.labelZh}作品页面`}
       >
-        <section className="work-category-hero">
-          {poster && (
-            <div
-              className="work-category-backdrop"
-              style={{ backgroundImage: `url("${poster}")` }}
-              aria-hidden="true"
-            />
-          )}
-          <div className="work-category-overlay" aria-hidden="true" />
-
-          <nav className="work-category-nav" aria-label="分类页导航">
-            <Link href="/">← 返回首页</Link>
-            <span>BEIMU · WORKS</span>
-          </nav>
-
-          <header className="work-category-heading">
-            <p>
-              {category.index} / 04 · {category.labelEn}
-            </p>
-            <h1>{category.labelZh}</h1>
-            <span>{category.description}</span>
-          </header>
-
-          <p className="work-category-scroll-cue">
-            <span>SCROLL TO VIEW</span>
-            <span aria-hidden="true">↓</span>
-          </p>
-        </section>
-
-        <div className="work-category-content">
-          <WorkCategoryNav activeCategoryId={category.id} />
-          <ProjectArchiveList category={category} />
-        </div>
+        <Link className="work-category-home-link" href="/">
+          BEIMU / WORKS
+        </Link>
+        <p className="work-category-count">
+          {String(category.projects.length).padStart(2, "0")} PROJECTS · 2025—2026
+        </p>
+        <WorkCategoryNav activeCategoryId={category.id} />
+        <ProjectArchiveList category={category} />
       </div>
     </main>
   );

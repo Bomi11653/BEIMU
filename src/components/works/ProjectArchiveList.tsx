@@ -11,6 +11,10 @@ type ProjectArchiveListProps = {
   category: PortfolioCategory;
 };
 
+function projectHref(category: PortfolioCategory, project: PortfolioProject) {
+  return `/works/${category.slug}/${project.slug}`;
+}
+
 function ProjectPreview({
   category,
   project,
@@ -19,26 +23,23 @@ function ProjectPreview({
   project: PortfolioProject;
 }) {
   return (
-    <div className="project-file-preview" aria-live="polite">
-      <div
+    <Link
+      className="project-file-preview"
+      href={projectHref(category, project)}
+      aria-label={`打开项目：${project.titleZh}`}
+    >
+      <span
         className="project-file-preview-image"
         key={project.id}
-        style={{ backgroundImage: `url("${project.cover}")` }}
+        style={{
+          backgroundImage: `url("${project.cover}")`,
+          backgroundPosition: project.coverPosition ?? "85% center",
+        }}
         aria-hidden="true"
       />
-      <div className="project-file-preview-shade" aria-hidden="true" />
-
-      <div className="project-file-preview-topline">
-        <span>{category.index} / 04</span>
-        <span>{project.year ?? "YEAR TBC"}</span>
-      </div>
-
-      <div className="project-file-preview-copy">
-        <p>{project.titleEn}</p>
-        <h3>{project.titleZh}</h3>
-        <span>{project.summary}</span>
-      </div>
-    </div>
+      <span className="project-file-preview-shade" aria-hidden="true" />
+      <span className="project-file-preview-open">VIEW PROJECT</span>
+    </Link>
   );
 }
 
@@ -53,7 +54,7 @@ export function ProjectArchiveList({ category }: ProjectArchiveListProps) {
         <p>PROJECT FILES · AWAITING MATERIAL</p>
         <h2 id="empty-title">文件位置已预留</h2>
         <span>
-          回到个人电脑后，只需把真实项目素材放入对应目录并更新数据文件，列表和详情路径会自动生成。
+          回到个人电脑后，只需放入真实项目素材并更新数据，列表和详情路径会自动生成。
         </span>
         <Link href="/">返回首页</Link>
       </section>
@@ -66,11 +67,14 @@ export function ProjectArchiveList({ category }: ProjectArchiveListProps) {
 
   return (
     <section className="project-file-browser" aria-labelledby="archive-title">
+      <div className="project-file-stage">
+        <ProjectPreview category={category} project={activeProject} />
+      </div>
+
       <div className="project-file-index">
         <header className="project-file-heading">
-          <p>PROJECT FILES</p>
-          <h2 id="archive-title">作品列表</h2>
-          <span>{String(category.projects.length).padStart(2, "0")} FILES</span>
+          <p>作品　/　WORKS</p>
+          <h1 id="archive-title">{category.labelZh}</h1>
         </header>
 
         <ol className="project-file-list">
@@ -81,41 +85,30 @@ export function ProjectArchiveList({ category }: ProjectArchiveListProps) {
               <li key={project.id}>
                 <Link
                   className={`project-file-row${isActive ? " is-active" : ""}`}
-                  href={`/works/${category.slug}/${project.slug}`}
+                  href={projectHref(category, project)}
                   onMouseEnter={() => setActiveProjectId(project.id)}
                   onFocus={() => setActiveProjectId(project.id)}
                   onTouchStart={() => setActiveProjectId(project.id)}
-                  aria-label={`打开项目文件：${project.titleZh}`}
+                  aria-label={`打开项目：${project.titleZh}`}
                 >
                   <span className="project-file-number">
                     {String(index + 1).padStart(2, "0")}
                   </span>
-
+                  <span className="project-file-year">
+                    {project.year ?? "—"}
+                  </span>
                   <span className="project-file-title">
                     <strong>{project.titleZh}</strong>
-                    <small>{project.titleEn}</small>
-                  </span>
-
-                  <span className="project-file-meta">
-                    {project.roleZh ?? category.labelZh}
+                    <small>{project.summary}</small>
                   </span>
                   <span className="project-file-arrow" aria-hidden="true">
-                    ↗
+                    VIEW
                   </span>
                 </Link>
               </li>
             );
           })}
         </ol>
-
-        <footer className="project-file-footer">
-          <span>HOVER TO PREVIEW</span>
-          <span>CLICK ANY ROW TO OPEN</span>
-        </footer>
-      </div>
-
-      <div className="project-file-stage">
-        <ProjectPreview category={category} project={activeProject} />
       </div>
     </section>
   );

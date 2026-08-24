@@ -92,14 +92,19 @@ export function HomeStage() {
         activeCategoryId={activeId}
         onActivateCategory={activateCapability}
       />
-      <ProfileContactStage isActive={activeStage === 2} />
-
-      <EdgeRevealNav
-        items={capabilities}
-        activeId={activeId}
-        onActivate={activateCapability}
-        compact={activeStage !== 0}
+      <ProfileContactStage
+        isActive={activeStage === 2}
+        onGoToWorks={() => goToStage(1)}
       />
+
+      {activeStage !== 2 && (
+        <EdgeRevealNav
+          items={capabilities}
+          activeId={activeId}
+          onActivate={activateCapability}
+          compact={activeStage !== 0}
+        />
+      )}
 
       <button
         className="stage-switch-cue"

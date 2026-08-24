@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/inter";
 import "@fontsource-variable/noto-sans-sc";
 import "./globals.css";
+import "../styles/p5.css";
 
 export const metadata: Metadata = {
   title: "郑荣成 — BEIMU",

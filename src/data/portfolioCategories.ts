@@ -35,6 +35,7 @@ export type PortfolioProject = {
   services?: string[];
   summary: string;
   cover: string;
+  coverPosition?: string;
   gallery: PortfolioGalleryItem[];
   detailStatus: "ready" | "summary";
   externalUrl?: string;
@@ -81,6 +82,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         slug: "ark-7",
         titleZh: "方舟",
         titleEn: "ARK-7",
+        year: "2025",
         roleZh: "3D 场景与视觉叙事",
         roleEn: "3D Environment & Visual Narrative",
         services: ["科幻概念场景", "世界观视觉", "环境叙事"],
@@ -107,6 +109,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         slug: "sci-fi-scene",
         titleZh: "科幻场景",
         titleEn: "Sci-Fi Environment",
+        year: "2025",
         roleZh: "3D 场景动态展示",
         roleEn: "3D Environment Motion",
         services: ["空间氛围", "灯光表现", "动态镜头"],

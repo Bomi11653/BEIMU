@@ -1,9 +1,8 @@
 @import "tailwindcss";
+@import "../styles/design-tokens.css";
 
 :root {
   color-scheme: dark;
-  --font-sans: "Inter Variable", "Noto Sans SC Variable", "PingFang SC",
-    "Microsoft YaHei", sans-serif;
   --white: #f6f8fa;
   --muted: rgba(246, 248, 250, 0.72);
   --hairline: rgba(255, 255, 255, 0.3);
