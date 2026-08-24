@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - feature/home-stage-p2
+      - feature/category-directory-p3
   workflow_dispatch:
 
 permissions:
