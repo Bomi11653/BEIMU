@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
+import { useRouteTransition } from "@/components/transitions/RouteTransitionProvider";
 import type {
   PortfolioCategory,
   PortfolioProject,
@@ -18,14 +19,17 @@ function projectHref(category: PortfolioCategory, project: PortfolioProject) {
 function ProjectPreview({
   category,
   project,
+  onOpen,
 }: {
   category: PortfolioCategory;
   project: PortfolioProject;
+  onOpen: (event: MouseEvent<HTMLAnchorElement>, project: PortfolioProject) => void;
 }) {
   return (
     <Link
       className="project-file-preview"
       href={projectHref(category, project)}
+      onClick={(event) => onOpen(event, project)}
       aria-label={`打开项目：${project.titleZh}`}
     >
       <span
@@ -44,6 +48,7 @@ function ProjectPreview({
 }
 
 export function ProjectArchiveList({ category }: ProjectArchiveListProps) {
+  const { isTransitioning, startRouteTransition } = useRouteTransition();
   const [activeProjectId, setActiveProjectId] = useState(
     category.projects[0]?.id ?? "",
   );
@@ -65,10 +70,35 @@ export function ProjectArchiveList({ category }: ProjectArchiveListProps) {
     category.projects.find((project) => project.id === activeProjectId) ??
     category.projects[0];
 
+  const openProject = (
+    event: MouseEvent<HTMLAnchorElement>,
+    project: PortfolioProject,
+  ) => {
+    if (
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+    startRouteTransition(projectHref(category, project), {
+      title: project.titleZh,
+      meta: `${project.year ?? "YEAR TBC"} · ${project.titleEn}`,
+    });
+  };
+
   return (
     <section className="project-file-browser" aria-labelledby="archive-title">
       <div className="project-file-stage">
-        <ProjectPreview category={category} project={activeProject} />
+        <ProjectPreview
+          category={category}
+          project={activeProject}
+          onOpen={openProject}
+        />
       </div>
 
       <div className="project-file-index">
@@ -86,10 +116,12 @@ export function ProjectArchiveList({ category }: ProjectArchiveListProps) {
                 <Link
                   className={`project-file-row${isActive ? " is-active" : ""}`}
                   href={projectHref(category, project)}
+                  onClick={(event) => openProject(event, project)}
                   onMouseEnter={() => setActiveProjectId(project.id)}
                   onFocus={() => setActiveProjectId(project.id)}
                   onTouchStart={() => setActiveProjectId(project.id)}
                   aria-label={`打开项目：${project.titleZh}`}
+                  aria-disabled={isTransitioning}
                 >
                   <span className="project-file-number">
                     {String(index + 1).padStart(2, "0")}
