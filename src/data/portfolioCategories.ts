@@ -71,8 +71,12 @@ export const portfolioCategories: PortfolioCategory[] = [
       {
         id: "3d-cyberpunk",
         kind: "video",
-        src: portfolioAssetPath("/media/3d/3d-cyberpunk.mp4"),
-        poster: portfolioAssetPath("/media/3d/3d-cyberpunk-poster.jpg"),
+        src: portfolioAssetPath(
+          "/media/works/3d-scene/sci-fi-scene/preview.mp4",
+        ),
+        poster: portfolioAssetPath(
+          "/media/works/3d-scene/sci-fi-scene/poster.jpg",
+        ),
         objectPosition: "center center",
       },
     ],
@@ -114,14 +118,20 @@ export const portfolioCategories: PortfolioCategory[] = [
         roleEn: "3D Environment Motion",
         services: ["空间氛围", "灯光表现", "动态镜头"],
         summary: "通过动态镜头呈现空间氛围与环境叙事。",
-        cover: portfolioAssetPath("/media/3d/3d-cyberpunk-poster.jpg"),
+        cover: portfolioAssetPath(
+          "/media/works/3d-scene/sci-fi-scene/poster.jpg",
+        ),
         detailStatus: "summary",
         gallery: [
           {
             id: "sci-fi-scene-film",
             kind: "video",
-            src: portfolioAssetPath("/media/3d/3d-cyberpunk.mp4"),
-            poster: portfolioAssetPath("/media/3d/3d-cyberpunk-poster.jpg"),
+            src: portfolioAssetPath(
+              "/media/works/3d-scene/sci-fi-scene/preview.mp4",
+            ),
+            poster: portfolioAssetPath(
+              "/media/works/3d-scene/sci-fi-scene/poster.jpg",
+            ),
             alt: "科幻场景动态预览",
           },
         ],
@@ -141,15 +151,23 @@ export const portfolioCategories: PortfolioCategory[] = [
       {
         id: "dbsource-preview",
         kind: "video",
-        src: portfolioAssetPath("/media/ai/dbsource-preview.mp4"),
-        poster: portfolioAssetPath("/media/ai/dbsource-preview-poster.jpg"),
+        src: portfolioAssetPath(
+          "/media/works/ai-development/dbsource-pro/preview.mp4",
+        ),
+        poster: portfolioAssetPath(
+          "/media/works/ai-development/dbsource-pro/poster.jpg",
+        ),
         objectPosition: "center top",
       },
       {
         id: "yuyakang-preview",
         kind: "video",
-        src: portfolioAssetPath("/media/ai/yuyakang-preview.mp4"),
-        poster: portfolioAssetPath("/media/ai/yuyakang-preview-poster.jpg"),
+        src: portfolioAssetPath(
+          "/media/works/ai-development/yuyakang/preview.mp4",
+        ),
+        poster: portfolioAssetPath(
+          "/media/works/ai-development/yuyakang/poster.jpg",
+        ),
         objectPosition: "center top",
       },
     ],
@@ -163,14 +181,20 @@ export const portfolioCategories: PortfolioCategory[] = [
         roleEn: "Product Design & Web Development",
         services: ["信息架构", "界面设计", "前端开发"],
         summary: "AI 网站产品设计与开发案例。",
-        cover: portfolioAssetPath("/media/ai/dbsource-preview-poster.jpg"),
+        cover: portfolioAssetPath(
+          "/media/works/ai-development/dbsource-pro/poster.jpg",
+        ),
         detailStatus: "summary",
         gallery: [
           {
             id: "dbsource-website-preview",
             kind: "video",
-            src: portfolioAssetPath("/media/ai/dbsource-preview.mp4"),
-            poster: portfolioAssetPath("/media/ai/dbsource-preview-poster.jpg"),
+            src: portfolioAssetPath(
+              "/media/works/ai-development/dbsource-pro/preview.mp4",
+            ),
+            poster: portfolioAssetPath(
+              "/media/works/ai-development/dbsource-pro/poster.jpg",
+            ),
             alt: "dBsource Pro 网站预览",
           },
         ],
@@ -185,14 +209,20 @@ export const portfolioCategories: PortfolioCategory[] = [
         roleEn: "Web Design & Development",
         services: ["界面设计", "响应式开发", "网站交付"],
         summary: "网站产品设计与开发案例。",
-        cover: portfolioAssetPath("/media/ai/yuyakang-preview-poster.jpg"),
+        cover: portfolioAssetPath(
+          "/media/works/ai-development/yuyakang/poster.jpg",
+        ),
         detailStatus: "summary",
         gallery: [
           {
             id: "yuyakang-website-preview",
             kind: "video",
-            src: portfolioAssetPath("/media/ai/yuyakang-preview.mp4"),
-            poster: portfolioAssetPath("/media/ai/yuyakang-preview-poster.jpg"),
+            src: portfolioAssetPath(
+              "/media/works/ai-development/yuyakang/preview.mp4",
+            ),
+            poster: portfolioAssetPath(
+              "/media/works/ai-development/yuyakang/poster.jpg",
+            ),
             alt: "Yuyakang 网站预览",
           },
         ],
@@ -214,10 +244,10 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "product-v212",
         kind: "video",
         src: portfolioAssetPath(
-          "/media/3d-product-motion/product-v212.mp4",
+          "/media/works/3d-product-motion/product-v212/preview.mp4",
         ),
         poster: portfolioAssetPath(
-          "/media/3d-product-motion/product-v212-poster.jpg",
+          "/media/works/3d-product-motion/product-v212/poster.jpg",
         ),
         objectPosition: "center center",
       },
@@ -233,7 +263,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         services: ["产品表现", "材质灯光", "动态镜头"],
         summary: "以产品展示为核心的三维动态影像。",
         cover: portfolioAssetPath(
-          "/media/3d-product-motion/product-v212-poster.jpg",
+          "/media/works/3d-product-motion/product-v212/poster.jpg",
         ),
         detailStatus: "summary",
         gallery: [
@@ -241,10 +271,10 @@ export const portfolioCategories: PortfolioCategory[] = [
             id: "product-v212-film",
             kind: "video",
             src: portfolioAssetPath(
-              "/media/3d-product-motion/product-v212.mp4",
+              "/media/works/3d-product-motion/product-v212/preview.mp4",
             ),
             poster: portfolioAssetPath(
-              "/media/3d-product-motion/product-v212-poster.jpg",
+              "/media/works/3d-product-motion/product-v212/poster.jpg",
             ),
             alt: "产品动画 V212 预览",
           },
