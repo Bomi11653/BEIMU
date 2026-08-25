@@ -1,28 +1,44 @@
 # BEIMU
 
-郑荣成的个人作品集网站，聚焦 3D 建模、AI 开发与新媒体视频运营。
+郑荣成（LEON）的个人作品集网站，聚焦 3D 场景、AI 开发、3D 产品动画与新媒体视频运营。
 
-当前开发阶段：P4 文件式作品列表与个人介绍 / 联系模块框架。
+当前稳定阶段：P5 作品列表、项目转场、个人介绍与联系平台目录。
+
+## 在线预览
+
+- GitHub Pages：https://bomi11653.github.io/BEIMU/
 
 ## 本地开发
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
 ## 当前范围
 
 - Next.js 16、React 19、TypeScript、Tailwind CSS 4。
-- 三 Stage 首页：全屏作品视频、四分类目录，以及品牌 / 个人介绍 / 联系方式。
-- 本地开源字体：Inter Variable + Noto Sans SC Variable。
+- 三 Stage 首页：全屏作品视频、四分类目录、品牌预留 / 个人介绍 / 联系方式。
 - 四类作品：3D 场景、AI 开发、3D 产品动画、新媒体视频运营。
-- 分类卡全区域点击，并带有卡片扩张至全屏的路由转场。
-- 分类作品归档与项目详情均采用静态生成，兼容 GitHub Pages 与 Sites。
-- 已接入 ARK-7、科幻场景、dBsource Pro、Yuyakang 与产品动画 V212。
-- 新媒体分类保持真实素材待补状态，不使用虚构案例。
-- 分类页复用旧作品集的“项目索引 + 大幅预览”交互，并保持整行可点击。
-- 首页第三 Stage 包含品牌预留、个人介绍与平台链接窗口。
-- 个人电脑素材接入方法见 [`docs/p4-content-handoff.md`](docs/p4-content-handoff.md)。
+- 作品分类页采用左侧文件索引与右侧全背景预览，名称和图片均可进入项目。
+- 跨页面使用上下幕布与加载文字转场，并支持减少动态效果。
+- 所有导航为纯文字形式，字号由统一设计 Token 管理。
+- 联系区包含 Bilibili、小红书、GGAC、GitHub、微信和 Gmail；微信使用二维码弹窗。
+- 静态生成兼容 GitHub Pages 与 OpenAI Sites。
+- 新媒体分类与合作品牌保持真实素材待补状态，不使用虚构案例。
 
-完整阶段规划见 [`docs/development-plan.md`](docs/development-plan.md)。
+## Cursor 接手
+
+- 项目约束：AGENTS.md
+- 完整交接：docs/cursor-handoff.md
+- 素材接入：docs/p4-content-handoff.md
+- 阶段规划：docs/development-plan.md
+
+## 验证命令
+
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build:pages
+npm run build:sites
+```
