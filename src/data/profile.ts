@@ -9,8 +9,8 @@ export type PlatformLink = {
   id: string;
   label: string;
   handle: string;
-  preview: string;
-  action: string;
+  logo: string;
+  kind: "external" | "email" | "wechat";
   href?: string;
 };
 
@@ -36,39 +36,50 @@ export const publicProfile = {
 
 export const platformLinks: PlatformLink[] = [
   {
-    id: "email",
-    label: "Email",
-    handle: "地址待补",
-    preview: "/media/contact/email.webp",
-    action: "LINK TO ADD",
+    id: "bilibili",
+    label: "Bilibili",
+    handle: "UID 279855573",
+    logo: "/media/contact/logos/bilibili.svg",
+    kind: "external",
+    href: "https://space.bilibili.com/279855573",
+  },
+  {
+    id: "xiaohongshu",
+    label: "小红书",
+    handle: "LEON",
+    logo: "/media/contact/logos/xiaohongshu.svg",
+    kind: "external",
+    href: "https://www.xiaohongshu.com/user/profile/5f966ddd0000000001000622",
+  },
+  {
+    id: "ggac",
+    label: "GGAC",
+    handle: "UID 674218",
+    logo: "/media/contact/ggac-logo.png",
+    kind: "external",
+    href: "https://www.ggac.com/user-center/home/work/list?uid=674218",
   },
   {
     id: "github",
     label: "GitHub",
     handle: "Bomi11653",
-    preview: "/media/contact/github.webp",
-    action: "VIEW PROFILE",
+    logo: "/media/contact/logos/github.svg",
+    kind: "external",
     href: "https://github.com/Bomi11653",
-  },
-  {
-    id: "xiaohongshu",
-    label: "小红书",
-    handle: "链接待补",
-    preview: "/media/contact/xiaohongshu.webp",
-    action: "LINK TO ADD",
   },
   {
     id: "wechat",
     label: "微信",
-    handle: "二维码待补",
-    preview: "/media/contact/wechat.webp",
-    action: "QR TO ADD",
+    handle: "LEON",
+    logo: "/media/contact/logos/wechat.svg",
+    kind: "wechat",
   },
   {
-    id: "behance",
-    label: "Behance",
-    handle: "链接待补",
-    preview: "/media/contact/behance.webp",
-    action: "LINK TO ADD",
+    id: "gmail",
+    label: "Gmail",
+    handle: "shhsjsasd886@gmail.com",
+    logo: "/media/contact/logos/gmail.svg",
+    kind: "email",
+    href: "mailto:shhsjsasd886@gmail.com",
   },
 ];

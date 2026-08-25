@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import {
   partnerBrands,
   platformLinks,
@@ -8,6 +8,7 @@ import {
   type PlatformLink,
 } from "@/data/profile";
 import { portfolioAssetPath } from "@/data/portfolioCategories";
+import { WeChatDialog } from "./WeChatDialog";
 
 type ProfileContactStageProps = {
   isActive: boolean;
@@ -16,51 +17,60 @@ type ProfileContactStageProps = {
 
 type ProfileSection = "about" | "contact";
 
-function PlatformCard({
+function PlatformLinkItem({
   platform,
-  index,
+  onOpenWechat,
+  wechatButtonRef,
 }: {
   platform: PlatformLink;
-  index: number;
+  onOpenWechat: () => void;
+  wechatButtonRef: RefObject<HTMLButtonElement | null>;
 }) {
   const content = (
     <>
-      <figure className="contact-platform-preview">
+      <span className="contact-platform-logo" aria-hidden="true">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={portfolioAssetPath(platform.preview)}
-          alt={`${platform.label}平台界面预览`}
+          src={portfolioAssetPath(platform.logo)}
+          alt=""
         />
-      </figure>
-      <span className="contact-platform-caption">
-        <span className="contact-platform-index">
-          {String(index + 1).padStart(2, "0")}
-        </span>
-        <span>
-          <strong>{platform.label}</strong>
-          <small>{platform.action}</small>
-        </span>
+      </span>
+      <span
+        className="contact-platform-label"
+        lang={
+          ["xiaohongshu", "wechat"].includes(platform.id) ? "zh-CN" : "en"
+        }
+      >
+        {platform.label}
       </span>
     </>
   );
 
-  return platform.href ? (
+  if (platform.kind === "wechat") {
+    return (
+      <button
+        ref={wechatButtonRef}
+        className="contact-platform-link contact-platform-wechat"
+        type="button"
+        aria-haspopup="dialog"
+        aria-label="打开 LEON 的微信二维码"
+        onClick={onOpenWechat}
+      >
+        {content}
+      </button>
+    );
+  }
+
+  return (
     <a
-      className={`contact-platform-card contact-platform-${platform.id}`}
+      className={`contact-platform-link contact-platform-${platform.id}`}
       href={platform.href}
-      target="_blank"
-      rel="noreferrer"
-      aria-label={`打开${platform.label}：${platform.handle}`}
+      target={platform.kind === "external" ? "_blank" : undefined}
+      rel={platform.kind === "external" ? "noreferrer" : undefined}
+      aria-label={`${platform.kind === "email" ? "发送邮件至" : "打开"}${platform.label}：${platform.handle}`}
     >
       {content}
     </a>
-  ) : (
-    <article
-      className={`contact-platform-card contact-platform-${platform.id} is-pending`}
-      aria-label={`${platform.label}链接待补`}
-    >
-      {content}
-    </article>
   );
 }
 
@@ -71,7 +81,9 @@ export function ProfileContactStage({
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const aboutRef = useRef<HTMLElement | null>(null);
   const contactRef = useRef<HTMLElement | null>(null);
+  const wechatButtonRef = useRef<HTMLButtonElement | null>(null);
   const [activeSection, setActiveSection] = useState<ProfileSection>("about");
+  const [isWechatOpen, setIsWechatOpen] = useState(false);
 
   useEffect(() => {
     const scrollElement = scrollRef.current;
@@ -263,17 +275,23 @@ export function ProfileContactStage({
           </div>
 
           <div className="contact-platform-canvas">
-            {platformLinks.map((platform, index) => (
-              <PlatformCard platform={platform} index={index} key={platform.id} />
+            {platformLinks.map((platform) => (
+              <PlatformLinkItem
+                platform={platform}
+                onOpenWechat={() => setIsWechatOpen(true)}
+                wechatButtonRef={wechatButtonRef}
+                key={platform.id}
+              />
             ))}
-          </div>
-
-          <div className="contact-resume-status">
-            <span>RESUME</span>
-            <span>DOWNLOAD LATER</span>
           </div>
         </section>
       </div>
+
+      <WeChatDialog
+        isOpen={isWechatOpen && isActive}
+        onClose={() => setIsWechatOpen(false)}
+        returnFocusRef={wechatButtonRef}
+      />
     </section>
   );
 }
