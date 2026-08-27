@@ -61,7 +61,7 @@ export function ProjectArchiveList({ category }: ProjectArchiveListProps) {
         <span>
           回到个人电脑后，只需放入真实项目素材并更新数据，列表和详情路径会自动生成。
         </span>
-        <Link href="/">返回首页</Link>
+        <Link href="/?stage=2">返回作品目录</Link>
       </section>
     );
   }
@@ -103,7 +103,7 @@ export function ProjectArchiveList({ category }: ProjectArchiveListProps) {
 
       <div className="project-file-index">
         <header className="project-file-heading">
-          <p>作品　/　WORKS</p>
+          <p>{category.labelEn}</p>
           <h1 id="archive-title">{category.labelZh}</h1>
         </header>
 

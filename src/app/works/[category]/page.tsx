@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProjectArchiveList } from "@/components/works/ProjectArchiveList";
 import { WorkCategoryNav } from "@/components/works/WorkCategoryNav";
@@ -56,10 +55,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         tabIndex={0}
         aria-label={`${category.labelZh}作品页面`}
       >
-        <Link className="work-category-home-link" href="/">
-          BEIMU / WORKS
-        </Link>
-        <p className="work-category-count">
+        <p className="work-category-meta-left">BEIMU / WORKS</p>
+        <p className="work-category-meta-right">
           {String(category.projects.length).padStart(2, "0")} PROJECTS · 2025—2026
         </p>
         <WorkCategoryNav activeCategoryId={category.id} />

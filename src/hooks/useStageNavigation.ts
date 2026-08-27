@@ -8,14 +8,14 @@ import {
   type RefObject,
 } from "react";
 
-export type HomeStageIndex = 0 | 1 | 2;
+export type HomeStageIndex = 0 | 1 | 2 | 3 | 4;
 export type StageDirection = "forward" | "backward";
 
 const WHEEL_THRESHOLD = 48;
 const TOUCH_THRESHOLD = 48;
 const TRANSITION_LOCK_MS = 900;
 const REDUCED_MOTION_LOCK_MS = 180;
-const LAST_STAGE: HomeStageIndex = 2;
+const LAST_STAGE: HomeStageIndex = 4;
 
 type UseStageNavigationOptions = {
   activeStage: HomeStageIndex;
@@ -202,9 +202,28 @@ export function useStageNavigation({
         event.repeat ||
         event.altKey ||
         event.ctrlKey ||
-        event.metaKey ||
-        isInteractiveTarget(event.target)
+        event.metaKey
       ) {
+        return;
+      }
+
+      const typingTarget =
+        event.target instanceof HTMLElement &&
+        Boolean(
+          event.target.closest(
+            "input, textarea, select, summary, [contenteditable='true']",
+          ),
+        );
+
+      if (typingTarget) return;
+
+      if (/^[1-5]$/.test(event.key)) {
+        event.preventDefault();
+        goToStage((Number(event.key) - 1) as HomeStageIndex);
+        return;
+      }
+
+      if (isInteractiveTarget(event.target)) {
         return;
       }
 

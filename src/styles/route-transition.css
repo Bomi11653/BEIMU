@@ -20,7 +20,7 @@
   height: 50.1%;
   background:
     radial-gradient(circle at 50% 100%, rgba(29, 42, 50, 0.18), transparent 42%),
-    #03070a;
+    #000;
   will-change: transform;
 }
 

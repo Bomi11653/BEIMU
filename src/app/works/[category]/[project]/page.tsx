@@ -66,52 +66,55 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <div className="project-detail-scroll">
         <nav className="project-detail-nav" aria-label="项目详情导航">
           <Link href={category.route}>← {category.labelZh}</Link>
-          <Link href="/">BEIMU · HOME</Link>
+          <span className="project-detail-nav-meta">
+            {category.index} · {category.labelEn}
+          </span>
         </nav>
 
-        <header className="project-detail-hero">
-          <div
-            className="project-detail-cover"
-            style={{ backgroundImage: `url("${project.cover}")` }}
-            aria-hidden="true"
-          />
-          <div className="project-detail-cover-shade" aria-hidden="true" />
+        <header className="project-detail-header">
+          <div className="project-detail-cover-bleed" aria-hidden="true">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="project-detail-cover-image is-sharp"
+              src={project.cover}
+              alt=""
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="project-detail-cover-image is-blur"
+              src={project.cover}
+              alt=""
+            />
+            <div className="project-detail-cover-veil" />
+          </div>
 
-          <div className="project-detail-heading">
-            <p>
+          <div className="project-detail-copy">
+            <p className="project-detail-kicker">
               {category.index} · {category.labelEn}
             </p>
             <h1>{project.titleZh}</h1>
-            <span>{project.titleEn}</span>
-          </div>
-        </header>
+            <p className="project-detail-title-en">{project.titleEn}</p>
+            <p className="project-detail-summary">{project.summary}</p>
 
-        <section className="project-detail-intro" aria-labelledby="project-overview">
-          <div>
-            <p>PROJECT OVERVIEW</p>
-            <h2 id="project-overview">项目概述</h2>
-          </div>
-          <div>
-            <p>{project.summary}</p>
-            <dl>
+            <dl className="project-detail-meta">
               {project.roleZh && (
                 <div>
                   <dt>ROLE</dt>
                   <dd>{project.roleZh}</dd>
                 </div>
               )}
-              {project.services?.length && (
+              {project.services?.length ? (
                 <div>
                   <dt>SERVICES</dt>
                   <dd>{project.services.join(" · ")}</dd>
                 </div>
-              )}
-              {project.tools?.length && (
+              ) : null}
+              {project.tools?.length ? (
                 <div>
                   <dt>TOOLS</dt>
                   <dd>{project.tools.join(" · ")}</dd>
                 </div>
-              )}
+              ) : null}
               {project.year && (
                 <div>
                   <dt>YEAR</dt>
@@ -120,7 +123,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               )}
             </dl>
           </div>
-        </section>
+        </header>
 
         <section className="project-detail-gallery" aria-label="项目媒体">
           {project.gallery.map((item, index) => (

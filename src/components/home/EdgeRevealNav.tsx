@@ -95,7 +95,7 @@ export function EdgeRevealNav({
 
   return (
     <div
-      className={`edge-reveal-nav${compact ? " is-compact" : ""}${
+      className={`edge-reveal-nav is-bottom${compact ? " is-compact" : ""}${
         isRevealed ? " is-revealed" : ""
       }`}
       onFocusCapture={handleFocus}

@@ -124,7 +124,7 @@ export function CategoryDirectory({
       inert={!isActive ? true : undefined}
     >
       <header className="category-directory-header">
-        <p>SELECTED WORK · 02</p>
+        <p>SELECTED WORK · 03</p>
         <h2 id="work-directory-title">作品目录</h2>
         <span>WORK DIRECTORY</span>
       </header>

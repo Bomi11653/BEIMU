@@ -7,114 +7,197 @@ type BackgroundMediaProps = {
   media: CapabilityMedia;
 };
 
+const SWITCH_LOCK_MS = 340;
+const HIDE_PAUSE_MS = 480;
+
+/**
+ * Stable dual-layer crossfade.
+ * - Video nodes never remount (fixed keys) → no remount thrash on rapid clicks
+ * - Clicks within SWITCH_LOCK_MS coalesce to the latest target only
+ */
 export function BackgroundMedia({ media }: BackgroundMediaProps) {
-  const [layers, setLayers] = useState<[CapabilityMedia, CapabilityMedia]>([
+  const [activeLayer, setActiveLayer] = useState<0 | 1>(0);
+  const [layerMedia, setLayerMedia] = useState<[CapabilityMedia, CapabilityMedia]>([
     media,
     media,
   ]);
-  const [activeLayer, setActiveLayer] = useState<0 | 1>(0);
+
   const activeLayerRef = useRef<0 | 1>(0);
-  const activeMediaIdRef = useRef(media.id);
-  const transitionTokenRef = useRef(0);
-  const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
+  const shownIdRef = useRef(media.id);
+  const tokenRef = useRef(0);
+  const videoRefs = useRef<[HTMLVideoElement | null, HTMLVideoElement | null]>([
+    null,
+    null,
+  ]);
+  const lockUntilRef = useRef(0);
+  const pendingRef = useRef<CapabilityMedia | null>(null);
+  const flushTimerRef = useRef<number | null>(null);
+  const pauseTimerRef = useRef<number | null>(null);
+  const targetLayerRef = useRef<0 | 1>(0);
 
   useEffect(() => {
-    if (activeMediaIdRef.current === media.id) {
-      return;
-    }
+    activeLayerRef.current = activeLayer;
+  }, [activeLayer]);
 
-    activeMediaIdRef.current = media.id;
-    const token = transitionTokenRef.current + 1;
-    transitionTokenRef.current = token;
-    const nextLayer = (activeLayerRef.current === 0 ? 1 : 0) as 0 | 1;
+  // Coalesce rapid media requests into one swap.
+  useEffect(() => {
+    const startLayer = (next: CapabilityMedia) => {
+      if (next.id === shownIdRef.current) return;
 
-    setLayers((current) => {
-      const next: [CapabilityMedia, CapabilityMedia] = [...current];
-      next[nextLayer] = media;
-      return next;
-    });
+      shownIdRef.current = next.id;
+      pendingRef.current = null;
+      const token = ++tokenRef.current;
+      const nextLayer = (activeLayerRef.current === 0 ? 1 : 0) as 0 | 1;
+      targetLayerRef.current = nextLayer;
+      lockUntilRef.current = performance.now() + SWITCH_LOCK_MS;
 
-    const frame = window.requestAnimationFrame(() => {
-      const video = videoRefs.current[nextLayer];
+      setLayerMedia((current) => {
+        const copy: [CapabilityMedia, CapabilityMedia] = [...current];
+        copy[nextLayer] = next;
+        return copy;
+      });
 
-      if (media.kind === "placeholder") {
+      if (next.kind === "placeholder") {
         activeLayerRef.current = nextLayer;
         setActiveLayer(nextLayer);
-
-        window.setTimeout(() => {
-          const hiddenLayer = nextLayer === 0 ? 1 : 0;
-          videoRefs.current[hiddenLayer]?.pause();
-        }, 950);
         return;
       }
 
-      if (!video) return;
+      // Play/reveal is handled by the layerMedia effect below (token-gated).
+      void token;
+    };
 
-      video.load();
+    if (media.id === shownIdRef.current && !pendingRef.current) {
+      return;
+    }
 
-      const reveal = async () => {
-        if (transitionTokenRef.current !== token) {
-          return;
-        }
-
-        try {
-          await video.play();
-        } catch {
-          // The poster remains visible if a browser blocks autoplay.
-        }
-
-        if (transitionTokenRef.current !== token) {
-          return;
-        }
-
-        activeLayerRef.current = nextLayer;
-        setActiveLayer(nextLayer);
-
-        window.setTimeout(() => {
-          const hiddenLayer = nextLayer === 0 ? 1 : 0;
-          videoRefs.current[hiddenLayer]?.pause();
-        }, 950);
-      };
-
-      if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-        void reveal();
-      } else {
-        video.addEventListener("loadeddata", reveal, { once: true });
+    const wait = lockUntilRef.current - performance.now();
+    if (wait > 0) {
+      pendingRef.current = media;
+      if (flushTimerRef.current !== null) {
+        window.clearTimeout(flushTimerRef.current);
       }
-    });
+      flushTimerRef.current = window.setTimeout(() => {
+        flushTimerRef.current = null;
+        const pending = pendingRef.current;
+        pendingRef.current = null;
+        if (pending) startLayer(pending);
+      }, wait);
+      return;
+    }
 
-    return () => window.cancelAnimationFrame(frame);
+    startLayer(media);
+
+    return () => {
+      if (flushTimerRef.current !== null) {
+        window.clearTimeout(flushTimerRef.current);
+        flushTimerRef.current = null;
+      }
+    };
   }, [media]);
+
+  // When a layer's media changes, wait for canplay then crossfade.
+  useEffect(() => {
+    const layer = targetLayerRef.current;
+    const next = layerMedia[layer];
+    const token = tokenRef.current;
+
+    if (next.kind !== "video") return;
+    if (next.id === layerMedia[activeLayerRef.current]?.id && activeLayerRef.current === layer) {
+      return;
+    }
+
+    const video = videoRefs.current[layer];
+    if (!video) return;
+
+    let cancelled = false;
+
+    const reveal = () => {
+      if (cancelled || tokenRef.current !== token) return;
+      activeLayerRef.current = layer;
+      setActiveLayer(layer);
+
+      if (pauseTimerRef.current !== null) {
+        window.clearTimeout(pauseTimerRef.current);
+      }
+      pauseTimerRef.current = window.setTimeout(() => {
+        const hidden = layer === 0 ? 1 : 0;
+        videoRefs.current[hidden]?.pause();
+      }, HIDE_PAUSE_MS);
+    };
+
+    const playAndReveal = () => {
+      if (cancelled || tokenRef.current !== token) return;
+      void video
+        .play()
+        .catch(() => undefined)
+        .finally(reveal);
+    };
+
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      try {
+        if (video.currentTime > 0.05) video.currentTime = 0;
+      } catch {
+        /* ignore */
+      }
+      playAndReveal();
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    const onReady = () => {
+      video.removeEventListener("canplay", onReady);
+      playAndReveal();
+    };
+    video.addEventListener("canplay", onReady);
+
+    return () => {
+      cancelled = true;
+      video.removeEventListener("canplay", onReady);
+    };
+  }, [layerMedia]);
+
+  useEffect(() => {
+    return () => {
+      if (flushTimerRef.current !== null) window.clearTimeout(flushTimerRef.current);
+      if (pauseTimerRef.current !== null) window.clearTimeout(pauseTimerRef.current);
+    };
+  }, []);
 
   return (
     <div className="stage-media" aria-hidden="true">
-      {layers.map((layer, index) => (
-        layer.kind === "video" ? (
+      {([0, 1] as const).map((layerIndex) => {
+        const layer = layerMedia[layerIndex];
+        const isActive = activeLayer === layerIndex;
+
+        if (layer.kind !== "video") {
+          return (
+            <div
+              className={`stage-video stage-video-placeholder${isActive ? " is-active" : ""}`}
+              key={`layer-${layerIndex}`}
+            />
+          );
+        }
+
+        return (
           <video
-            className={`stage-video${activeLayer === index ? " is-active" : ""}`}
-            key={`${index}-${layer.id}`}
+            className={`stage-video${isActive ? " is-active" : ""}`}
+            key={`layer-${layerIndex}`}
             ref={(node) => {
-              videoRefs.current[index] = node;
+              videoRefs.current[layerIndex] = node;
             }}
-            autoPlay={index === 0}
             muted
             loop
             playsInline
-            preload={activeLayer === index ? "auto" : "metadata"}
+            preload="auto"
             poster={layer.poster}
+            src={layer.src}
             style={{ objectPosition: layer.objectPosition }}
-          >
-            <source src={layer.src} type="video/mp4" />
-          </video>
-        ) : (
-          <div
-            className={`stage-video stage-video-placeholder${
-              activeLayer === index ? " is-active" : ""
-            }`}
-            key={`${index}-${layer.id}`}
+            autoPlay={layerIndex === 0}
           />
-        )
-      ))}
+        );
+      })}
       <div className="bottom-blur" />
     </div>
   );

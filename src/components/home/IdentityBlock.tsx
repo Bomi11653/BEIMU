@@ -1,7 +1,19 @@
+import { brandAssets } from "@/data/brand";
+import { portfolioAssetPath } from "@/data/portfolioCategories";
+
 export function IdentityBlock() {
   return (
     <header className="identity-block">
-      <p className="identity-brand">BEIMU_</p>
+      <p className="identity-brand">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="identity-brand-mark"
+          src={portfolioAssetPath(brandAssets.symbolWhite)}
+          alt="BEIMU"
+          width={28}
+          height={56}
+        />
+      </p>
 
       <div className="identity-main">
         <div className="identity-name-group">
