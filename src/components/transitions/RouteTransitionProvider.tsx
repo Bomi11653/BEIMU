@@ -16,6 +16,7 @@ type RouteTransitionPhase = "off" | "closing" | "closed" | "opening";
 export type RouteTransitionCopy = {
   title: string;
   meta: string;
+  eyebrow?: string;
 };
 
 type RouteTransitionContextValue = {
@@ -107,7 +108,7 @@ export function RouteTransitionProvider({ children }: { children: ReactNode }) {
         <div className="route-transition-panel route-transition-panel-bottom" />
 
         <div className="route-transition-copy">
-          <p>OPENING PROJECT</p>
+          <p>{copy?.eyebrow ?? "OPENING PROJECT"}</p>
           <h2>{copy?.title}</h2>
           <span>{copy?.meta}</span>
           <i aria-hidden="true" />

@@ -2,32 +2,19 @@
 
 import {
   useCallback,
-  useEffect,
   useRef,
   useState,
   type FocusEvent,
   type MouseEvent,
   type PointerEvent,
 } from "react";
-import { useRouter } from "next/navigation";
+import { useRouteTransition } from "@/components/transitions/RouteTransitionProvider";
 import {
   portfolioCategories,
   type PortfolioCategory,
   type PortfolioCategoryId,
 } from "@/data/portfolioCategories";
 import { CategoryCard } from "./CategoryCard";
-import {
-  CategoryTransitionOverlay,
-  type CategoryTransitionRect,
-} from "./CategoryTransitionOverlay";
-
-const CATEGORY_TRANSITION_MS = 760;
-
-type CategoryTransitionState = {
-  category: PortfolioCategory;
-  rect: CategoryTransitionRect;
-  isExpanded: boolean;
-};
 
 type CategoryDirectoryProps = {
   isActive: boolean;
@@ -40,14 +27,10 @@ export function CategoryDirectory({
   activeCategoryId,
   onActivateCategory,
 }: CategoryDirectoryProps) {
-  const router = useRouter();
+  const { isTransitioning, startRouteTransition } = useRouteTransition();
   const [isInteractionActive, setIsInteractionActive] = useState(false);
-  const [transition, setTransition] =
-    useState<CategoryTransitionState | null>(null);
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef(new Map<PortfolioCategoryId, HTMLAnchorElement>());
-  const transitionTimerRef = useRef<number | null>(null);
-  const transitionFrameRef = useRef<number | null>(null);
 
   const activeSlot = portfolioCategories.findIndex(
     (category) => category.id === activeCategoryId,
@@ -62,19 +45,6 @@ export function CategoryDirectory({
         cardRefs.current.set(id, node);
       } else {
         cardRefs.current.delete(id);
-      }
-    },
-    [],
-  );
-
-  useEffect(
-    () => () => {
-      if (transitionTimerRef.current !== null) {
-        window.clearTimeout(transitionTimerRef.current);
-      }
-
-      if (transitionFrameRef.current !== null) {
-        window.cancelAnimationFrame(transitionFrameRef.current);
       }
     },
     [],
@@ -119,7 +89,7 @@ export function CategoryDirectory({
     category: PortfolioCategory,
     event: MouseEvent<HTMLAnchorElement>,
   ) => {
-    if (transition) {
+    if (isTransitioning) {
       event.preventDefault();
       return;
     }
@@ -135,47 +105,22 @@ export function CategoryDirectory({
       return;
     }
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return;
-    }
-
     event.preventDefault();
     onActivateCategory(category.id);
-
-    const bounds = event.currentTarget.getBoundingClientRect();
-    setTransition({
-      category,
-      rect: {
-        top: bounds.top,
-        left: bounds.left,
-        width: bounds.width,
-        height: bounds.height,
-      },
-      isExpanded: false,
+    startRouteTransition(category.route, {
+      eyebrow: "OPENING WORKS",
+      title: category.labelZh,
+      meta: category.labelEn,
     });
-
-    transitionFrameRef.current = window.requestAnimationFrame(() => {
-      transitionFrameRef.current = window.requestAnimationFrame(() => {
-        setTransition((current) =>
-          current ? { ...current, isExpanded: true } : current,
-        );
-        transitionFrameRef.current = null;
-      });
-    });
-
-    transitionTimerRef.current = window.setTimeout(() => {
-      router.push(category.route, { scroll: false });
-      transitionTimerRef.current = null;
-    }, CATEGORY_TRANSITION_MS);
   };
 
   return (
     <section
       className="home-stage-layer category-directory"
-      data-transitioning={transition ? "true" : "false"}
+      data-transitioning={isTransitioning ? "true" : "false"}
       aria-hidden={!isActive}
       aria-labelledby="work-directory-title"
-      aria-busy={transition ? true : undefined}
+      aria-busy={isTransitioning ? true : undefined}
       inert={!isActive ? true : undefined}
     >
       <header className="category-directory-header">
@@ -211,7 +156,7 @@ export function CategoryDirectory({
                 isMediaActive={
                   isActive &&
                   activeCategoryId === category.id &&
-                  !transition
+                  !isTransitioning
                 }
                 registerCard={(node) => registerCard(category.id, node)}
                 onPointerEnter={handlePointerEnter}
@@ -228,14 +173,6 @@ export function CategoryDirectory({
       <p className="category-directory-status" aria-live="polite">
         {String(activeSlot + 1).padStart(2, "0")} / 04
       </p>
-
-      {transition && (
-        <CategoryTransitionOverlay
-          category={transition.category}
-          rect={transition.rect}
-          isExpanded={transition.isExpanded}
-        />
-      )}
     </section>
   );
 }

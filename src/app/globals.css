@@ -1013,28 +1013,204 @@ button {
   white-space: nowrap;
 }
 
+/* Typography experiment — hide PortfolioStage metadata duplicates */
+.portfolio-stage > .stage-content > .portfolio-year,
+.portfolio-stage > .stage-content > .location-label {
+  display: none;
+}
+
 .identity-block {
+  --identity-primary: rgba(255, 255, 255, 0.95);
+  --identity-secondary: rgba(255, 255, 255, 0.7);
+  --identity-meta: rgba(255, 255, 255, 0.5);
+  --identity-inline: clamp(2.5rem, 6.2vw, 6.75rem);
   position: absolute;
-  left: clamp(1.5rem, 7.1vw, 7rem);
-  bottom: clamp(2.2rem, 6.4vh, 4.6rem);
-  max-width: min(68vw, 58rem);
-  text-shadow: 0 3px 26px rgba(0, 0, 0, 0.28);
+  inset: 0;
+  z-index: 2;
+  max-width: none;
+  pointer-events: none;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.42),
+    0 4px 18px rgba(0, 0, 0, 0.24);
 }
 
 .identity-block h1,
 .identity-block p,
-.portfolio-year,
-.location-label {
+.identity-block ul,
+.identity-block li {
   margin: 0;
+  padding: 0;
 }
 
-.identity-block h1 {
-  font-size: clamp(4.8rem, 9vw, 8.8rem);
+.identity-block ul {
+  list-style: none;
+}
+
+.identity-brand,
+.identity-alias,
+.identity-kicker,
+.identity-hero,
+.identity-disciplines,
+.identity-meta {
+  font-family: var(--font-latin);
+}
+
+.identity-brand {
+  position: absolute;
+  top: clamp(0.2rem, 0.9vh, 0.6rem);
+  right: var(--identity-inline);
+  color: var(--identity-meta);
+  font-size: clamp(0.58rem, 0.64vw, 0.7rem);
+  font-weight: 450;
+  letter-spacing: 0.26em;
+  line-height: 1;
+}
+
+.identity-main {
+  position: absolute;
+  left: var(--identity-inline);
+  top: 36%;
+  width: min(34vw, 25rem);
+  transform: translateY(-28%);
+  isolation: isolate;
+}
+
+.identity-main::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -26% -36% -32% -22%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 70% 54% at 30% 58%,
+      rgba(0, 0, 0, 0.12) 0%,
+      rgba(0, 0, 0, 0.05) 42%,
+      transparent 76%
+    ),
+    linear-gradient(
+      108deg,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0.12) 24%,
+      rgba(0, 0, 0, 0.055) 46%,
+      rgba(0, 0, 0, 0.018) 66%,
+      transparent 88%
+    );
+}
+
+.identity-name-group h1 {
+  color: var(--identity-primary);
+  font-family: var(--font-cjk);
+  font-size: clamp(1.28rem, 1.72vw, 1.78rem);
+  font-weight: 320;
+  letter-spacing: 0.06em;
+  line-height: 1.08;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.5),
+    0 6px 22px rgba(0, 0, 0, 0.32);
+}
+
+.identity-alias {
+  margin-top: 0.42rem !important;
+  color: var(--identity-secondary);
+  font-size: clamp(0.52rem, 0.58vw, 0.62rem);
+  font-weight: 450;
+  letter-spacing: 0.32em;
+  line-height: 1.2;
+}
+
+.identity-statement {
+  margin-top: clamp(2.4rem, 5.2vh, 3.6rem);
+}
+
+.identity-kicker {
+  margin-left: 0.85rem !important;
+  color: var(--identity-meta);
+  font-size: clamp(0.48rem, 0.54vw, 0.56rem);
+  font-weight: 450;
+  letter-spacing: 0.38em;
+  line-height: 1;
+}
+
+.identity-hero {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5rem !important;
+  color: var(--identity-primary);
+  font-size: clamp(1.42rem, 2.9vw, 2.75rem);
   font-weight: 300;
-  letter-spacing: -0.075em;
-  line-height: 0.88;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.52),
+    0 6px 24px rgba(0, 0, 0, 0.34);
 }
 
+.identity-hero > span {
+  display: block;
+  white-space: nowrap;
+}
+
+.identity-disciplines {
+  position: absolute;
+  right: var(--identity-inline);
+  bottom: clamp(7.25rem, 18vh, 11rem);
+  top: auto;
+  display: grid;
+  gap: 0.85rem;
+  width: auto;
+  max-width: 12.5rem;
+  transform: none;
+  isolation: isolate;
+}
+
+.identity-disciplines::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -60% -55% -65% -58%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 64% 70% at 82% 52%,
+      rgba(0, 0, 0, 0.07) 0%,
+      rgba(0, 0, 0, 0.025) 46%,
+      transparent 74%
+    ),
+    linear-gradient(
+      308deg,
+      rgba(0, 0, 0, 0.12) 0%,
+      rgba(0, 0, 0, 0.06) 30%,
+      rgba(0, 0, 0, 0.02) 54%,
+      transparent 82%
+    );
+}
+
+.identity-disciplines li {
+  color: rgba(255, 255, 255, 0.66);
+  font-size: clamp(0.55rem, 0.62vw, 0.66rem);
+  font-weight: 450;
+  letter-spacing: 0.18em;
+  line-height: 1.35;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 3px 14px rgba(0, 0, 0, 0.22);
+}
+
+.identity-meta {
+  position: absolute;
+  bottom: 0;
+  left: var(--identity-inline);
+  right: auto;
+  display: block;
+  color: var(--identity-meta);
+  font-size: clamp(0.48rem, 0.54vw, 0.56rem);
+  font-weight: 450;
+  letter-spacing: 0.2em;
+  line-height: 1.2;
+}
+
+/* Legacy class hooks retained for non-intro surfaces */
 .brand-name {
   margin-top: clamp(1.15rem, 2vh, 1.8rem) !important;
   font-size: clamp(1.25rem, 2.2vw, 2rem);
@@ -1069,6 +1245,26 @@ button {
 
 .location-label {
   right: clamp(1.5rem, 7.1vw, 7rem);
+}
+
+@media (max-width: 1100px) and (min-width: 761px) {
+  .identity-main {
+    width: min(36vw, 21rem);
+    top: 34%;
+  }
+
+  .identity-hero {
+    font-size: clamp(1.32rem, 2.55vw, 2.15rem);
+  }
+
+  .identity-kicker {
+    margin-left: 0.65rem !important;
+  }
+
+  .identity-disciplines {
+    max-width: 11rem;
+    bottom: clamp(6.75rem, 17vh, 10rem);
+  }
 }
 
 @media (max-width: 760px) {
@@ -1114,14 +1310,123 @@ button {
   }
 
   .identity-block {
-    left: 1.25rem;
-    bottom: 5.2rem;
-    max-width: calc(100vw - 2.5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.1rem;
+    padding: 0.55rem 1.15rem 3.6rem;
   }
 
-  .identity-block h1 {
-    font-size: clamp(4rem, 22vw, 6.2rem);
-    letter-spacing: -0.085em;
+  .identity-brand {
+    position: static;
+    align-self: flex-start;
+    font-size: 0.62rem;
+    letter-spacing: 0.28em;
+  }
+
+  .identity-main {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    max-width: none;
+    transform: none;
+    padding-top: clamp(1.35rem, 6vh, 2.8rem);
+  }
+
+  .identity-main::before {
+    inset: -12% -16% -16% -12%;
+    background:
+      radial-gradient(
+        ellipse 72% 58% at 32% 55%,
+        rgba(0, 0, 0, 0.11) 0%,
+        rgba(0, 0, 0, 0.045) 44%,
+        transparent 76%
+      ),
+      linear-gradient(
+        105deg,
+        rgba(0, 0, 0, 0.18) 0%,
+        rgba(0, 0, 0, 0.09) 32%,
+        rgba(0, 0, 0, 0.03) 58%,
+        transparent 86%
+      );
+  }
+
+  .identity-name-group h1 {
+    font-size: clamp(1.32rem, 5.4vw, 1.65rem);
+    letter-spacing: 0.07em;
+  }
+
+  .identity-alias {
+    margin-top: 0.4rem !important;
+    font-size: 0.58rem;
+    letter-spacing: 0.3em;
+  }
+
+  .identity-statement {
+    margin-top: clamp(1.7rem, 5vh, 2.4rem);
+  }
+
+  .identity-kicker {
+    margin-left: 0.45rem !important;
+    font-size: 0.52rem;
+    letter-spacing: 0.34em;
+  }
+
+  .identity-hero {
+    margin-top: 0.55rem !important;
+    font-size: clamp(1.7rem, 8.8vw, 2.35rem);
+    letter-spacing: -0.01em;
+    line-height: 1.02;
+  }
+
+  .identity-hero > span {
+    white-space: normal;
+  }
+
+  .identity-punct {
+    display: none;
+  }
+
+  .identity-disciplines {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    max-width: 16rem;
+    gap: 0.55rem;
+    transform: none;
+    margin-top: auto;
+  }
+
+  .identity-disciplines::before {
+    inset: -35% -24% -40% -18%;
+    background:
+      radial-gradient(
+        ellipse 70% 75% at 22% 48%,
+        rgba(0, 0, 0, 0.06) 0%,
+        rgba(0, 0, 0, 0.02) 50%,
+        transparent 76%
+      ),
+      linear-gradient(
+        98deg,
+        rgba(0, 0, 0, 0.09) 0%,
+        rgba(0, 0, 0, 0.035) 42%,
+        transparent 80%
+      );
+  }
+
+  .identity-disciplines li {
+    font-size: clamp(0.54rem, 2.55vw, 0.62rem);
+    letter-spacing: 0.14em;
+  }
+
+  .identity-meta {
+    position: static;
+    margin-top: 0.95rem;
+    font-size: 0.48rem;
+    letter-spacing: 0.16em;
   }
 
   .brand-name {
