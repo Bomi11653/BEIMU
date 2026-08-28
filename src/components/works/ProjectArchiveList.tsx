@@ -87,7 +87,8 @@ export function ProjectArchiveList({ category }: ProjectArchiveListProps) {
     event.preventDefault();
     startRouteTransition(projectHref(category, project), {
       title: project.titleZh,
-      meta: `${project.year ?? "YEAR TBC"} · ${project.titleEn}`,
+      description: project.summary,
+      meta: project.titleEn,
     });
   };
 

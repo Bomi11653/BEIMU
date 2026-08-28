@@ -10,13 +10,18 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { brandAssets } from "@/data/brand";
+import { portfolioAssetPath } from "@/data/portfolioCategories";
 
 type RouteTransitionPhase = "off" | "closing" | "closed" | "opening";
 
 export type RouteTransitionCopy = {
+  /** Destination theme / main title */
   title: string;
-  meta: string;
-  eyebrow?: string;
+  /** Short intro under the theme */
+  description?: string;
+  /** Optional secondary line (e.g. English title) */
+  meta?: string;
 };
 
 type RouteTransitionContextValue = {
@@ -108,9 +113,16 @@ export function RouteTransitionProvider({ children }: { children: ReactNode }) {
         <div className="route-transition-panel route-transition-panel-bottom" />
 
         <div className="route-transition-copy">
-          <p>{copy?.eyebrow ?? "OPENING PROJECT"}</p>
-          <h2>{copy?.title}</h2>
-          <span>{copy?.meta}</span>
+          <img
+            className="route-transition-brand"
+            src={portfolioAssetPath(brandAssets.wordmarkWhite)}
+            alt="BEIMU"
+          />
+          <div className="route-transition-destination">
+            <h2>{copy?.title}</h2>
+            {copy?.description ? <p>{copy.description}</p> : null}
+            {copy?.meta ? <span>{copy.meta}</span> : null}
+          </div>
           <i aria-hidden="true" />
         </div>
       </div>

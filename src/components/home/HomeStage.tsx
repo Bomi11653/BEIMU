@@ -21,6 +21,7 @@ import { CategoryDirectory } from "./CategoryDirectory";
 import { DownloadStage } from "./DownloadStage";
 import { PortfolioStage } from "./PortfolioStage";
 import { ProfileContactStage } from "./ProfileContactStage";
+import { StageAudioToggle } from "./StageAudioToggle";
 
 const AUTO_ADVANCE_MS = 8500;
 const LAST_STAGE = 4 as HomeStageIndex;
@@ -76,6 +77,8 @@ export function HomeStage() {
   const [activeMedia, setActiveMedia] = useState<CapabilityMedia>(
     initialCapability.media[0],
   );
+  const [brandIntroActive, setBrandIntroActive] = useState(false);
+  const [audioEnabled, setAudioEnabled] = useState(false);
   const rootRef = useRef<HTMLElement | null>(null);
   const syncingFromUrlRef = useRef(false);
   const urlReadyRef = useRef(false);
@@ -85,22 +88,15 @@ export function HomeStage() {
       number
     >,
   );
-  const userHasInteractedRef = useRef(false);
   const activeIdRef = useRef<CapabilityId>(initialCapability.id);
 
   const activateCapability = useCallback(
-    (id: CapabilityId, initiatedByUser = true) => {
-      if (initiatedByUser) {
-        userHasInteractedRef.current = true;
-      }
-
+    (id: CapabilityId) => {
       if (activeIdRef.current === id) return;
 
       const capability = capabilities.find((item) => item.id === id);
       if (!capability) return;
 
-      // Prefer first media for a category (stable), not rotating on every click —
-      // rotation during rapid clicks caused extra load spikes.
       const nextMedia = capability.media[0];
       mediaCursorRef.current[id] = 0;
 
@@ -111,25 +107,37 @@ export function HomeStage() {
     [],
   );
 
+  const advanceToNextCapability = useCallback(() => {
+    const activeIndex = capabilities.findIndex(
+      (item) => item.id === activeIdRef.current,
+    );
+    if (activeIndex < 0) return;
+
+    const nextCapability =
+      capabilities[(activeIndex + 1) % capabilities.length];
+    activateCapability(nextCapability.id);
+  }, [activateCapability]);
+
   useEffect(() => {
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-    if (reducedMotion || userHasInteractedRef.current || activeStage !== 0) {
+    if (
+      reducedMotion ||
+      activeStage !== 0 ||
+      brandIntroActive
+    ) {
       return;
     }
 
     const timer = window.setTimeout(() => {
-      if (userHasInteractedRef.current || activeStage !== 0) return;
-
-      const activeIndex = capabilities.findIndex((item) => item.id === activeId);
-      const nextCapability = capabilities[(activeIndex + 1) % capabilities.length];
-      activateCapability(nextCapability.id, false);
+      if (activeStage !== 0 || brandIntroActive) return;
+      advanceToNextCapability();
     }, AUTO_ADVANCE_MS);
 
     return () => window.clearTimeout(timer);
-  }, [activeId, activeStage, activateCapability]);
+  }, [activeId, activeStage, advanceToNextCapability, brandIntroActive]);
 
   const { direction, goToStage, isTransitioning } = useStageNavigation({
     activeStage,
@@ -236,12 +244,33 @@ export function HomeStage() {
         capabilities[
           (activeIndex + delta + capabilities.length) % capabilities.length
         ];
-      activateCapability(next.id, true);
+      activateCapability(next.id);
     };
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [activeId, activeStage, activateCapability]);
+
+  useEffect(() => {
+    if (brandIntroActive) {
+      document.body.dataset.brandIntro = "playing";
+      return () => {
+        delete document.body.dataset.brandIntro;
+      };
+    }
+
+    delete document.body.dataset.brandIntro;
+  }, [brandIntroActive]);
+
+  useEffect(() => {
+    if (activeStage === 0) return;
+    setAudioEnabled(false);
+  }, [activeStage]);
+
+  const showAudioToggle =
+    activeStage === 0 &&
+    !brandIntroActive &&
+    activeMedia.kind === "video";
 
   return (
     <main
@@ -251,11 +280,18 @@ export function HomeStage() {
       data-active-stage={activeStage}
       data-stage-direction={direction}
       data-stage-transitioning={isTransitioning ? "true" : "false"}
+      data-brand-intro={brandIntroActive ? "playing" : "done"}
     >
       <p className="visually-hidden" aria-live="polite">
         {STAGE_STATUS[activeStage]}
       </p>
-      <PortfolioStage media={activeMedia} isActive={activeStage === 0} />
+      <PortfolioStage
+        media={activeMedia}
+        isActive={activeStage === 0}
+        audioEnabled={audioEnabled}
+        onIntroActiveChange={setBrandIntroActive}
+        onBackgroundClick={advanceToNextCapability}
+      />
       <ProfileContactStage
         mode="about"
         isActive={activeStage === 1}
@@ -269,11 +305,18 @@ export function HomeStage() {
       <DownloadStage isActive={activeStage === 3} />
       <ProfileContactStage mode="contact" isActive={activeStage === 4} />
 
-      {showCarousel ? (
+      {showCarousel && !brandIntroActive ? (
         <CapabilityCarouselDots
           items={capabilities}
           activeId={activeId}
           onActivate={activateCapability}
+        />
+      ) : null}
+
+      {showAudioToggle ? (
+        <StageAudioToggle
+          enabled={audioEnabled}
+          onToggle={() => setAudioEnabled((current) => !current)}
         />
       ) : null}
 

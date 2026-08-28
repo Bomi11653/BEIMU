@@ -108,8 +108,8 @@ export function CategoryDirectory({
     event.preventDefault();
     onActivateCategory(category.id);
     startRouteTransition(category.route, {
-      eyebrow: "OPENING WORKS",
       title: category.labelZh,
+      description: category.description,
       meta: category.labelEn,
     });
   };

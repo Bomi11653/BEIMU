@@ -2,13 +2,17 @@
 
 import { useRef, useState, type RefObject } from "react";
 import {
+  CREDENTIAL_SLOT_COUNT,
   partnerBrands,
   platformLinks,
+  profileCredentials,
   publicProfile,
   type PlatformLink,
+  type ProfileLang,
 } from "@/data/profile";
 import { brandAssets } from "@/data/brand";
 import { portfolioAssetPath } from "@/data/portfolioCategories";
+import { AboutLanguageShutter } from "./AboutLanguageShutter";
 import { WeChatDialog } from "./WeChatDialog";
 
 export type ProfileStageMode = "about" | "contact";
@@ -80,7 +84,16 @@ export function ProfileContactStage({
 }: ProfileContactStageProps) {
   const wechatButtonRef = useRef<HTMLButtonElement | null>(null);
   const [isWechatOpen, setIsWechatOpen] = useState(false);
+  const [aboutLang, setAboutLang] = useState<ProfileLang>("zh");
   const isAbout = mode === "about";
+  const bioBlocks =
+    aboutLang === "zh"
+      ? publicProfile.introductionZh
+      : publicProfile.introductionEn;
+  const credentialSlots = Array.from(
+    { length: Math.max(CREDENTIAL_SLOT_COUNT, profileCredentials.length) },
+    (_, index) => profileCredentials[index] ?? null,
+  );
 
   return (
     <section
@@ -164,11 +177,9 @@ export function ProfileContactStage({
             >
               <header className="profile-identity-heading">
                 <h2 id="profile-title">
-                  {publicProfile.nameEn} <span>{publicProfile.nameZh}</span>
+                  {publicProfile.nameZh} <span>/ {publicProfile.alias}</span>
                 </h2>
-                <p>
-                  {publicProfile.studioName} · {publicProfile.title}
-                </p>
+                <p>{publicProfile.title}</p>
               </header>
 
               <div className="profile-introduction-grid">
@@ -182,7 +193,9 @@ export function ProfileContactStage({
                   </figure>
 
                   <div className="profile-summary-copy">
-                    <strong>{publicProfile.nameZh} / BEIMU</strong>
+                    <strong>
+                      {publicProfile.nameZh} / {publicProfile.alias}
+                    </strong>
                     <span>{publicProfile.disciplines.join(" · ")}</span>
                     <span>BASE　{publicProfile.location}</span>
                   </div>
@@ -199,19 +212,102 @@ export function ProfileContactStage({
                 </aside>
 
                 <div className="profile-biography">
-                  <p className="profile-edition">2026 CREATIVE PORTFOLIO</p>
+                  <div className="profile-biography-toolbar">
+                    <AboutLanguageShutter
+                      lang={aboutLang}
+                      onLangChange={setAboutLang}
+                    />
+                    <p className="profile-edition">
+                      {publicProfile.studioName} / {publicProfile.studioNameZh}
+                    </p>
+                  </div>
 
-                  <div lang="zh-CN">
-                    {publicProfile.introductionZh.map((paragraph) => (
-                      <p key={paragraph}>{paragraph}</p>
+                  <div
+                    lang={aboutLang === "zh" ? "zh-CN" : "en"}
+                    className="profile-bio-lang"
+                    aria-live="polite"
+                  >
+                    {bioBlocks.map((block) => (
+                      <div
+                        className="profile-bio-block"
+                        key={`${aboutLang}-${block.kicker ?? block.paragraphs[0]}`}
+                      >
+                        {block.kicker ? (
+                          <p className="profile-bio-kicker">{block.kicker}</p>
+                        ) : null}
+                        {block.paragraphs.map((paragraph) => (
+                          <p key={paragraph}>{paragraph}</p>
+                        ))}
+                      </div>
                     ))}
                   </div>
 
-                  <div lang="en">
-                    {publicProfile.introductionEn.map((paragraph) => (
-                      <p key={paragraph}>{paragraph}</p>
-                    ))}
-                  </div>
+                  <section
+                    className="profile-credentials"
+                    aria-labelledby="credentials-title"
+                  >
+                    <header className="profile-credentials-heading">
+                      <p>CREDENTIALS</p>
+                      <h3 id="credentials-title">专业认证</h3>
+                    </header>
+
+                    <ul className="profile-credentials-list">
+                      {credentialSlots.map((item, index) => (
+                        <li
+                          key={item?.id ?? `credential-slot-${index}`}
+                          className={
+                            item
+                              ? "profile-credential-card"
+                              : "profile-credential-card is-empty"
+                          }
+                        >
+                          {item ? (
+                            <>
+                              <p className="profile-credential-index">
+                                {String(index + 1).padStart(2, "0")}
+                              </p>
+                              <div>
+                                <strong>
+                                  {aboutLang === "zh"
+                                    ? item.titleZh
+                                    : item.titleEn}
+                                </strong>
+                                <span>
+                                  {aboutLang === "zh"
+                                    ? item.issuerZh
+                                    : item.issuerEn}
+                                  {item.year ? ` · ${item.year}` : ""}
+                                </span>
+                              </div>
+                              {item.verifyUrl ? (
+                                <a
+                                  href={item.verifyUrl}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  VERIFY ↗
+                                </a>
+                              ) : null}
+                            </>
+                          ) : (
+                            <>
+                              <p className="profile-credential-index">
+                                {String(index + 1).padStart(2, "0")}
+                              </p>
+                              <div>
+                                <strong>RESERVED</strong>
+                                <span>证书整理后显示</span>
+                              </div>
+                            </>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <p className="profile-credentials-more" aria-disabled="true">
+                      VIEW ALL CREDENTIALS
+                    </p>
+                  </section>
                 </div>
               </div>
             </section>
