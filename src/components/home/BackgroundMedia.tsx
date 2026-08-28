@@ -7,8 +7,6 @@ type BackgroundMediaProps = {
   media: CapabilityMedia;
   /** When false, portfolio videos stay hidden until brand intro completes. */
   revealed?: boolean;
-  /** When true, active background video plays with original audio. */
-  audioEnabled?: boolean;
 };
 
 const SWITCH_LOCK_MS = 340;
@@ -19,11 +17,7 @@ const HIDE_PAUSE_MS = 480;
  * - Video nodes never remount (fixed keys) → no remount thrash on rapid clicks
  * - Clicks within SWITCH_LOCK_MS coalesce to the latest target only
  */
-export function BackgroundMedia({
-  media,
-  revealed = true,
-  audioEnabled = false,
-}: BackgroundMediaProps) {
+export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps) {
   const [activeLayer, setActiveLayer] = useState<0 | 1>(0);
   const [layerMedia, setLayerMedia] = useState<[CapabilityMedia, CapabilityMedia]>([
     media,
@@ -180,16 +174,6 @@ export function BackgroundMedia({
   }, [layerMedia, revealed]);
 
   useEffect(() => {
-    videoRefs.current.forEach((video) => {
-      if (!video) return;
-      video.muted = !audioEnabled;
-      if (audioEnabled && video === videoRefs.current[activeLayerRef.current]) {
-        void video.play().catch(() => undefined);
-      }
-    });
-  }, [audioEnabled]);
-
-  useEffect(() => {
     return () => {
       if (flushTimerRef.current !== null) window.clearTimeout(flushTimerRef.current);
       if (pauseTimerRef.current !== null) window.clearTimeout(pauseTimerRef.current);
@@ -221,7 +205,7 @@ export function BackgroundMedia({
             ref={(node) => {
               videoRefs.current[layerIndex] = node;
             }}
-            muted={!audioEnabled}
+            muted
             loop
             playsInline
             preload="auto"

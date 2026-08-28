@@ -21,7 +21,6 @@ import { CategoryDirectory } from "./CategoryDirectory";
 import { DownloadStage } from "./DownloadStage";
 import { PortfolioStage } from "./PortfolioStage";
 import { ProfileContactStage } from "./ProfileContactStage";
-import { StageAudioToggle } from "./StageAudioToggle";
 
 const AUTO_ADVANCE_MS = 8500;
 const LAST_STAGE = 4 as HomeStageIndex;
@@ -78,7 +77,6 @@ export function HomeStage() {
     initialCapability.media[0],
   );
   const [brandIntroActive, setBrandIntroActive] = useState(false);
-  const [audioEnabled, setAudioEnabled] = useState(false);
   const rootRef = useRef<HTMLElement | null>(null);
   const syncingFromUrlRef = useRef(false);
   const urlReadyRef = useRef(false);
@@ -262,16 +260,6 @@ export function HomeStage() {
     delete document.body.dataset.brandIntro;
   }, [brandIntroActive]);
 
-  useEffect(() => {
-    if (activeStage === 0) return;
-    setAudioEnabled(false);
-  }, [activeStage]);
-
-  const showAudioToggle =
-    activeStage === 0 &&
-    !brandIntroActive &&
-    activeMedia.kind === "video";
-
   return (
     <main
       id="main-content"
@@ -288,7 +276,6 @@ export function HomeStage() {
       <PortfolioStage
         media={activeMedia}
         isActive={activeStage === 0}
-        audioEnabled={audioEnabled}
         onIntroActiveChange={setBrandIntroActive}
         onBackgroundClick={advanceToNextCapability}
       />
@@ -310,13 +297,6 @@ export function HomeStage() {
           items={capabilities}
           activeId={activeId}
           onActivate={activateCapability}
-        />
-      ) : null}
-
-      {showAudioToggle ? (
-        <StageAudioToggle
-          enabled={audioEnabled}
-          onToggle={() => setAudioEnabled((current) => !current)}
         />
       ) : null}
 
