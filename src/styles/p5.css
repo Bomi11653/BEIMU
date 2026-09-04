@@ -1366,8 +1366,9 @@
   .project-file-stage {
     position: relative;
     order: 0;
-    height: 48vh;
-    min-height: 24rem;
+    height: 40vh;
+    min-height: 15rem;
+    max-height: 20rem;
   }
 
   .project-file-preview-shade {
@@ -1390,18 +1391,18 @@
     order: 1;
     width: 100%;
     height: auto;
-    padding: 3.5rem 1.25rem 6rem;
+    padding: 2.5rem 1.15rem 5rem;
   }
 
   .project-file-heading {
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.15rem;
   }
 
   .project-file-row {
-    min-height: 7.2rem;
-    grid-template-columns: 2rem 3rem minmax(0, 1fr);
-    gap: 0.55rem 0.7rem;
+    min-height: 5.4rem;
+    grid-template-columns: 2rem 2.75rem minmax(0, 1fr);
+    gap: 0.45rem 0.6rem;
   }
 
   .project-file-actions {
@@ -1425,22 +1426,27 @@
   }
 
   .partner-archive {
-    min-height: 42vh;
-    padding: var(--stage-content-top) 1.25rem 3.5rem;
+    min-height: 0;
+    padding: var(--stage-content-top) 1.15rem 2.25rem;
+  }
+
+  .partner-archive-heading h2 {
+    font-size: clamp(2rem, 10vw, 3rem);
   }
 
   .profile-introduction {
     min-height: auto;
-    padding: 4rem 1.25rem 6rem;
+    padding: 3.25rem 1.15rem 4.5rem;
   }
 
   .profile-identity-heading {
-    margin-bottom: 4.5rem;
+    margin-bottom: 2.5rem;
   }
 
   .profile-identity-heading h2 {
     display: grid;
-    gap: 0.5rem;
+    gap: 0.4rem;
+    font-size: clamp(1.85rem, 9vw, 2.6rem);
   }
 
   .profile-identity-heading h2 span {
@@ -1449,23 +1455,59 @@
 
   .profile-introduction-grid {
     grid-template-columns: 1fr;
-    gap: 4rem;
+    gap: 2.5rem;
   }
 
   .profile-summary {
     width: 100%;
-    padding: 0 0 3.5rem;
+    padding: 0 0 2rem;
     border-right: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   }
 
+  .profile-portrait-card {
+    width: min(58vw, 14.5rem);
+  }
+
+  .profile-aside-contact {
+    width: min(100%, 100%);
+    margin-top: 1.35rem;
+    gap: 0.7rem;
+  }
+
+  .profile-aside-contact-label {
+    width: 100%;
+    font-size: 0.72rem;
+  }
+
+  .profile-aside-contact-list {
+    gap: 0.85rem;
+  }
+
+  .profile-aside-contact-item span {
+    font-size: 0.68rem;
+  }
+
+  .profile-aside-contact-item strong {
+    font-size: 0.9rem;
+  }
+
+  .profile-aside-contact-item em {
+    font-size: 0.64rem;
+  }
+
   .profile-biography-toolbar {
     flex-wrap: wrap;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .profile-bio-block p {
+    font-size: var(--type-body);
+    line-height: 1.7;
   }
 
   .profile-credentials {
-    margin-top: 2.75rem;
+    margin-top: 2.25rem;
   }
 
   .profile-credential-card {
@@ -1478,54 +1520,55 @@
 
   .platform-directory {
     display: grid;
-    height: 100dvh;
-    min-height: 40rem;
+    height: auto;
+    min-height: 0;
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-    gap: 1.25rem;
+    grid-template-rows: auto auto;
+    gap: 1.1rem;
     align-content: start;
-    padding: var(--stage-content-top) 0.8rem 1rem;
+    padding: var(--stage-content-top) 0.9rem 5rem;
+    overflow: visible;
   }
 
   .contact-introduction {
     display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: 0.45rem 1rem;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
     align-items: start;
-    padding: 0 0.2rem;
+    padding: 0 0.15rem;
   }
 
   .contact-introduction > p:first-child,
   .contact-introduction-rule,
   .contact-introduction h2,
-  .contact-introduction > p:nth-of-type(2) {
+  .contact-introduction > p:nth-of-type(2),
+  .contact-meta-list {
     grid-column: 1;
   }
 
   .contact-introduction-rule {
-    margin: 0.7rem 0 0.9rem;
+    margin: 0.55rem 0 0.7rem;
   }
 
   .contact-introduction h2 {
-    font-size: var(--type-section-title);
+    font-size: clamp(1.55rem, 7.5vw, 2.1rem);
   }
 
   .contact-introduction > p:nth-of-type(2) {
-    margin-top: 0.4rem;
+    margin-top: 0.25rem;
   }
 
   .contact-meta-list {
-    grid-column: 2;
-    grid-row: 1 / 5;
+    grid-row: auto;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.7rem;
-    margin-top: 0;
-    padding-top: 0;
-    border-top: 0;
+    gap: 0.85rem 1rem;
+    margin-top: 0.35rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
   }
 
   .contact-meta-list div {
-    gap: 0.25rem;
+    gap: 0.3rem;
   }
 
   .contact-meta-list dd {
@@ -1536,15 +1579,16 @@
     display: grid;
     min-height: 0;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(3, minmax(0, 1fr));
+    grid-template-rows: none;
+    grid-auto-rows: minmax(5.5rem, auto);
     gap: 0;
-    margin-top: 0;
+    margin-top: 0.25rem;
     align-self: stretch;
   }
 
   .contact-platform-link {
-    min-height: 0;
-    padding: 0.65rem;
+    min-height: 5.5rem;
+    padding: 0.85rem 0.7rem;
     border-right: 1px solid rgba(255, 255, 255, 0.13);
     border-bottom: 1px solid rgba(255, 255, 255, 0.13);
   }
@@ -1561,22 +1605,22 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.13);
   }
 
-  .contact-platform-link:nth-child(n + 5) {
+  .contact-platform-link:nth-child(n + 7) {
     border-bottom: 0;
   }
 
   .contact-platform-logo {
-    width: clamp(2.3rem, 10vw, 3rem);
-    height: clamp(2.3rem, 10vw, 3rem);
+    width: clamp(2.1rem, 9vw, 2.7rem);
+    height: clamp(2.1rem, 9vw, 2.7rem);
   }
 
   .contact-platform-ggac .contact-platform-logo {
-    width: min(7rem, 27vw);
-    height: 2.4rem;
+    width: min(6.5rem, 28vw);
+    height: 2.2rem;
   }
 
   .contact-platform-label {
-    font-size: var(--type-micro);
+    font-size: 0.72rem;
   }
 }
 

@@ -35,14 +35,14 @@
 
 @media (max-width: 700px) {
   :root {
-    --type-page-title: clamp(1.9rem, 8.8vw, 2.25rem);
-    --type-identity: clamp(1.5rem, 7vw, 1.75rem);
-    --type-project-title: clamp(1.5rem, 7.8vw, 1.875rem);
-    --type-section-title: clamp(1.125rem, 5vw, 1.375rem);
-    --type-body: clamp(0.875rem, 3.8vw, 0.9375rem);
-    --type-nav: clamp(0.78rem, 3.4vw, 0.875rem);
-    --type-label: 0.7rem;
-    --type-index: 0.7rem;
-    --type-micro: 0.64rem;
+    --type-page-title: clamp(1.75rem, 8vw, 2.1rem);
+    --type-identity: clamp(1.45rem, 6.5vw, 1.7rem);
+    --type-project-title: clamp(1.35rem, 7vw, 1.7rem);
+    --type-section-title: clamp(1.15rem, 5.2vw, 1.4rem);
+    --type-body: clamp(0.9rem, 3.9vw, 0.98rem);
+    --type-nav: clamp(0.82rem, 3.5vw, 0.9rem);
+    --type-label: 0.74rem;
+    --type-index: 0.74rem;
+    --type-micro: 0.68rem;
   }
 }

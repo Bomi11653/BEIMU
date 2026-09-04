@@ -1874,13 +1874,13 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
   }
 
   .capability-index {
-    font-size: 0.53rem;
-    letter-spacing: 0.04em;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
   }
 
   .capability-label {
-    font-size: clamp(0.61rem, 2.65vw, 0.76rem);
-    letter-spacing: 0;
+    font-size: clamp(0.72rem, 3.1vw, 0.86rem);
+    letter-spacing: 0.01em;
   }
 
   .identity-block {
@@ -1888,7 +1888,7 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
     flex-direction: column;
     justify-content: space-between;
     gap: 1.1rem;
-    padding: 0.55rem 1.15rem 3.6rem;
+    padding: 0.75rem 1.15rem 4.25rem;
   }
 
   .identity-brand {
@@ -1929,14 +1929,14 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
   }
 
   .identity-name-group h1 {
-    font-size: clamp(1.32rem, 5.4vw, 1.65rem);
-    letter-spacing: 0.07em;
+    font-size: clamp(1.45rem, 6vw, 1.85rem);
+    letter-spacing: 0.06em;
   }
 
   .identity-alias {
     margin-top: 0.4rem !important;
-    font-size: 0.58rem;
-    letter-spacing: 0.3em;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
   }
 
   .identity-statement {
@@ -1945,13 +1945,13 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
 
   .identity-kicker {
     margin-left: 0.45rem !important;
-    font-size: 0.52rem;
-    letter-spacing: 0.34em;
+    font-size: 0.68rem;
+    letter-spacing: 0.28em;
   }
 
   .identity-hero {
     margin-top: 0.55rem !important;
-    font-size: clamp(1.7rem, 8.8vw, 2.35rem);
+    font-size: clamp(1.85rem, 9.2vw, 2.55rem);
     letter-spacing: -0.01em;
     line-height: 1.02;
   }
@@ -1970,8 +1970,8 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
     right: auto;
     bottom: auto;
     width: 100%;
-    max-width: 16rem;
-    gap: 0.55rem;
+    max-width: 18rem;
+    gap: 0.65rem;
     transform: none;
     margin-top: auto;
   }
@@ -1994,15 +1994,15 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
   }
 
   .identity-disciplines li {
-    font-size: clamp(0.54rem, 2.55vw, 0.62rem);
-    letter-spacing: 0.14em;
+    font-size: clamp(0.7rem, 3vw, 0.82rem);
+    letter-spacing: 0.1em;
   }
 
   .identity-meta {
     position: static;
     margin-top: 0.95rem;
-    font-size: 0.48rem;
-    letter-spacing: 0.16em;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
   }
 
   .brand-name {
@@ -2012,7 +2012,7 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
   .portfolio-year,
   .location-label {
     bottom: 1.25rem;
-    font-size: 0.52rem;
+    font-size: 0.68rem;
   }
 
   .portfolio-year {
@@ -2031,11 +2031,11 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
 
   .category-directory-header p,
   .category-directory-header span {
-    font-size: 0.48rem;
+    font-size: 0.64rem;
   }
 
   .category-directory-header h2 {
-    font-size: 1.2rem;
+    font-size: 1.35rem;
   }
 
   .category-directory-viewport {
@@ -2067,7 +2067,7 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
   .category-card-index {
     top: 0.8rem;
     left: 0.8rem;
-    font-size: 0.5rem;
+    font-size: 0.64rem;
   }
 
   .category-card-action {
@@ -2081,13 +2081,13 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
   }
 
   .category-card-copy p {
-    font-size: 0.43rem;
-    letter-spacing: 0.1em;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
   }
 
   .category-card-copy h3 {
     margin-top: 0.3rem;
-    font-size: clamp(1.18rem, 5.9vw, 1.72rem);
+    font-size: clamp(1.28rem, 6.2vw, 1.85rem);
     line-height: 1.04;
   }
 
@@ -2098,13 +2098,13 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
   .category-directory-status {
     right: 0.75rem;
     bottom: 0.65rem;
-    font-size: 0.46rem;
+    font-size: 0.62rem;
   }
 
   .category-transition-index {
     top: 0.8rem;
     left: 0.8rem;
-    font-size: 0.48rem;
+    font-size: 0.64rem;
   }
 
   .category-transition-copy {
@@ -2925,13 +2925,13 @@ a.platform-window:focus-visible {
 @media (max-width: 900px) {
   .partner-archive {
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    gap: 1.75rem;
   }
 
   .profile-introduction {
     min-height: auto;
-    grid-template-columns: minmax(14rem, 0.65fr) minmax(20rem, 1.35fr);
-    gap: 3rem;
+    grid-template-columns: 1fr;
+    gap: 2.75rem;
   }
 
   .platform-window-grid {
@@ -2939,7 +2939,7 @@ a.platform-window:focus-visible {
   }
 
   .project-file-browser {
-    grid-template-columns: minmax(19rem, 0.9fr) minmax(24rem, 1.1fr);
+    grid-template-columns: 1fr;
   }
 
   .project-file-row {
@@ -2953,27 +2953,37 @@ a.platform-window:focus-visible {
 
 @media (max-width: 700px) {
   .partner-archive {
-    min-height: 52vh;
-    padding: 6rem 1.25rem 3.5rem;
+    min-height: 0;
+    padding: 5rem 1.15rem 2.5rem;
   }
 
   .partner-archive-heading h2,
   .platform-directory-heading h2 {
-    font-size: clamp(3rem, 16vw, 5rem);
+    font-size: clamp(2.2rem, 11vw, 3.4rem);
+  }
+
+  .partner-brand-list {
+    gap: 1.5rem 2rem;
+    justify-content: flex-start;
+  }
+
+  .partner-brand-list li {
+    width: 4.25rem;
+    height: 4.25rem;
   }
 
   .profile-introduction {
     grid-template-columns: 1fr;
-    gap: 4rem;
-    padding: 5rem 1.25rem 6rem;
+    gap: 2.75rem;
+    padding: 4rem 1.15rem 5rem;
   }
 
   .profile-portrait-card {
-    width: min(82vw, 22rem);
+    width: min(72vw, 18rem);
   }
 
   .profile-introduction-copy h2 {
-    font-size: clamp(2.8rem, 13.5vw, 4.8rem);
+    font-size: clamp(2rem, 10vw, 3.2rem);
   }
 
   .profile-signature {
@@ -2983,7 +2993,7 @@ a.platform-window:focus-visible {
   }
 
   .platform-directory {
-    padding: 5.5rem 1rem 7rem;
+    padding: 5rem 1rem 5rem;
   }
 
   .platform-directory-heading {
@@ -3000,7 +3010,7 @@ a.platform-window:focus-visible {
   }
 
   .platform-window {
-    min-height: 8.5rem;
+    min-height: 7.5rem;
   }
 
   .project-file-browser {
@@ -3013,32 +3023,33 @@ a.platform-window:focus-visible {
     position: relative;
     top: auto;
     order: 0;
-    height: 58vh;
-    min-height: 27rem;
+    height: 42vh;
+    min-height: 16rem;
+    max-height: 22rem;
   }
 
   .project-file-index {
     order: 1;
     min-height: 0;
-    padding: 4.5rem 1rem 6rem;
+    padding: 2.5rem 1rem 5rem;
     border-right: 0;
   }
 
   .project-file-heading {
-    margin-bottom: 3.5rem;
+    margin-bottom: 2rem;
   }
 
   .project-file-heading h2 {
-    font-size: clamp(3.3rem, 17vw, 5.5rem);
+    font-size: clamp(2.2rem, 12vw, 3.6rem);
   }
 
   .project-file-row {
-    min-height: 7rem;
+    min-height: 5.5rem;
     grid-template-columns: 2rem minmax(0, 1fr) auto;
   }
 
   .project-file-title strong {
-    font-size: clamp(1.8rem, 9vw, 3rem);
+    font-size: clamp(1.2rem, 6.5vw, 1.85rem);
   }
 
   .project-file-footer {
@@ -3046,7 +3057,7 @@ a.platform-window:focus-visible {
   }
 
   .project-file-preview-copy h3 {
-    font-size: clamp(3.5rem, 20vw, 6rem);
+    font-size: clamp(1.8rem, 10vw, 2.8rem);
   }
 }
 
@@ -3766,19 +3777,19 @@ a.platform-window:focus-visible {
   }
 
   .project-archive {
-    padding: 4.5rem 1rem 7rem;
+    padding: 4.5rem 1rem 6rem;
   }
 
   .project-archive-header {
-    margin-bottom: 3.5rem;
+    margin-bottom: 2.5rem;
   }
 
   .project-archive-header h2 {
-    font-size: clamp(3.4rem, 17vw, 5.5rem);
+    font-size: clamp(2.2rem, 12vw, 3.6rem);
   }
 
   .project-archive-list {
-    gap: 4.5rem;
+    gap: 2.75rem;
   }
 
   .project-archive-link {
@@ -3791,15 +3802,15 @@ a.platform-window:focus-visible {
   }
 
   .project-archive-media {
-    min-height: min(72vh, 32rem);
+    min-height: min(42vh, 18rem);
   }
 
   .project-archive-copy {
-    padding: 1.5rem 1.25rem 1.75rem;
+    padding: 1.25rem 1.1rem 1.5rem;
   }
 
   .project-archive-copy h3 {
-    font-size: clamp(2.8rem, 14vw, 4.5rem);
+    font-size: clamp(1.7rem, 9vw, 2.6rem);
   }
 
   .project-archive-empty {
@@ -3815,14 +3826,14 @@ a.platform-window:focus-visible {
     grid-template-columns: 1fr;
     min-height: 0;
     gap: 0;
-    padding: 0.25rem 1.25rem 2.5rem;
+    padding: 0.25rem 1.15rem 2rem;
   }
 
   .project-detail-cover-bleed {
     position: relative;
     inset: auto;
-    height: min(46vh, 22rem);
-    margin: 0 -1.25rem 1.5rem;
+    height: min(40vh, 17rem);
+    margin: 0 -1.15rem 1.25rem;
   }
 
   .project-detail-cover-image.is-sharp {
