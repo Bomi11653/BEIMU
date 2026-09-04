@@ -74,9 +74,9 @@ export function WeChatDialog({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={portfolioAssetPath("/media/contact/wechat-qr.png")}
-            alt="LEON 的微信二维码"
+            alt="Affectionwood 的微信二维码"
           />
-          <figcaption>扫码添加 LEON</figcaption>
+          <figcaption>微信：Affectionwood</figcaption>
         </figure>
       </div>
     </dialog>

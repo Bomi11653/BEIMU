@@ -96,6 +96,22 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <p className="project-detail-title-en">{project.titleEn}</p>
             <p className="project-detail-summary">{project.summary}</p>
 
+            {project.bodyZh?.length ? (
+              <div className="project-detail-body">
+                {project.bodyZh.map((block, blockIndex) => (
+                  <div
+                    className="project-detail-body-block"
+                    key={`${block.title ?? "lead"}-${blockIndex}`}
+                  >
+                    {block.title ? <h2>{block.title}</h2> : null}
+                    {block.paragraphs.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            ) : null}
+
             <dl className="project-detail-meta">
               {project.roleZh && (
                 <div>
@@ -125,37 +141,39 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </div>
         </header>
 
-        <section className="project-detail-gallery" aria-label="项目媒体">
-          {project.gallery.map((item, index) => (
-            <figure key={item.id}>
-              {item.kind === "video" ? (
-                <video
-                  src={item.src}
-                  poster={item.poster}
-                  controls
-                  muted
-                  playsInline
-                  preload="metadata"
-                  aria-label={item.alt}
-                  style={{ objectPosition: item.objectPosition }}
-                />
-              ) : (
-                // Assets are already prepared at their final display size.
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={item.src}
-                  alt={item.alt}
-                  loading={index > 0 ? "lazy" : "eager"}
-                  style={{ objectPosition: item.objectPosition }}
-                />
-              )}
-              <figcaption>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <span>{item.alt}</span>
-              </figcaption>
-            </figure>
-          ))}
-        </section>
+        {project.gallery.length > 0 ? (
+          <section className="project-detail-gallery" aria-label="项目媒体">
+            {project.gallery.map((item, index) => (
+              <figure key={item.id}>
+                {item.kind === "video" ? (
+                  <video
+                    src={item.src}
+                    poster={item.poster}
+                    controls
+                    muted
+                    playsInline
+                    preload="metadata"
+                    aria-label={item.alt}
+                    style={{ objectPosition: item.objectPosition }}
+                  />
+                ) : (
+                  // Assets are already prepared at their final display size.
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={item.src}
+                    alt={item.alt}
+                    loading={index > 0 ? "lazy" : "eager"}
+                    style={{ objectPosition: item.objectPosition }}
+                  />
+                )}
+                <figcaption>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <span>{item.alt}</span>
+                </figcaption>
+              </figure>
+            ))}
+          </section>
+        ) : null}
 
         <footer className="project-detail-footer">
           <div>
@@ -174,7 +192,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <div className="project-detail-actions">
             {project.externalUrl && (
               <a href={project.externalUrl} target="_blank" rel="noreferrer">
-                访问线上项目 ↗
+                {project.externalUrl.includes("douyin.com")
+                  ? "在抖音观看 ↗"
+                  : project.externalUrl.includes("bilibili.com")
+                    ? "在 Bilibili 观看 ↗"
+                    : "访问线上项目 ↗"}
               </a>
             )}
             <Link href={category.route}>返回作品列表</Link>

@@ -2,6 +2,10 @@ export type PartnerBrand = {
   id: string;
   name: string;
   logo: string;
+  /** Optional looping muted video for animated partner marks */
+  motion?: string;
+  /** Optical scale vs the shared logo slot (1 = full). */
+  scale?: number;
   href?: string;
 };
 
@@ -31,7 +35,20 @@ export type ProfileCredential = {
   verifyUrl?: string;
 };
 
-export const partnerBrands: PartnerBrand[] = [];
+export const partnerBrands: PartnerBrand[] = [
+  {
+    id: "tuyi",
+    name: "屠艺",
+    logo: "/media/partners/tuyi.png",
+  },
+  {
+    id: "all-live",
+    name: "ALL LIVE",
+    logo: "/media/partners/all-live.png",
+    motion: "/media/partners/all-live-hold.webm",
+    scale: 0.9,
+  },
+];
 
 export const profileCredentials: ProfileCredential[] = [
   {
@@ -145,7 +162,7 @@ export const platformLinks: PlatformLink[] = [
   {
     id: "wechat",
     label: "微信",
-    handle: "LEON",
+    handle: "Affectionwood",
     logo: "/media/contact/logos/wechat.svg",
     kind: "wechat",
   },
@@ -157,4 +174,17 @@ export const platformLinks: PlatformLink[] = [
     kind: "email",
     href: "mailto:shhsjsasd886@gmail.com",
   },
+  {
+    id: "qq",
+    label: "QQ",
+    handle: "33110783636@qq.com",
+    logo: "/media/contact/logos/qq.svg",
+    kind: "email",
+    href: "mailto:33110783636@qq.com",
+  },
 ];
+
+/** Direct channels shown under About sidebar “联系方式”. */
+export const profileDirectContacts = platformLinks.filter((link) =>
+  ["wechat", "gmail", "qq"].includes(link.id),
+);

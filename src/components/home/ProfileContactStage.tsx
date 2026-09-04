@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef, useState, type RefObject } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type RefObject } from "react";
 import {
   CREDENTIAL_SLOT_COUNT,
   partnerBrands,
   platformLinks,
   profileCredentials,
+  profileDirectContacts,
   publicProfile,
   type PlatformLink,
   type ProfileLang,
@@ -41,7 +42,9 @@ function PlatformLinkItem({
       <span
         className="contact-platform-label"
         lang={
-          ["xiaohongshu", "wechat"].includes(platform.id) ? "zh-CN" : "en"
+          ["xiaohongshu", "wechat", "qq"].includes(platform.id)
+            ? "zh-CN"
+            : "en"
         }
       >
         {platform.label}
@@ -56,7 +59,7 @@ function PlatformLinkItem({
         className="contact-platform-link contact-platform-wechat"
         type="button"
         aria-haspopup="dialog"
-        aria-label="打开 LEON 的微信二维码"
+        aria-label="打开 Affectionwood 的微信二维码"
         onClick={onOpenWechat}
       >
         {content}
@@ -85,6 +88,41 @@ export function ProfileContactStage({
   const wechatButtonRef = useRef<HTMLButtonElement | null>(null);
   const [isWechatOpen, setIsWechatOpen] = useState(false);
   const [aboutLang, setAboutLang] = useState<ProfileLang>("zh");
+  const [copiedContactId, setCopiedContactId] = useState<string | null>(null);
+  const copyResetTimerRef = useRef<number | null>(null);
+
+  const copyContactHandle = async (id: string, value: string) => {
+    try {
+      await navigator.clipboard.writeText(value);
+    } catch {
+      const input = document.createElement("textarea");
+      input.value = value;
+      input.setAttribute("readonly", "");
+      input.style.position = "fixed";
+      input.style.opacity = "0";
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      document.body.removeChild(input);
+    }
+
+    setCopiedContactId(id);
+    if (copyResetTimerRef.current != null) {
+      window.clearTimeout(copyResetTimerRef.current);
+    }
+    copyResetTimerRef.current = window.setTimeout(() => {
+      setCopiedContactId(null);
+      copyResetTimerRef.current = null;
+    }, 1600);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (copyResetTimerRef.current != null) {
+        window.clearTimeout(copyResetTimerRef.current);
+      }
+    };
+  }, []);
   const isAbout = mode === "about";
   const bioBlocks =
     aboutLang === "zh"
@@ -145,19 +183,73 @@ export function ProfileContactStage({
 
               {partnerBrands.length > 0 ? (
                 <ul className="partner-brand-list">
-                  {partnerBrands.map((brand) => (
-                    <li key={brand.id}>
-                      {brand.href ? (
-                        <a href={brand.href} target="_blank" rel="noreferrer">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={brand.logo} alt={brand.name} />
-                        </a>
-                      ) : (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={brand.logo} alt={brand.name} />
-                      )}
-                    </li>
-                  ))}
+                  {partnerBrands.map((brand) => {
+                    const scaleStyle =
+                      brand.scale != null
+                        ? ({
+                            ["--partner-mark-scale" as string]: String(
+                              brand.scale,
+                            ),
+                          } as CSSProperties)
+                        : undefined;
+
+                    const mark = brand.motion ? (
+                      <span
+                        className="partner-brand-mark partner-brand-mark--motion"
+                        style={scaleStyle}
+                      >
+                        <video
+                          className="partner-brand-motion"
+                          poster={portfolioAssetPath(brand.logo)}
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          aria-label={brand.name}
+                          onError={(event) => {
+                            event.currentTarget.style.display = "none";
+                            const fallback =
+                              event.currentTarget.nextElementSibling;
+                            if (fallback instanceof HTMLElement) {
+                              fallback.style.opacity = "1";
+                            }
+                          }}
+                        >
+                          <source
+                            src={portfolioAssetPath(brand.motion)}
+                            type="video/webm"
+                          />
+                        </video>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          className="partner-brand-fallback"
+                          src={portfolioAssetPath(brand.logo)}
+                          alt=""
+                          aria-hidden="true"
+                        />
+                      </span>
+                    ) : (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        className="partner-brand-mark"
+                        style={scaleStyle}
+                        src={portfolioAssetPath(brand.logo)}
+                        alt={brand.name}
+                      />
+                    );
+
+                    return (
+                      <li key={brand.id} data-partner={brand.id}>
+                        {brand.href ? (
+                          <a href={brand.href} target="_blank" rel="noreferrer">
+                            {mark}
+                          </a>
+                        ) : (
+                          mark
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               ) : (
                 <div
@@ -200,15 +292,51 @@ export function ProfileContactStage({
                     <span>BASE　{publicProfile.location}</span>
                   </div>
 
-                  {onGoToContact ? (
-                    <button
-                      className="profile-contact-jump"
-                      type="button"
-                      onClick={onGoToContact}
-                    >
+                  <div className="profile-aside-contact">
+                    <p className="profile-aside-contact-label">
                       联系方式 / CONTACT
-                    </button>
-                  ) : null}
+                    </p>
+                    <ul className="profile-aside-contact-list">
+                      {profileDirectContacts.map((channel) => {
+                        const isCopied = copiedContactId === channel.id;
+                        return (
+                          <li key={channel.id}>
+                            <button
+                              ref={
+                                channel.kind === "wechat"
+                                  ? wechatButtonRef
+                                  : undefined
+                              }
+                              className={`profile-aside-contact-item${isCopied ? " is-copied" : ""}`}
+                              type="button"
+                              aria-label={`复制${channel.label}：${channel.handle}`}
+                              onClick={() =>
+                                void copyContactHandle(
+                                  channel.id,
+                                  channel.handle,
+                                )
+                              }
+                            >
+                              <span>{channel.label}</span>
+                              <strong>{channel.handle}</strong>
+                              <em aria-live="polite">
+                                {isCopied ? "已复制" : "点击复制"}
+                              </em>
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                    {onGoToContact ? (
+                      <button
+                        className="profile-contact-jump"
+                        type="button"
+                        onClick={onGoToContact}
+                      >
+                        全部平台入口 →
+                      </button>
+                    ) : null}
+                  </div>
                 </aside>
 
                 <div className="profile-biography">
@@ -358,13 +486,11 @@ export function ProfileContactStage({
         )}
       </div>
 
-      {!isAbout ? (
-        <WeChatDialog
-          isOpen={isWechatOpen && isActive}
-          onClose={() => setIsWechatOpen(false)}
-          returnFocusRef={wechatButtonRef}
-        />
-      ) : null}
+      <WeChatDialog
+        isOpen={isWechatOpen && isActive}
+        onClose={() => setIsWechatOpen(false)}
+        returnFocusRef={wechatButtonRef}
+      />
     </section>
   );
 }

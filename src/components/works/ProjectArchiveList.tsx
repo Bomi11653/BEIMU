@@ -32,17 +32,34 @@ function ProjectPreview({
       onClick={(event) => onOpen(event, project)}
       aria-label={`打开项目：${project.titleZh}`}
     >
-      <span
-        className="project-file-preview-image"
-        key={project.id}
-        style={{
-          backgroundImage: `url("${project.cover}")`,
-          backgroundPosition: project.coverPosition ?? "85% center",
-        }}
-        aria-hidden="true"
-      />
+      {project.teaser ? (
+        <video
+          className="project-file-preview-video"
+          key={project.id}
+          src={project.teaser}
+          poster={project.cover}
+          muted
+          loop
+          playsInline
+          autoPlay
+          preload="metadata"
+          aria-hidden="true"
+        />
+      ) : (
+        <span
+          className="project-file-preview-image"
+          key={project.id}
+          style={{
+            backgroundImage: `url("${project.cover}")`,
+            backgroundPosition: project.coverPosition ?? "85% center",
+          }}
+          aria-hidden="true"
+        />
+      )}
       <span className="project-file-preview-shade" aria-hidden="true" />
-      <span className="project-file-preview-open">VIEW PROJECT</span>
+      <span className="project-file-preview-open">
+        {project.teaser ? "PREVIEW · 3S" : "VIEW PROJECT"}
+      </span>
     </Link>
   );
 }
@@ -111,11 +128,60 @@ export function ProjectArchiveList({ category }: ProjectArchiveListProps) {
         <ol className="project-file-list">
           {category.projects.map((project, index) => {
             const isActive = project.id === activeProject.id;
+            const rowClass = `project-file-row${isActive ? " is-active" : ""}`;
+            const useExternalActions = Boolean(project.externalUrl);
+            const externalLabel = project.externalUrl?.includes("douyin.com")
+              ? "抖音"
+              : project.externalUrl?.includes("bilibili.com")
+                ? "Bilibili"
+                : "跳转";
+
+            if (useExternalActions) {
+              return (
+                <li key={project.id}>
+                  <div
+                    className={rowClass}
+                    onMouseEnter={() => setActiveProjectId(project.id)}
+                    onFocusCapture={() => setActiveProjectId(project.id)}
+                    onTouchStart={() => setActiveProjectId(project.id)}
+                  >
+                    <span className="project-file-number">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="project-file-year">
+                      {project.year ?? "—"}
+                    </span>
+                    <span className="project-file-title">
+                      <strong>{project.titleZh}</strong>
+                      <small>{project.summary}</small>
+                    </span>
+                    <div className="project-file-actions">
+                      <Link
+                        className="project-file-action"
+                        href={projectHref(category, project)}
+                        onClick={(event) => openProject(event, project)}
+                        aria-disabled={isTransitioning}
+                      >
+                        详情
+                      </Link>
+                      <a
+                        className="project-file-action is-external"
+                        href={project.externalUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {externalLabel}
+                      </a>
+                    </div>
+                  </div>
+                </li>
+              );
+            }
 
             return (
               <li key={project.id}>
                 <Link
-                  className={`project-file-row${isActive ? " is-active" : ""}`}
+                  className={rowClass}
                   href={projectHref(category, project)}
                   onClick={(event) => openProject(event, project)}
                   onMouseEnter={() => setActiveProjectId(project.id)}
