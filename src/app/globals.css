@@ -2087,8 +2087,9 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
 
   .category-card-copy h3 {
     margin-top: 0.3rem;
-    font-size: clamp(1.28rem, 6.2vw, 1.85rem);
-    line-height: 1.04;
+    font-size: clamp(1.05rem, 5vw, 1.45rem);
+    line-height: 1.12;
+    overflow-wrap: anywhere;
   }
 
   .category-card-copy > span {
@@ -3079,6 +3080,16 @@ a.platform-window:focus-visible {
 
   .capability-item:last-child .capability-label {
     max-width: 6.2rem;
+  }
+
+  .category-directory-grid,
+  .category-directory-grid[data-active-slot] {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+  }
+
+  .category-card-copy h3 {
+    font-size: clamp(1.2rem, 6.5vw, 1.55rem);
   }
 }
 
