@@ -6,4 +6,6 @@ export const brandAssets = {
   signatureWhite: "/brand/BEIMU_Signature_White.svg",
   primaryVerticalWhite: "/brand/BEIMU_Primary_Vertical_White.svg",
   brandIntroVideo: "/media/brand/beimu-brand-ident.mp4",
+  brandIntroVideoMobile: "/media/brand/beimu-brand-ident-mobile.mp4",
+  brandIntroPoster: "/media/brand/beimu-brand-ident-poster.jpg",
 } as const;

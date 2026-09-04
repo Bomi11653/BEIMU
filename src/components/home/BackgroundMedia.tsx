@@ -16,6 +16,7 @@ const HIDE_PAUSE_MS = 480;
  * Stable dual-layer crossfade.
  * - Video nodes never remount (fixed keys) → no remount thrash on rapid clicks
  * - Clicks within SWITCH_LOCK_MS coalesce to the latest target only
+ * - Sources only load after `revealed`; inactive layer uses preload=none
  */
 export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps) {
   const [activeLayer, setActiveLayer] = useState<0 | 1>(0);
@@ -36,10 +37,15 @@ export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps
   const flushTimerRef = useRef<number | null>(null);
   const pauseTimerRef = useRef<number | null>(null);
   const targetLayerRef = useRef<0 | 1>(0);
+  const revealedRef = useRef(revealed);
 
   useEffect(() => {
     activeLayerRef.current = activeLayer;
   }, [activeLayer]);
+
+  useEffect(() => {
+    revealedRef.current = revealed;
+  }, [revealed]);
 
   // Coalesce rapid media requests into one swap.
   useEffect(() => {
@@ -65,7 +71,6 @@ export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps
         return;
       }
 
-      // Play/reveal is handled by the layerMedia effect below (token-gated).
       void token;
     };
 
@@ -100,12 +105,17 @@ export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps
 
   // When a layer's media changes, wait for canplay then crossfade.
   useEffect(() => {
+    if (!revealed) return;
+
     const layer = targetLayerRef.current;
     const next = layerMedia[layer];
     const token = tokenRef.current;
 
     if (next.kind !== "video") return;
-    if (next.id === layerMedia[activeLayerRef.current]?.id && activeLayerRef.current === layer) {
+    if (
+      next.id === layerMedia[activeLayerRef.current]?.id &&
+      activeLayerRef.current === layer
+    ) {
       return;
     }
 
@@ -115,7 +125,7 @@ export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps
     let cancelled = false;
 
     const reveal = () => {
-      if (cancelled || tokenRef.current !== token || !revealed) return;
+      if (cancelled || tokenRef.current !== token || !revealedRef.current) return;
       activeLayerRef.current = layer;
       setActiveLayer(layer);
 
@@ -124,12 +134,18 @@ export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps
       }
       pauseTimerRef.current = window.setTimeout(() => {
         const hidden = layer === 0 ? 1 : 0;
-        videoRefs.current[hidden]?.pause();
+        const hiddenVideo = videoRefs.current[hidden];
+        hiddenVideo?.pause();
+        // Drop inactive source so it stops downloading.
+        if (hiddenVideo) {
+          hiddenVideo.removeAttribute("src");
+          hiddenVideo.load();
+        }
       }, HIDE_PAUSE_MS);
     };
 
     const playAndReveal = () => {
-      if (cancelled || tokenRef.current !== token || !revealed) return;
+      if (cancelled || tokenRef.current !== token || !revealedRef.current) return;
       void video
         .play()
         .catch(() => undefined)
@@ -153,6 +169,8 @@ export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps
       playAndReveal();
     };
     video.addEventListener("canplay", onReady);
+    // Ensure load starts after src attaches post-reveal.
+    video.load();
 
     return () => {
       cancelled = true;
@@ -161,7 +179,12 @@ export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps
   }, [layerMedia, revealed]);
 
   useEffect(() => {
-    if (!revealed) return;
+    if (!revealed) {
+      for (const video of videoRefs.current) {
+        video?.pause();
+      }
+      return;
+    }
 
     const layer = activeLayerRef.current;
     const current = layerMedia[layer];
@@ -170,8 +193,26 @@ export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps
     const video = videoRefs.current[layer];
     if (!video) return;
 
-    void video.play().catch(() => undefined);
-  }, [layerMedia, revealed]);
+    const playActive = () => {
+      void video.play().catch(() => undefined);
+    };
+
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      playActive();
+      return;
+    }
+
+    const onReady = () => {
+      video.removeEventListener("canplay", onReady);
+      playActive();
+    };
+    video.addEventListener("canplay", onReady);
+    video.load();
+
+    return () => {
+      video.removeEventListener("canplay", onReady);
+    };
+  }, [layerMedia, revealed, activeLayer]);
 
   useEffect(() => {
     return () => {
@@ -198,21 +239,28 @@ export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps
           );
         }
 
+        const shouldLoad = revealed && (isActive || layerIndex === targetLayerRef.current);
+
         return (
           <video
             className={`stage-video${isActive ? " is-active" : ""}`}
             key={`layer-${layerIndex}`}
             ref={(node) => {
               videoRefs.current[layerIndex] = node;
+              if (node) {
+                node.setAttribute("webkit-playsinline", "true");
+                node.setAttribute("playsinline", "true");
+                node.setAttribute("x5-playsinline", "true");
+                node.setAttribute("x5-video-player-type", "h5");
+              }
             }}
             muted
             loop
             playsInline
-            preload="auto"
+            preload={shouldLoad && isActive ? "metadata" : "none"}
             poster={layer.poster}
-            src={layer.src}
+            src={shouldLoad ? layer.src : undefined}
             style={{ objectPosition: layer.objectPosition }}
-            autoPlay={layerIndex === 0 && revealed}
           />
         );
       })}

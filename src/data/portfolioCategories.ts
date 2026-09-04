@@ -344,7 +344,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "solo-c",
         kind: "video",
         src: portfolioAssetPath(
-          "/media/works/3d-product-motion/solo-c/preview.mp4",
+          "/media/works/3d-product-motion/solo-c/teaser.mp4",
         ),
         poster: portfolioAssetPath(
           "/media/works/3d-product-motion/solo-c/poster.jpg",
@@ -355,7 +355,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "k212s",
         kind: "video",
         src: portfolioAssetPath(
-          "/media/works/3d-product-motion/k212s/preview.mp4",
+          "/media/works/3d-product-motion/k212s/teaser.mp4",
         ),
         poster: portfolioAssetPath(
           "/media/works/3d-product-motion/k212s/poster.jpg",

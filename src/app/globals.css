@@ -389,6 +389,7 @@ button {
 }
 
 .brand-intro-video-hit {
+  position: relative;
   display: grid;
   flex: 1;
   width: 100%;
@@ -407,6 +408,34 @@ button {
   object-fit: contain;
   background: #000;
   pointer-events: none;
+}
+
+.brand-intro-video.is-mobile-cover {
+  object-fit: cover;
+  object-position: center center;
+}
+
+.brand-intro-gesture-hint {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(4.5rem, 14vh, 7rem);
+  z-index: 1;
+  padding: 0.55rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+@media (max-width: 768px) and (orientation: portrait) {
+  .brand-intro-video {
+    object-fit: cover;
+    object-position: center center;
+  }
 }
 
 .brand-intro-overlay .stage-audio-toggle {
