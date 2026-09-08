@@ -21,6 +21,7 @@ body {
   min-height: 100%;
   margin: 0;
   background: #000;
+  overflow-x: clip;
 }
 
 body {
@@ -1843,7 +1844,11 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
 @media (max-width: 760px) {
   .home-stage,
   .portfolio-stage {
-    min-height: 500px;
+    min-height: 100dvh;
+  }
+
+  .home-stage {
+    touch-action: manipulation;
   }
 
   .stage-video {
@@ -1851,44 +1856,60 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
   }
 
   .stage-content {
-    padding: 1rem;
+    padding:
+      calc(0.85rem + env(safe-area-inset-top, 0px))
+      max(1rem, env(safe-area-inset-right, 0px))
+      calc(1rem + env(safe-area-inset-bottom, 0px))
+      max(1rem, env(safe-area-inset-left, 0px));
+  }
+
+  .global-top-nav {
+    padding-top: env(safe-area-inset-top, 0px);
   }
 
   .edge-reveal-nav {
     --edge-nav-offset: 0.55rem;
-    --edge-nav-lift: clamp(4.35rem, 9vh, 5.5rem);
+    --edge-nav-lift: calc(clamp(4.1rem, 8.5vh, 5.25rem) + env(safe-area-inset-bottom, 0px));
     height: 4.1rem;
   }
 
   .edge-reveal-nav-panel {
-    width: calc(100vw - 1.5rem);
+    width: min(100% - 1.25rem, calc(100vw - 1.25rem));
+    max-width: calc(100dvw - 1.25rem);
   }
 
   .capability-nav {
-    min-height: 3.25rem;
+    min-height: 3.45rem;
+    gap: 0.15rem;
   }
 
   .capability-item {
-    gap: 0.38rem;
-    padding: 0 0.35rem;
+    gap: 0.32rem;
+    min-height: 3.1rem;
+    padding: 0.25rem 0.2rem;
   }
 
   .capability-index {
-    font-size: 0.68rem;
+    font-size: 0.62rem;
     letter-spacing: 0.06em;
   }
 
   .capability-label {
-    font-size: clamp(0.72rem, 3.1vw, 0.86rem);
+    font-size: clamp(0.7rem, 2.9vw, 0.82rem);
     letter-spacing: 0.01em;
+    line-height: 1.2;
   }
 
   .identity-block {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 1.1rem;
-    padding: 0.75rem 1.15rem 4.25rem;
+    gap: 1rem;
+    padding:
+      calc(0.45rem + env(safe-area-inset-top, 0px))
+      max(1.05rem, env(safe-area-inset-right, 0px))
+      calc(3.35rem + env(safe-area-inset-bottom, 0px))
+      max(1.05rem, env(safe-area-inset-left, 0px));
   }
 
   .identity-brand {
@@ -1897,7 +1918,7 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
   }
 
   .identity-brand-mark {
-    height: 2.15rem;
+    height: 1.95rem;
   }
 
   .identity-main {
@@ -1907,7 +1928,7 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
     width: 100%;
     max-width: none;
     transform: none;
-    padding-top: clamp(1.35rem, 6vh, 2.8rem);
+    padding-top: clamp(1.1rem, 5vh, 2.2rem);
   }
 
   .identity-main::before {
@@ -1929,31 +1950,31 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
   }
 
   .identity-name-group h1 {
-    font-size: clamp(1.45rem, 6vw, 1.85rem);
-    letter-spacing: 0.06em;
+    font-size: clamp(1.45rem, 6vw, 1.8rem);
+    letter-spacing: 0.05em;
   }
 
   .identity-alias {
-    margin-top: 0.4rem !important;
-    font-size: 0.72rem;
-    letter-spacing: 0.22em;
+    margin-top: 0.35rem !important;
+    font-size: 0.68rem;
+    letter-spacing: 0.24em;
   }
 
   .identity-statement {
-    margin-top: clamp(1.7rem, 5vh, 2.4rem);
+    margin-top: clamp(1.35rem, 4.2vh, 2rem);
   }
 
   .identity-kicker {
-    margin-left: 0.45rem !important;
-    font-size: 0.68rem;
-    letter-spacing: 0.28em;
+    margin-left: 0.35rem !important;
+    font-size: 0.64rem;
+    letter-spacing: 0.26em;
   }
 
   .identity-hero {
-    margin-top: 0.55rem !important;
-    font-size: clamp(1.85rem, 9.2vw, 2.55rem);
-    letter-spacing: -0.01em;
-    line-height: 1.02;
+    margin-top: 0.5rem !important;
+    font-size: clamp(1.85rem, 9vw, 2.45rem);
+    letter-spacing: -0.015em;
+    line-height: 1.05;
   }
 
   .identity-hero > span {
@@ -1971,7 +1992,7 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
     bottom: auto;
     width: 100%;
     max-width: 18rem;
-    gap: 0.65rem;
+    gap: 0.5rem;
     transform: none;
     margin-top: auto;
   }
@@ -1994,15 +2015,15 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
   }
 
   .identity-disciplines li {
-    font-size: clamp(0.7rem, 3vw, 0.82rem);
+    font-size: clamp(0.68rem, 2.8vw, 0.78rem);
     letter-spacing: 0.1em;
   }
 
   .identity-meta {
     position: static;
-    margin-top: 0.95rem;
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
+    margin-top: 0.85rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
   }
 
   .brand-name {
@@ -2011,31 +2032,31 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
 
   .portfolio-year,
   .location-label {
-    bottom: 1.25rem;
-    font-size: 0.68rem;
+    bottom: calc(1.05rem + env(safe-area-inset-bottom, 0px));
+    font-size: 0.62rem;
   }
 
   .portfolio-year {
-    left: 1.25rem;
+    left: max(1.05rem, env(safe-area-inset-left, 0px));
     transform: none;
   }
 
   .location-label {
-    right: 1.25rem;
+    right: max(1.05rem, env(safe-area-inset-right, 0px));
   }
 
   .category-directory-header {
-    top: 0.75rem;
-    right: 0.75rem;
+    top: calc(0.7rem + env(safe-area-inset-top, 0px));
+    right: max(0.75rem, env(safe-area-inset-right, 0px));
   }
 
   .category-directory-header p,
   .category-directory-header span {
-    font-size: 0.64rem;
+    font-size: 0.58rem;
   }
 
   .category-directory-header h2 {
-    font-size: 1.35rem;
+    font-size: 1.28rem;
   }
 
   .category-directory-viewport {
@@ -2065,9 +2086,9 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
   }
 
   .category-card-index {
-    top: 0.8rem;
-    left: 0.8rem;
-    font-size: 0.64rem;
+    top: 0.75rem;
+    left: 0.75rem;
+    font-size: 0.62rem;
   }
 
   .category-card-action {
@@ -2075,21 +2096,20 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
   }
 
   .category-card-copy {
-    right: 0.8rem;
-    bottom: 0.9rem;
-    left: 0.8rem;
+    right: 0.75rem;
+    bottom: 0.85rem;
+    left: 0.75rem;
   }
 
   .category-card-copy p {
-    font-size: 0.62rem;
+    font-size: 0.58rem;
     letter-spacing: 0.08em;
   }
 
   .category-card-copy h3 {
-    margin-top: 0.3rem;
-    font-size: clamp(1.05rem, 5vw, 1.45rem);
-    line-height: 1.12;
-    overflow-wrap: anywhere;
+    margin-top: 0.28rem;
+    font-size: clamp(1.2rem, 5.6vw, 1.65rem);
+    line-height: 1.06;
   }
 
   .category-card-copy > span {
@@ -2098,53 +2118,53 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
 
   .category-directory-status {
     right: 0.75rem;
-    bottom: 0.65rem;
-    font-size: 0.62rem;
+    bottom: calc(0.55rem + env(safe-area-inset-bottom, 0px));
+    font-size: 0.58rem;
   }
 
   .category-transition-index {
-    top: 0.8rem;
-    left: 0.8rem;
-    font-size: 0.64rem;
+    top: 0.75rem;
+    left: 0.75rem;
+    font-size: 0.58rem;
   }
 
   .category-transition-copy {
-    right: 0.8rem;
-    bottom: 0.9rem;
-    left: 0.8rem;
+    right: 0.75rem;
+    bottom: 0.85rem;
+    left: 0.75rem;
   }
 
   .category-transition-copy h2 {
-    font-size: clamp(1.18rem, 5.9vw, 1.72rem);
+    font-size: clamp(1.2rem, 5.6vw, 1.65rem);
   }
 
   .category-transition-overlay.is-expanded .category-transition-index {
     top: 1rem;
-    left: 1.25rem;
+    left: 1.15rem;
   }
 
   .category-transition-overlay.is-expanded .category-transition-copy {
-    right: 1.25rem;
-    bottom: 9.5rem;
-    left: 1.25rem;
+    right: 1.15rem;
+    bottom: 8.5rem;
+    left: 1.15rem;
   }
 
   .category-transition-overlay.is-expanded .category-transition-copy h2 {
-    font-size: clamp(3.6rem, 19vw, 6rem);
+    font-size: clamp(2.6rem, 14vw, 4.5rem);
   }
 
   .category-transition-copy p {
-    font-size: 0.78rem;
+    font-size: 0.84rem;
   }
 
   .stage-switch-cue {
-    bottom: 0.52rem;
-    min-height: 2.5rem;
-    padding: 0.55rem 0.75rem;
+    bottom: calc(0.4rem + env(safe-area-inset-bottom, 0px));
+    min-height: 2.65rem;
+    padding: 0.55rem 0.85rem;
   }
 
   .stage-switch-cue span {
-    font-size: 0.5rem;
+    font-size: 0.62rem;
   }
 
   .work-category-nav {
@@ -2154,26 +2174,35 @@ body:not([data-brand-intro="playing"]) .global-top-nav {
   }
 
   .work-category-heading {
-    right: 1.25rem;
-    bottom: 9.5rem;
-    left: 1.25rem;
+    right: 1.15rem;
+    bottom: 8.5rem;
+    left: 1.15rem;
     max-width: none;
   }
 
   .work-category-heading h1 {
-    font-size: clamp(3.6rem, 19vw, 6rem);
+    font-size: clamp(2.6rem, 14vw, 4.5rem);
   }
 
   .work-category-heading > span {
     max-width: 27rem;
-    margin-top: 1rem;
+    margin-top: 0.85rem;
+    font-size: var(--type-body);
   }
 
   .work-category-building-status {
-    right: 1.25rem;
-    bottom: 1.5rem;
-    left: 1.25rem;
+    right: 1.15rem;
+    bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+    left: 1.15rem;
     max-width: none;
+  }
+
+  .brand-intro-overlay .stage-audio-toggle {
+    margin-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .brand-intro-gesture-hint {
+    bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -2926,13 +2955,13 @@ a.platform-window:focus-visible {
 @media (max-width: 900px) {
   .partner-archive {
     grid-template-columns: 1fr;
-    gap: 1.75rem;
+    gap: 2.5rem;
   }
 
   .profile-introduction {
     min-height: auto;
-    grid-template-columns: 1fr;
-    gap: 2.75rem;
+    grid-template-columns: minmax(14rem, 0.65fr) minmax(20rem, 1.35fr);
+    gap: 3rem;
   }
 
   .platform-window-grid {
@@ -2940,7 +2969,7 @@ a.platform-window:focus-visible {
   }
 
   .project-file-browser {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(19rem, 0.9fr) minmax(24rem, 1.1fr);
   }
 
   .project-file-row {
@@ -2953,57 +2982,11 @@ a.platform-window:focus-visible {
 }
 
 @media (max-width: 700px) {
-  .partner-archive {
-    min-height: 0;
-    padding: 5rem 1.15rem 2.5rem;
-  }
-
-  .partner-archive-heading h2,
-  .platform-directory-heading h2 {
-    font-size: clamp(2.2rem, 11vw, 3.4rem);
-  }
-
-  .partner-brand-list {
-    gap: 1.5rem 2rem;
-    justify-content: flex-start;
-  }
-
-  .partner-brand-list li {
-    width: 4.25rem;
-    height: 4.25rem;
-  }
-
-  .profile-introduction {
-    grid-template-columns: 1fr;
-    gap: 2.75rem;
-    padding: 4rem 1.15rem 5rem;
-  }
-
-  .profile-portrait-card {
-    width: min(72vw, 18rem);
-  }
-
-  .profile-introduction-copy h2 {
-    font-size: clamp(2rem, 10vw, 3.2rem);
-  }
-
+  /* Structural mobile layout lives in p5.css; keep only non-conflicting polish here. */
   .profile-signature {
     align-items: start;
     flex-direction: column;
     gap: 1rem;
-  }
-
-  .platform-directory {
-    padding: 5rem 1rem 5rem;
-  }
-
-  .platform-directory-heading {
-    align-items: start;
-    flex-direction: column;
-  }
-
-  .platform-directory-heading p {
-    order: 0;
   }
 
   .platform-window-grid {
@@ -3014,51 +2997,20 @@ a.platform-window:focus-visible {
     min-height: 7.5rem;
   }
 
-  .project-file-browser {
-    display: flex;
-    min-height: 0;
-    flex-direction: column;
-  }
-
-  .project-file-stage {
-    position: relative;
-    top: auto;
-    order: 0;
-    height: 42vh;
-    min-height: 16rem;
-    max-height: 22rem;
-  }
-
-  .project-file-index {
-    order: 1;
-    min-height: 0;
-    padding: 2.5rem 1rem 5rem;
-    border-right: 0;
-  }
-
-  .project-file-heading {
-    margin-bottom: 2rem;
-  }
-
-  .project-file-heading h2 {
-    font-size: clamp(2.2rem, 12vw, 3.6rem);
-  }
-
-  .project-file-row {
-    min-height: 5.5rem;
-    grid-template-columns: 2rem minmax(0, 1fr) auto;
-  }
-
-  .project-file-title strong {
-    font-size: clamp(1.2rem, 6.5vw, 1.85rem);
-  }
-
-  .project-file-footer {
-    display: none;
-  }
-
   .project-file-preview-copy h3 {
     font-size: clamp(1.8rem, 10vw, 2.8rem);
+  }
+
+  .profile-contact-stage.is-about,
+  .profile-contact-stage.is-contact {
+    overflow: hidden;
+  }
+
+  .profile-contact-scroll {
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 }
 
@@ -3080,16 +3032,6 @@ a.platform-window:focus-visible {
 
   .capability-item:last-child .capability-label {
     max-width: 6.2rem;
-  }
-
-  .category-directory-grid,
-  .category-directory-grid[data-active-slot] {
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(4, minmax(0, 1fr));
-  }
-
-  .category-card-copy h3 {
-    font-size: clamp(1.2rem, 6.5vw, 1.55rem);
   }
 }
 
@@ -3788,19 +3730,20 @@ a.platform-window:focus-visible {
   }
 
   .project-archive {
-    padding: 4.5rem 1rem 6rem;
+    overflow-x: hidden;
+    padding: 4.5rem 1rem 7rem;
   }
 
   .project-archive-header {
-    margin-bottom: 2.5rem;
+    margin-bottom: 3.5rem;
   }
 
   .project-archive-header h2 {
-    font-size: clamp(2.2rem, 12vw, 3.6rem);
+    font-size: clamp(1.8rem, 10vw, 2.8rem);
   }
 
   .project-archive-list {
-    gap: 2.75rem;
+    gap: 4.5rem;
   }
 
   .project-archive-link {
@@ -3813,15 +3756,15 @@ a.platform-window:focus-visible {
   }
 
   .project-archive-media {
-    min-height: min(42vh, 18rem);
+    min-height: min(72vh, 32rem);
   }
 
   .project-archive-copy {
-    padding: 1.25rem 1.1rem 1.5rem;
+    padding: 1.5rem 1.25rem 1.75rem;
   }
 
   .project-archive-copy h3 {
-    font-size: clamp(1.7rem, 9vw, 2.6rem);
+    font-size: clamp(1.8rem, 10vw, 2.8rem);
   }
 
   .project-archive-empty {
@@ -3837,14 +3780,14 @@ a.platform-window:focus-visible {
     grid-template-columns: 1fr;
     min-height: 0;
     gap: 0;
-    padding: 0.25rem 1.15rem 2rem;
+    padding: 0.25rem 1.25rem 2.5rem;
   }
 
   .project-detail-cover-bleed {
     position: relative;
     inset: auto;
-    height: min(40vh, 17rem);
-    margin: 0 -1.15rem 1.25rem;
+    height: min(46vh, 22rem);
+    margin: 0 -1.25rem 1.5rem;
   }
 
   .project-detail-cover-image.is-sharp {
@@ -3896,7 +3839,7 @@ a.platform-window:focus-visible {
   }
 
   .project-detail-copy h1 {
-    font-size: clamp(2.6rem, 14vw, 4.2rem);
+    font-size: clamp(1.8rem, 10vw, 2.8rem);
   }
 
   .project-detail-meta {
