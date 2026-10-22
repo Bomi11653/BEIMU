@@ -11,6 +11,7 @@ type WorkCategoryNavProps = {
 export function WorkCategoryNav({ activeCategoryId }: WorkCategoryNavProps) {
   return (
     <nav className="work-category-tabs" aria-label="作品分类导航">
+      <Link href="/works"><span>↗</span><span>作品分类</span></Link>
       {portfolioCategories.map((item) => (
         <Link
           href={item.route}

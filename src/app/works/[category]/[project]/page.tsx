@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ProjectImage } from "@/components/works/ProjectImage";
 import {
   portfolioCategories,
   type PortfolioCategory,
@@ -142,7 +143,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </header>
 
         {project.gallery.length > 0 ? (
-          <section className="project-detail-gallery" aria-label="项目媒体">
+          <section className="project-detail-gallery" data-layout={project.galleryLayout} aria-label="项目媒体">
             {project.gallery.map((item, index) => (
               <figure key={item.id}>
                 {item.kind === "video" ? (
@@ -157,13 +158,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     style={{ objectPosition: item.objectPosition }}
                   />
                 ) : (
-                  // Assets are already prepared at their final display size.
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
+                  <ProjectImage
                     src={item.src}
                     alt={item.alt}
-                    loading={index > 0 ? "lazy" : "eager"}
-                    style={{ objectPosition: item.objectPosition }}
+                    eager={index === 0}
+                    objectPosition={item.objectPosition}
                   />
                 )}
                 <figcaption>

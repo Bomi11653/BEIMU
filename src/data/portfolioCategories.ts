@@ -1,4 +1,5 @@
 export type PortfolioCategoryId =
+  | "graphic-design"
   | "3d-scene"
   | "ai-development"
   | "3d-product-motion"
@@ -48,6 +49,7 @@ export type PortfolioProject = {
   gallery: PortfolioGalleryItem[];
   detailStatus: "ready" | "summary";
   externalUrl?: string;
+  galleryLayout?: "sequence";
 };
 
 export type PortfolioCategory = {
@@ -61,6 +63,8 @@ export type PortfolioCategory = {
   contentStatus: PortfolioContentStatus;
   previewMedia: PortfolioPreview[];
   projects: PortfolioProject[];
+  /** Project used as the category cover; falls back to the first project. */
+  representativeProjectId?: string;
 };
 
 const assetBasePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -68,9 +72,74 @@ export const portfolioAssetPath = (path: string) => `${assetBasePath}${path}`;
 
 export const portfolioCategories: PortfolioCategory[] = [
   {
+    id: "graphic-design",
+    index: "05",
+    labelZh: "平面海报设计",
+    labelEn: "Graphic & Poster Design",
+    slug: "graphic-design",
+    route: "/works/graphic-design",
+    description: "从商业主视觉、创意海报到菜单与台卡的平面视觉设计。",
+    contentStatus: "ready",
+    previewMedia: [],
+    representativeProjectId: "burger-visual-design",
+    projects: [
+      {
+        id: "burger-visual-design",
+        slug: "burger-visual-design",
+        titleZh: "汉堡全套设计",
+        titleEn: "BEIMU TASK 003 · Burger Visual Design",
+        year: "2026",
+        summary: "围绕焦糖培根洋葱汉堡展开的模板设计案例，涵盖商业主视觉、系列创意海报、异形台卡、场景展示与食材结构图。",
+        services: ["商业主视觉", "创意海报", "异形台卡", "场景视觉"],
+        bodyZh: [{ paragraphs: ["自主商业视觉概念设计，按原项目 01–09 的设计顺序展示九项视觉成果。图像为视觉效果展示，不代表已完成实体生产或销售验证。"] }],
+        cover: portfolioAssetPath("/media/works/graphic-design/burger-visual-design/cover.webp"),
+        coverPosition: "center center",
+        detailStatus: "ready",
+        galleryLayout: "sequence",
+        gallery: ["商业主视觉 KV", "创意海报 A · 霓虹黄街头", "创意海报 B · 黑金微距套餐", "创意海报 C · HOT DEALS", "异形台卡正面", "台卡正背面平面展示", "台卡单体场景", "汉堡与台卡餐桌场景", "食材爆炸结构图"].map((alt, index) => ({
+          id: `burger-${index + 1}`, kind: "image" as const,
+          src: portfolioAssetPath(`/media/works/graphic-design/burger-visual-design/${String(index + 1).padStart(2, "0")}.webp`), alt,
+        })),
+      },
+      {
+        id: "drinks-coffee-collection",
+        slug: "drinks-coffee-collection",
+        titleZh: "饮品与咖啡 · 三款饮品设计全案",
+        titleEn: "BEIMU TASK 004 · Drinks Collection",
+        year: "2026",
+        summary: "围绕冰美式、西柚冰淇淋气泡饮与抹茶草莓牛乳建立视觉系列，串联产品主视觉、创意海报、产品卡、组合菜单与台卡展示。",
+        services: ["产品视觉", "创意海报", "产品介绍卡", "菜单设计", "展示台卡"],
+        bodyZh: [{ paragraphs: ["自主商业视觉概念设计。沿用 V1.3 FINAL 已完成的 20 页版式，按 P01–P20 原顺序展示，保留原页面中的设计说明与概念标注。"] }],
+        cover: portfolioAssetPath("/media/works/graphic-design/drinks-coffee-collection/cover.webp"),
+        detailStatus: "ready",
+        galleryLayout: "sequence",
+        gallery: ["作品集封面", "项目概述", "视觉语言", "三款产品系列", "冰美式主视觉", "冰美式创意海报", "冰美式产品介绍卡", "西柚冰淇淋气泡饮主视觉", "西柚冰淇淋气泡饮创意海报", "西柚冰淇淋气泡饮产品介绍卡", "抹茶草莓牛乳主视觉", "抹茶草莓牛乳创意海报", "抹茶草莓牛乳产品介绍卡", "六张产品卡场景展示", "三款饮品组合菜单", "信息层级", "异形台卡展示", "空间展示", "弹簧连接结构概念", "项目结尾"].map((alt, index) => ({
+          id: `drinks-${index + 1}`, kind: "image" as const,
+          src: portfolioAssetPath(`/media/works/graphic-design/drinks-coffee-collection/${String(index + 1).padStart(2, "0")}.webp`), alt: `P${String(index + 1).padStart(2, "0")} · ${alt}`,
+        })),
+      },
+      {
+        id: "all-live-halloween",
+        slug: "all-live-halloween",
+        titleZh: "ALL LIVE · 万圣节主题饮品设计",
+        titleEn: "ALL LIVE · Halloween Drinks",
+        summary: "围绕僵尸、啤格罗尼、南瓜热酒与紫薯魅影四款饮品展开的万圣节主题海报系列。",
+        services: ["主题海报", "饮品视觉"],
+        cover: portfolioAssetPath("/media/works/graphic-design/all-live-halloween/cover.webp"),
+        detailStatus: "ready",
+        galleryLayout: "sequence",
+        gallery: ["僵尸 · ZOMBIE", "啤格罗尼 · BEERGRONI", "南瓜热酒 · PUMPKIN MULLED WINE", "紫薯魅影 · PURPLE PHANTOM"].map((alt, index) => ({
+          id: `halloween-${index + 1}`, kind: "image" as const,
+          src: portfolioAssetPath(`/media/works/graphic-design/all-live-halloween/${String(index + 1).padStart(2, "0")}.webp`), alt,
+        })),
+      },
+    ],
+  },
+  {
     id: "3d-scene",
+    representativeProjectId: "ice-lock-cold-river",
     index: "01",
-    labelZh: "3D 场景",
+    labelZh: "3D 场景设计",
     labelEn: "3D Environments",
     slug: "3d-scene",
     route: "/works/3d-scene",
@@ -322,7 +391,7 @@ export const portfolioCategories: PortfolioCategory[] = [
   {
     id: "3d-product-motion",
     index: "03",
-    labelZh: "3D 产品动画",
+    labelZh: "3D 产品动画设计",
     labelEn: "3D Product Motion",
     slug: "3d-product-motion",
     route: "/works/3d-product-motion",
@@ -453,7 +522,7 @@ export const portfolioCategories: PortfolioCategory[] = [
   {
     id: "new-media",
     index: "04",
-    labelZh: "新媒体视频运营",
+    labelZh: "新媒体视频剪辑",
     labelEn: "New Media Operations",
     slug: "new-media",
     route: "/works/new-media",

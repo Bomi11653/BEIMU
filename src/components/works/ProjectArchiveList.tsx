@@ -73,10 +73,10 @@ export function ProjectArchiveList({ category }: ProjectArchiveListProps) {
   if (category.projects.length === 0) {
     return (
       <section className="project-archive-empty" aria-labelledby="empty-title">
-        <p>PROJECT FILES · AWAITING MATERIAL</p>
-        <h2 id="empty-title">文件位置已预留</h2>
+        <p>PROJECTS · IN PREPARATION</p>
+        <h2 id="empty-title">作品整理中</h2>
         <span>
-          回到个人电脑后，只需放入真实项目素材并更新数据，列表和详情路径会自动生成。
+          该分类的作品资料正在整理，敬请期待。
         </span>
         <Link href="/?stage=2">返回作品目录</Link>
       </section>

@@ -10,13 +10,19 @@ function readOption(name, fallback) {
 
 const hostname = readOption("--host", "0.0.0.0");
 const port = readOption("--port", "3000");
+const compilerOption = args.includes("--turbopack") ? "--turbopack" : "--webpack";
 const nextBin = fileURLToPath(
   new URL("../node_modules/next/dist/bin/next", import.meta.url),
 );
 
+const nextArgs = [nextBin, "dev", "--hostname", hostname, "--port", port];
+if (compilerOption) {
+  nextArgs.push(compilerOption);
+}
+
 const child = spawn(
   process.execPath,
-  [nextBin, "dev", "--hostname", hostname, "--port", port],
+  nextArgs,
   { stdio: "inherit" },
 );
 

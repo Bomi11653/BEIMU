@@ -69,14 +69,17 @@ const STAGE_STATUS: Record<HomeStageIndex, string> = {
 export function HomeStage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const initialStage = parseHomeStageQuery(searchParams.get("stage")) ?? 0;
   const [activeStage, setActiveStage] = useState<HomeStageIndex>(
-    () => parseHomeStageQuery(searchParams.get("stage")) ?? 0,
+    () => initialStage,
   );
   const [activeId, setActiveId] = useState<CapabilityId>(initialCapability.id);
   const [activeMedia, setActiveMedia] = useState<CapabilityMedia>(
     initialCapability.media[0],
   );
-  const [brandIntroActive, setBrandIntroActive] = useState(false);
+  const [brandIntroActive, setBrandIntroActive] = useState(
+    () => initialStage === 0,
+  );
   const rootRef = useRef<HTMLElement | null>(null);
   const syncingFromUrlRef = useRef(false);
   const urlReadyRef = useRef(false);
@@ -286,8 +289,6 @@ export function HomeStage() {
       />
       <CategoryDirectory
         isActive={activeStage === 2}
-        activeCategoryId={activeId}
-        onActivateCategory={activateCapability}
       />
       <DownloadStage isActive={activeStage === 3} />
       <ProfileContactStage mode="contact" isActive={activeStage === 4} />

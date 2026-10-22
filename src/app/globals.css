@@ -359,7 +359,9 @@ button {
 
 .stage-media {
   z-index: -2;
-  background: #000;
+  background-color: #000;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .stage-media:not(.is-revealed) .stage-video.is-active {
@@ -471,7 +473,8 @@ button {
   transition: opacity 480ms ease;
 }
 
-body[data-brand-intro="playing"] .global-top-nav {
+body[data-brand-intro="playing"] .global-top-nav,
+body:has(.home-stage[data-brand-intro="playing"]) .global-top-nav {
   opacity: 0;
   pointer-events: none;
   transition: opacity 480ms ease;

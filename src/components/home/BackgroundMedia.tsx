@@ -221,10 +221,20 @@ export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps
     };
   }, []);
 
+  const activeMedia = layerMedia[activeLayer];
+  const posterStyle =
+    activeMedia.kind === "video"
+      ? {
+          backgroundImage: `url("${activeMedia.poster}")`,
+          backgroundPosition: activeMedia.objectPosition ?? "center center",
+        }
+      : undefined;
+
   return (
     <div
       className={revealed ? "stage-media is-revealed" : "stage-media"}
       aria-hidden="true"
+      style={posterStyle}
     >
       {([0, 1] as const).map((layerIndex) => {
         const layer = layerMedia[layerIndex];

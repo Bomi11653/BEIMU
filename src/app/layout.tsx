@@ -5,6 +5,7 @@ import "@fontsource-variable/noto-sans-sc";
 import "./globals.css";
 import "../styles/p5.css";
 import "../styles/route-transition.css";
+import "../styles/work-archive.css";
 import { GlobalTopNav } from "@/components/navigation/GlobalTopNav";
 import { RouteTransitionProvider } from "@/components/transitions/RouteTransitionProvider";
 

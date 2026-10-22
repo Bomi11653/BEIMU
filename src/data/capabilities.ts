@@ -1,8 +1,8 @@
 import {
-  portfolioCategories,
   type PortfolioCategoryId,
   type PortfolioPreview,
 } from "./portfolioCategories";
+import { featuredCategories } from "./featuredCategories";
 
 export type CapabilityId = PortfolioCategoryId;
 
@@ -21,7 +21,7 @@ export type Capability = {
   media: CapabilityMedia[];
 };
 
-export const capabilities: Capability[] = portfolioCategories.map(
+export const capabilities: Capability[] = featuredCategories.map(
   (category) => ({
     id: category.id,
     index: category.index,
