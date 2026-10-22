@@ -3,16 +3,17 @@
 ## Project scope
 
 - This repository is LEON / 郑荣成's BEIMU portfolio.
-- Current baseline: P5. Preserve the existing information architecture and approved visual direction unless the user explicitly asks for a redesign.
+- Preserve the approved black editorial visual direction; current architecture is recorded in docs/BEIMU_PROJECT_MEMORY.md.
 - The site must remain statically exportable for GitHub Pages and OpenAI Sites.
 
 ## Approved architecture
 
-- Home is a three-stage full-viewport experience: Intro → four-category directory → About / Contact.
-- Work categories stay fixed: 3D 场景, AI 开发, 3D 产品动画, 新媒体视频运营.
+- Home has five stages: HOME → ABOUT → WORKS → DOWNLOAD → CONTACT.
+- WORKS and /works share category strips linking to category lists, then project details.
+- Current categories: 平面海报设计, 3D 场景设计, 3D 产品动画设计, 新媒体视频剪辑, AI 开发. Read portfolioCategories.ts for actual content.
 - Category pages use a left project index with a right-aligned full-background preview fading from right to left.
 - Project navigation uses the existing shutter transition and loading copy.
-- About and Contact share the third home stage.
+- About and Contact use separate home stages, sharing ProfileContactStage.
 - Navigation is text-only: no pill, glass, border, or filled active background.
 
 ## Design system
@@ -29,7 +30,7 @@
 - Project content is driven by src/data/portfolioCategories.ts.
 - Profile, partner brands, and platform links are driven by src/data/profile.ts.
 - Store project assets under public/media/works/{category}/{project-slug}/.
-- Keep the partner brand area empty until LEON supplies real brand assets.
+- Preserve supplied partner brand assets; never invent new partners.
 - Keep platform URLs and the WeChat QR functional when changing Contact.
 
 ## Engineering rules
