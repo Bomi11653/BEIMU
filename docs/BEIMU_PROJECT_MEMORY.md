@@ -35,10 +35,11 @@
 
 - 本地开发使用 Webpack，避免此前 Turbopack panic；命令 `npm run dev -- --host 127.0.0.1 --port 3000`。
 - Pages 静态导出使用 `GITHUB_PAGES=true`，路径 `/BEIMU`。
-- Vercel：`vercel.json` 指定 `npm run build:vercel`，生成根路径静态站点。
+- Vercel：`vercel.json` 指定 `npm run build:vercel` 和 `.next` 输出目录，使用 Vercel 原生 Next.js 适配；根路径部署。Pages/Sites/OSS 继续独立静态导出。
 - 阿里云 OSS 是独立手动部署脚本，不从 Vercel 自动转发。
 - Pages 工作流监听 main 和两个旧功能分支，不监听当前 codex 分支。
 - TypeScript、Pages/Sites 构建已通过；全仓 ESLint 仍有 7 个错误、3 个警告，尚未修复。
-- 本次同步检查时 Vercel CLI 登录令牌无效，已启动重新授权；项目绑定、线上域名和 Production 状态尚未核验。不得据此宣称 Vercel 已更新。
+- Vercel 已重新授权；已核验现有项目 `beimu`，绑定 `Bomi11653/BEIMU`，productionBranch 为 main。
+- 旧构建失败原因：Next.js 适配器读取 `out/routes-manifest.json`，而 out 是独立静态导出目录。已修复为 `.next` 输出及原生构建，本地构建验证通过；线上发布结果待后续记录。
 
 后续发布成功后，应更新本节的实际部署 URL、版本和状态。

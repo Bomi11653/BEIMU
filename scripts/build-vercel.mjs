@@ -8,7 +8,14 @@ const nextBin = fileURLToPath(
 
 const build = spawnSync(process.execPath, [nextBin, "build"], {
   cwd: projectRoot,
-  env: { ...process.env, SITES_BUILD: "1" },
+  // Vercel's Next.js adapter consumes .next, not the standalone out export.
+  // Pages and OSS/Sites retain their separate static-export build commands.
+  env: {
+    ...process.env,
+    SITES_BUILD: "0",
+    GITHUB_PAGES: "false",
+    NEXT_PUBLIC_BASE_PATH: "",
+  },
   stdio: "inherit",
 });
 
