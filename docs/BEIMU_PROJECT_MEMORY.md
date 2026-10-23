@@ -38,7 +38,7 @@
 - Vercel：`vercel.json` 指定 `npm run build:vercel` 和 `.next` 输出目录，使用 Vercel 原生 Next.js 适配；根路径部署。Pages/Sites/OSS 继续独立静态导出。
 - 阿里云 OSS 是独立手动部署脚本，不从 Vercel 自动转发。
 - Pages 工作流监听 main 和两个旧功能分支，不监听当前 codex 分支。
-- TypeScript、Pages/Sites 构建已通过；全仓 ESLint 仍有 7 个错误、3 个警告，尚未修复。
+- TypeScript、Pages/Sites 构建已通过；2026-10-24 复查全仓 ESLint 仍有 3 个 Hooks 错误、3 个警告，未标记全仓通过。
 - 正式官网：https://www.beimudesign.top 。实际绑定 Vercel 项目 **beimuwz**（`prj_YhYzkA4gzmH0Vrex7ZtTx1k7Asui`），绑定仓库 `Bomi11653/BEIMU`，productionBranch 为 main。另有 `beimu`、`beimu-ccch` 等项目，不能混作官网发布目标。
 - 旧构建失败原因：Next.js 适配器读取 `out/routes-manifest.json`，而 out 是独立静态导出目录。提交 `874bafcca542e628a1018e593adaa456a078fc62` 已改为 `.next` 输出及原生构建，并上传 GitHub。
 - 2026-10-23 官网 Production 部署：`dpl_Hs68u3sD8Ma5Rm7yzyoP6BYyJAoc`，状态 READY，发布源码为 `874bafc`，来自 `codex/portfolio-category-projects`，并非 main 已合并。
@@ -56,3 +56,5 @@
 - 片头提供跳过、error 和无进度退出，修复透明导航拦截触摸；手机不自动下载背景循环视频。
 - 33 张平面缩略图由 37,154,474 字节原图减少到 2,892,814 字节，原图点击后再加载。
 - 验证使用隔离 Chromium 的微信 UA 与触摸模拟，不代表已完成 iOS WKWebView / Android X5 微信真机验收。发布后须微信关闭页面重新打开复测。
+- 2026-10-24 修复已推送：`5e2517902e11ae7ab87df49bd07b022ad6e3de25`。`beimuwz` Production 部署 `dpl_FnxqVUaivh4KovdMU1DpJCsxrDhX` 为 READY，官网域名已关联。
+- 正式域名已检查汉堡详情的 9 张缩略图和 9 个放大按钮，抽查 01-thumb.webp 为 HTTP 200 / image/webp（95,488 字节）。完整测试记录见手机适配报告。

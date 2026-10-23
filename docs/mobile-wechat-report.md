@@ -30,3 +30,12 @@
 - 微信 iPhone、微信 Android、低电量模式、弱网以及长时间切后台后的播放，仍需真机验收。不能保证浏览器允许自动播放；本次保证提供明确的播放/跳过/失败出口。
 
 发布目标必须是 `beimuwz` / `https://www.beimudesign.top`，不是同账户下的 `beimu`。
+
+## 发布记录
+
+- 修复提交：`5e2517902e11ae7ab87df49bd07b022ad6e3de25`，分支 `codex/mobile-wechat-compat`。
+- Production 部署：`dpl_FnxqVUaivh4KovdMU1DpJCsxrDhX`，READY，官网已指向新部署。
+- 本地 iPhone/Android 微信标识触摸模拟通过；移动菜单进入作品、自动播放拒绝/停滞兜底、分类与详情进入、原图放大关闭、多宽度溢出检查均通过。
+- 官网资源核验：汉堡详情 HTTP 200，9 张缩略图和 9 个放大按钮，缩略图 Content-Type 为 image/webp。
+- 正式域名再跑 iPhone 微信标识触摸模拟：片头手动跳过/停滞自动退出、手机菜单、分类→详情、放大与关闭和多宽度检查全部通过。仍不是微信真机结果。
+- 全仓 ESLint 当前 3 个 Hooks 错误和 3 个警告；未升级依赖。云端 npm 安装亦报告既有依赖审计告警，本次未执行 audit fix 或自动升级。
