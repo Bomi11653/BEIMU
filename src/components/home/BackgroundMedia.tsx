@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { CapabilityMedia } from "@/data/capabilities";
+import { useFinePointer } from "@/hooks/useFinePointer";
 
 type BackgroundMediaProps = {
   media: CapabilityMedia;
@@ -19,6 +20,8 @@ const HIDE_PAUSE_MS = 480;
  * - Sources only load after `revealed`; inactive layer uses preload=none
  */
 export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps) {
+  const finePointer = useFinePointer();
+  const [targetLayer, setTargetLayer] = useState<0 | 1>(0);
   const [activeLayer, setActiveLayer] = useState<0 | 1>(0);
   const [layerMedia, setLayerMedia] = useState<[CapabilityMedia, CapabilityMedia]>([
     media,
@@ -57,6 +60,7 @@ export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps
       const token = ++tokenRef.current;
       const nextLayer = (activeLayerRef.current === 0 ? 1 : 0) as 0 | 1;
       targetLayerRef.current = nextLayer;
+      setTargetLayer(nextLayer);
       lockUntilRef.current = performance.now() + SWITCH_LOCK_MS;
 
       setLayerMedia((current) => {
@@ -105,7 +109,7 @@ export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps
 
   // When a layer's media changes, wait for canplay then crossfade.
   useEffect(() => {
-    if (!revealed) return;
+    if (!revealed || !finePointer) return;
 
     const layer = targetLayerRef.current;
     const next = layerMedia[layer];
@@ -176,10 +180,10 @@ export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps
       cancelled = true;
       video.removeEventListener("canplay", onReady);
     };
-  }, [layerMedia, revealed]);
+  }, [layerMedia, revealed, finePointer]);
 
   useEffect(() => {
-    if (!revealed) {
+    if (!revealed || !finePointer) {
       for (const video of videoRefs.current) {
         video?.pause();
       }
@@ -212,7 +216,7 @@ export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps
     return () => {
       video.removeEventListener("canplay", onReady);
     };
-  }, [layerMedia, revealed, activeLayer]);
+  }, [layerMedia, revealed, activeLayer, finePointer]);
 
   useEffect(() => {
     return () => {
@@ -221,7 +225,7 @@ export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps
     };
   }, []);
 
-  const activeMedia = layerMedia[activeLayer];
+  const activeMedia = finePointer ? layerMedia[activeLayer] : media;
   const posterStyle =
     activeMedia.kind === "video"
       ? {
@@ -249,7 +253,7 @@ export function BackgroundMedia({ media, revealed = true }: BackgroundMediaProps
           );
         }
 
-        const shouldLoad = revealed && (isActive || layerIndex === targetLayerRef.current);
+        const shouldLoad = revealed && finePointer && (isActive || layerIndex === targetLayer);
 
         return (
           <video

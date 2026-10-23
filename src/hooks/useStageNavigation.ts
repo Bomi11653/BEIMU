@@ -146,7 +146,7 @@ export function useStageNavigation({
     };
 
     const handleTouchStart = (event: TouchEvent) => {
-      if (event.touches.length !== 1) {
+      if (event.touches.length !== 1 || isInteractiveTarget(event.target)) {
         touchStartRef.current = null;
         return;
       }

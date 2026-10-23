@@ -12,6 +12,7 @@ import {
 } from "react";
 import { brandAssets } from "@/data/brand";
 import { portfolioAssetPath } from "@/data/portfolioCategories";
+import { needsDocumentNavigation } from "@/lib/documentNavigation";
 
 type RouteTransitionPhase = "off" | "closing" | "closed" | "opening";
 
@@ -62,6 +63,10 @@ export function RouteTransitionProvider({ children }: { children: ReactNode }) {
 
   const startRouteTransition = useCallback(
     (href: string, nextCopy: RouteTransitionCopy) => {
+      if (needsDocumentNavigation(navigator.userAgent, window.matchMedia("(pointer: coarse)").matches)) {
+        window.location.assign(portfolioAssetPath(href));
+        return;
+      }
       if (transitionLock.current || href === pathname) return;
 
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -73,6 +78,7 @@ export function RouteTransitionProvider({ children }: { children: ReactNode }) {
       transitionLock.current = true;
       setCopy(nextCopy);
       setPhase("closing");
+
 
       timers.current.push(
         window.setTimeout(() => {

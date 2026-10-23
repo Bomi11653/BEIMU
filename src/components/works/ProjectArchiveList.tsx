@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, type MouseEvent } from "react";
 import { useRouteTransition } from "@/components/transitions/RouteTransitionProvider";
+import { useFinePointer } from "@/hooks/useFinePointer";
 import type {
   PortfolioCategory,
   PortfolioProject,
@@ -25,14 +26,16 @@ function ProjectPreview({
   project: PortfolioProject;
   onOpen: (event: MouseEvent<HTMLAnchorElement>, project: PortfolioProject) => void;
 }) {
+  const finePointer = useFinePointer();
   return (
     <Link
       className="project-file-preview"
+      prefetch={false}
       href={projectHref(category, project)}
       onClick={(event) => onOpen(event, project)}
       aria-label={`打开项目：${project.titleZh}`}
     >
-      {project.teaser ? (
+      {project.teaser && finePointer ? (
         <video
           className="project-file-preview-video"
           key={project.id}
@@ -141,9 +144,8 @@ export function ProjectArchiveList({ category }: ProjectArchiveListProps) {
                 <li key={project.id}>
                   <div
                     className={rowClass}
-                    onMouseEnter={() => setActiveProjectId(project.id)}
+                    onPointerEnter={(event) => { if (event.pointerType === "mouse") setActiveProjectId(project.id); }}
                     onFocusCapture={() => setActiveProjectId(project.id)}
-                    onTouchStart={() => setActiveProjectId(project.id)}
                   >
                     <span className="project-file-number">
                       {String(index + 1).padStart(2, "0")}
@@ -152,12 +154,15 @@ export function ProjectArchiveList({ category }: ProjectArchiveListProps) {
                       {project.year ?? "—"}
                     </span>
                     <span className="project-file-title">
-                      <strong>{project.titleZh}</strong>
+                      <Link href={projectHref(category, project)} prefetch={false} onClick={(event) => openProject(event, project)}>
+                        <strong>{project.titleZh}</strong>
+                      </Link>
                       <small>{project.summary}</small>
                     </span>
                     <div className="project-file-actions">
                       <Link
                         className="project-file-action"
+                        prefetch={false}
                         href={projectHref(category, project)}
                         onClick={(event) => openProject(event, project)}
                         aria-disabled={isTransitioning}
@@ -182,11 +187,11 @@ export function ProjectArchiveList({ category }: ProjectArchiveListProps) {
               <li key={project.id}>
                 <Link
                   className={rowClass}
+                  prefetch={false}
                   href={projectHref(category, project)}
                   onClick={(event) => openProject(event, project)}
-                  onMouseEnter={() => setActiveProjectId(project.id)}
+                  onPointerEnter={(event) => { if (event.pointerType === "mouse") setActiveProjectId(project.id); }}
                   onFocus={() => setActiveProjectId(project.id)}
-                  onTouchStart={() => setActiveProjectId(project.id)}
                   aria-label={`打开项目：${project.titleZh}`}
                   aria-disabled={isTransitioning}
                 >

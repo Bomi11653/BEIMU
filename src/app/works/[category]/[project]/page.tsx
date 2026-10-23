@@ -160,6 +160,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 ) : (
                   <ProjectImage
                     src={item.src}
+                    thumbnailSrc={item.thumbnailSrc}
                     alt={item.alt}
                     eager={index === 0}
                     objectPosition={item.objectPosition}

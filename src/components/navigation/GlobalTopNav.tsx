@@ -5,12 +5,12 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { brandAssets } from "@/data/brand";
 import { portfolioAssetPath } from "@/data/portfolioCategories";
+import { needsDocumentNavigation } from "@/lib/documentNavigation";
 import {
   SITE_NAV_EVENT,
   resolveActiveSiteNavId,
   siteNavItems,
   type SiteNavEventDetail,
-  type SiteNavId,
 } from "@/data/siteNav";
 
 export function GlobalTopNav() {
@@ -18,17 +18,13 @@ export function GlobalTopNav() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [navActiveId, setNavActiveId] = useState<SiteNavId | null>(null);
+  const navActiveId = resolveActiveSiteNavId(pathname, searchParams.get("stage"));
 
   useEffect(() => {
-    setNavActiveId(
-      resolveActiveSiteNavId(pathname, searchParams.get("stage")),
-    );
-  }, [pathname, searchParams]);
-
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [pathname, searchParams]);
+    const close = () => setMenuOpen(false);
+    window.addEventListener("popstate", close);
+    return () => window.removeEventListener("popstate", close);
+  }, []);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -57,6 +53,10 @@ export function GlobalTopNav() {
       return;
     }
 
+    if (needsDocumentNavigation(navigator.userAgent, window.matchMedia("(pointer: coarse)").matches)) {
+      window.location.assign(portfolioAssetPath(href));
+      return;
+    }
     router.push(href);
   };
 
@@ -65,6 +65,7 @@ export function GlobalTopNav() {
       <div className="global-top-nav-bar">
         <Link
           className="global-top-nav-brand"
+          prefetch={false}
           href="/?stage=0"
           aria-label="BEIMU 首页"
           onClick={(event) => {
@@ -91,6 +92,7 @@ export function GlobalTopNav() {
                 <li key={item.id}>
                   <Link
                     href={item.href}
+                    prefetch={false}
                     className={
                       isActive
                         ? "global-top-nav-link is-active"
@@ -134,6 +136,7 @@ export function GlobalTopNav() {
                   <li key={item.id}>
                     <Link
                       href={item.href}
+                      prefetch={false}
                       className={
                         isActive
                           ? "global-top-nav-drawer-link is-active"

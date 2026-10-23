@@ -2,8 +2,8 @@
 
 import { useRef, useState } from "react";
 
-export function ProjectImage({ src, alt, eager = false, objectPosition }: {
-  src: string; alt: string; eager?: boolean; objectPosition?: string;
+export function ProjectImage({ src, thumbnailSrc, alt, eager = false, objectPosition }: {
+  src: string; thumbnailSrc?: string; alt: string; eager?: boolean; objectPosition?: string;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const [open, setOpen] = useState(false);
@@ -12,11 +12,15 @@ export function ProjectImage({ src, alt, eager = false, objectPosition }: {
   return (
     <>
       <button type="button" className="project-image-trigger" aria-label={`放大查看：${alt}`} aria-haspopup="dialog" onClick={() => {
+        if (typeof dialog.current?.showModal !== "function") {
+          window.location.assign(src);
+          return;
+        }
         setOpen(true);
         dialog.current?.showModal();
       }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt={alt} loading={eager ? "eager" : "lazy"} style={{ objectPosition }} />
+        <img src={thumbnailSrc ?? src} alt={alt} decoding="async" loading={eager ? "eager" : "lazy"} style={{ objectPosition }} />
         <span className="project-image-hint">点击放大 ↗</span>
       </button>
       <dialog ref={dialog} className="project-image-dialog" aria-label={`图片查看：${alt}`} onClose={() => {

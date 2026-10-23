@@ -65,7 +65,10 @@ export function PortfolioStage({
   }, [introPhase, onIntroActiveChange]);
 
   const handleIntroSkip = useCallback(() => {
-    setIntroPhase("exiting");
+    // Touch WebViews may suspend video/transition callbacks. Release the page
+    // immediately on mobile instead of waiting for the desktop fade-out.
+    const immediate = window.matchMedia("(pointer: coarse)").matches || /MicroMessenger/i.test(navigator.userAgent);
+    setIntroPhase(immediate ? "done" : "exiting");
   }, []);
 
   const handleIntroExitComplete = useCallback(() => {
@@ -90,7 +93,7 @@ export function PortfolioStage({
       data-brand-intro={introPhase}
       onClick={handleStageClick}
     >
-      <BackgroundMedia media={media} revealed={mediaRevealed} />
+      <BackgroundMedia media={media} revealed={mediaRevealed && isActive} />
 
       <div
         className={

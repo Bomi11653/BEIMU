@@ -6,6 +6,7 @@ import "./globals.css";
 import "../styles/p5.css";
 import "../styles/route-transition.css";
 import "../styles/work-archive.css";
+import "../styles/mobile-compat.css";
 import { GlobalTopNav } from "@/components/navigation/GlobalTopNav";
 import { RouteTransitionProvider } from "@/components/transitions/RouteTransitionProvider";
 

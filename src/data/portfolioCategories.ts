@@ -16,6 +16,7 @@ export type PortfolioPreview = {
 };
 
 export type PortfolioGalleryItem = {
+  thumbnailSrc?: string;
   id: string;
   kind: "image" | "video";
   src: string;
@@ -98,6 +99,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         galleryLayout: "sequence",
         gallery: ["商业主视觉 KV", "创意海报 A · 霓虹黄街头", "创意海报 B · 黑金微距套餐", "创意海报 C · HOT DEALS", "异形台卡正面", "台卡正背面平面展示", "台卡单体场景", "汉堡与台卡餐桌场景", "食材爆炸结构图"].map((alt, index) => ({
           id: `burger-${index + 1}`, kind: "image" as const,
+          thumbnailSrc: portfolioAssetPath(`/media/works/graphic-design/burger-visual-design/${String(index + 1).padStart(2, "0")}-thumb.webp`),
           src: portfolioAssetPath(`/media/works/graphic-design/burger-visual-design/${String(index + 1).padStart(2, "0")}.webp`), alt,
         })),
       },
@@ -115,6 +117,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         galleryLayout: "sequence",
         gallery: ["作品集封面", "项目概述", "视觉语言", "三款产品系列", "冰美式主视觉", "冰美式创意海报", "冰美式产品介绍卡", "西柚冰淇淋气泡饮主视觉", "西柚冰淇淋气泡饮创意海报", "西柚冰淇淋气泡饮产品介绍卡", "抹茶草莓牛乳主视觉", "抹茶草莓牛乳创意海报", "抹茶草莓牛乳产品介绍卡", "六张产品卡场景展示", "三款饮品组合菜单", "信息层级", "异形台卡展示", "空间展示", "弹簧连接结构概念", "项目结尾"].map((alt, index) => ({
           id: `drinks-${index + 1}`, kind: "image" as const,
+          thumbnailSrc: portfolioAssetPath(`/media/works/graphic-design/drinks-coffee-collection/${String(index + 1).padStart(2, "0")}-thumb.webp`),
           src: portfolioAssetPath(`/media/works/graphic-design/drinks-coffee-collection/${String(index + 1).padStart(2, "0")}.webp`), alt: `P${String(index + 1).padStart(2, "0")} · ${alt}`,
         })),
       },
@@ -130,6 +133,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         galleryLayout: "sequence",
         gallery: ["僵尸 · ZOMBIE", "啤格罗尼 · BEERGRONI", "南瓜热酒 · PUMPKIN MULLED WINE", "紫薯魅影 · PURPLE PHANTOM"].map((alt, index) => ({
           id: `halloween-${index + 1}`, kind: "image" as const,
+          thumbnailSrc: portfolioAssetPath(`/media/works/graphic-design/all-live-halloween/${String(index + 1).padStart(2, "0")}-thumb.webp`),
           src: portfolioAssetPath(`/media/works/graphic-design/all-live-halloween/${String(index + 1).padStart(2, "0")}.webp`), alt,
         })),
       },

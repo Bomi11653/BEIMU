@@ -30,8 +30,10 @@ export function CategoryIndex({ headingId, standalone = false }: {
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={project.cover} alt="" loading="lazy" style={{ objectPosition: project.coverPosition }} />
                       {alternate ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img className="category-index-alternate" src={alternate.src} alt="" loading="lazy" style={{ objectPosition: alternate.objectPosition }} />
+                        <picture>
+                          <source media="(hover: hover) and (pointer: fine)" srcSet={alternate.thumbnailSrc ?? alternate.src} />
+                          <img className="category-index-alternate" src={project.cover} alt="" decoding="async" loading="lazy" style={{ objectPosition: alternate.objectPosition }} />
+                        </picture>
                       ) : null}
                     </>
                   ) : <span className="category-index-placeholder">素材待补充<span lang="en">IN PREPARATION</span></span>}

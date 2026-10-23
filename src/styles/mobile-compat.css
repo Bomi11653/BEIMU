@@ -1,0 +1,55 @@
+body[data-brand-intro="playing"] .global-top-nav,
+body:has(.home-stage[data-brand-intro="playing"]) .global-top-nav {
+  visibility: hidden;
+}
+body[data-brand-intro="playing"] .global-top-nav *,
+body:has(.home-stage[data-brand-intro="playing"]) .global-top-nav * {
+  pointer-events: none;
+}
+.brand-intro-skip {
+  position: absolute;
+  z-index: 5;
+  top: max(1rem, env(safe-area-inset-top, 0px));
+  right: max(1rem, env(safe-area-inset-right, 0px));
+  min-height: 44px;
+  padding: .75rem;
+  border: 0;
+  background: rgba(0, 0, 0, .65);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--type-label);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.brand-intro-skip:focus-visible { outline: 2px solid currentColor; }
+.work-archive.category-index-scroll { height: 100vh; height: 100dvh; }
+@media (pointer: coarse), (hover: none) {
+  a, button { -webkit-tap-highlight-color: rgba(255, 255, 255, .15); touch-action: manipulation; }
+  .category-index-link:active, .project-file-row:active, .project-file-action:active { opacity: .7; }
+  .home-stage { min-height: 0; }
+  .home-stage-layer { filter: none; transition-duration: 180ms; will-change: auto; }
+  .category-directory { filter: none; background: var(--surface); }
+  .stage-video { display: none; }
+  .bottom-blur { backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .category-index-media img { filter: none; }
+  .project-file-title a { display: block; color: inherit; min-height: 44px; text-decoration: none; }
+  .project-file-actions .project-file-action { min-height: 44px; display: inline-flex; align-items: center; }
+  .project-image-dialog { height: 94vh; height: 94dvh; }
+}
+@media (max-width: 700px) {
+  .work-category-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: sticky;
+    top: calc(4rem + env(safe-area-inset-top, 0px));
+    left: 0;
+    transform: none;
+    margin-inline: auto;
+    background: var(--surface);
+    scrollbar-width: thin;
+  }
+  .work-category-tabs a { flex: 0 0 auto; min-width: max-content; padding-inline: 1rem; }
+}

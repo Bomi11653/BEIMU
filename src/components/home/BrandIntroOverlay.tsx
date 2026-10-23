@@ -32,7 +32,7 @@ export function BrandIntroOverlay({
   const skipLockRef = useRef(false);
   const [audioEnabled, setAudioEnabled] = useState(false);
   const [needsGesture, setNeedsGesture] = useState(false);
-  const [isMobilePortrait, setIsMobilePortrait] = useState(false);
+  const [isMobilePortrait, setIsMobilePortrait] = useState<boolean | null>(null);
 
   useEffect(() => {
     const media = window.matchMedia(MOBILE_INTRO_QUERY);
@@ -67,23 +67,44 @@ export function BrandIntroOverlay({
   }, [onExitComplete, phase]);
 
   useEffect(() => {
-    if (phase !== "playing") return;
+    if (phase !== "playing" || isMobilePortrait === null) return;
 
     skipLockRef.current = false;
-    setNeedsGesture(false);
     const video = videoRef.current;
     if (!video) return;
 
     video.muted = !audioEnabled;
-    void video.play().then(
-      () => {
-        setNeedsGesture(false);
-      },
-      () => {
-        setNeedsGesture(true);
-      },
-    );
+    let cancelled = false;
+    const play = () => {
+      void video.play().then(
+        () => { if (!cancelled) setNeedsGesture(false); },
+        () => { if (!cancelled) setNeedsGesture(true); },
+      );
+    };
+    play();
+    document.addEventListener("WeixinJSBridgeReady", play);
+    return () => {
+      cancelled = true;
+      document.removeEventListener("WeixinJSBridgeReady", play);
+    };
   }, [audioEnabled, phase, isMobilePortrait]);
+
+  useEffect(() => {
+    if (phase !== "playing") return;
+    let lastTime = 0;
+    let lastProgress = Date.now();
+    const watchdog = window.setInterval(() => {
+      const video = videoRef.current;
+      if (document.hidden) { lastProgress = Date.now(); return; }
+      if (video && video.currentTime > lastTime + 0.05) {
+        lastTime = video.currentTime;
+        lastProgress = Date.now();
+      } else if (Date.now() - lastProgress > 10000) {
+        requestSkip();
+      }
+    }, 1000);
+    return () => window.clearInterval(watchdog);
+  }, [phase, requestSkip]);
 
   const handleSurfaceClick = useCallback(() => {
     if (phase !== "playing") return;
@@ -125,10 +146,12 @@ export function BrandIntroOverlay({
   }, []);
 
   const posterSrc = portfolioAssetPath(brandAssets.brandIntroPoster);
-  const videoSrc = pickIntroSrc(isMobilePortrait);
+  const videoSrc = isMobilePortrait === null ? undefined : pickIntroSrc(isMobilePortrait);
 
   return (
-    <div className={`brand-intro-overlay is-${phase}`} aria-hidden="true">
+    <div className={`brand-intro-overlay is-${phase}`} aria-label="品牌开场动画" onTransitionEnd={(event) => {
+      if (phase === "exiting" && event.target === event.currentTarget) onExitComplete();
+    }}>
       <button
         type="button"
         className="brand-intro-video-hit"
@@ -143,15 +166,20 @@ export function BrandIntroOverlay({
           src={videoSrc}
           poster={posterSrc}
           muted={!audioEnabled}
+          autoPlay
           playsInline
-          preload={isMobilePortrait ? "metadata" : "auto"}
+          preload="metadata"
           onEnded={requestSkip}
+          onError={requestSkip}
         />
         {needsGesture && phase === "playing" ? (
           <span className="brand-intro-gesture-hint">点击播放</span>
         ) : null}
       </button>
 
+      {phase === "playing" ? (
+        <button type="button" className="brand-intro-skip" onClick={requestSkip}>跳过开场 ↗</button>
+      ) : null}
       {phase === "playing" ? (
         <StageAudioToggle
           enabled={audioEnabled}
