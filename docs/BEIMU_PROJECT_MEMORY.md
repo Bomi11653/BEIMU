@@ -1,6 +1,6 @@
 # BEIMU 项目记忆
 
-更新时间：2026-10-22。以已核验实际代码为准，线上状态须独立核验。
+更新时间：2026-10-23。以已核验实际代码为准，线上状态须独立核验。
 
 ## 代码和版本
 
@@ -39,7 +39,12 @@
 - 阿里云 OSS 是独立手动部署脚本，不从 Vercel 自动转发。
 - Pages 工作流监听 main 和两个旧功能分支，不监听当前 codex 分支。
 - TypeScript、Pages/Sites 构建已通过；全仓 ESLint 仍有 7 个错误、3 个警告，尚未修复。
-- Vercel 已重新授权；已核验现有项目 `beimu`，绑定 `Bomi11653/BEIMU`，productionBranch 为 main。
-- 旧构建失败原因：Next.js 适配器读取 `out/routes-manifest.json`，而 out 是独立静态导出目录。已修复为 `.next` 输出及原生构建，本地构建验证通过；线上发布结果待后续记录。
+- 正式官网：https://www.beimudesign.top 。实际绑定 Vercel 项目 **beimuwz**（`prj_YhYzkA4gzmH0Vrex7ZtTx1k7Asui`），绑定仓库 `Bomi11653/BEIMU`，productionBranch 为 main。另有 `beimu`、`beimu-ccch` 等项目，不能混作官网发布目标。
+- 旧构建失败原因：Next.js 适配器读取 `out/routes-manifest.json`，而 out 是独立静态导出目录。提交 `874bafcca542e628a1018e593adaa456a078fc62` 已改为 `.next` 输出及原生构建，并上传 GitHub。
+- 2026-10-23 官网 Production 部署：`dpl_Hs68u3sD8Ma5Rm7yzyoP6BYyJAoc`，状态 READY，发布源码为 `874bafc`，来自 `codex/portfolio-category-projects`，并非 main 已合并。
+- 此部署 URL：https://beimuwz-11k8q3rqf-shhsjsasd886-9282s-projects.vercel.app 。官网域名已关联此部署，保留原域名配置。
+- 官网页面核验：`/?stage=2` 的首页脚本包含新分类索引；`/works` 为五分类且标注冰锁寒川代表作；平面列表及三个详情均 HTTP 200，详情图数为 9/20/4。抽查三项 WebP 为 HTTP 200、image/webp。未据此声称完成浏览器视觉与点击验收。
+- Vercel 历史失败记录不会因新部署成功而消失；验收应查看项目 `beimuwz` 的当前 Production，而非 `beimu` 的旧错误日志。
+- 后续应通过审核将功能分支合入 main，使默认生产分支与当前线上源码统一；在此之前不要用旧 main 重新发布覆盖新站。
 
-后续发布成功后，应更新本节的实际部署 URL、版本和状态。
+后续每次发布需核对官网域名、项目名、提交和 Production 状态，并同步本节记录。

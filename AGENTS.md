@@ -35,6 +35,8 @@
 
 ## Engineering rules
 
+- Official Vercel target: beimuwz; official domain: https://www.beimudesign.top. Do not confuse it with the separate beimu project. Verify the domain's current project binding before publishing.
+
 - Use TypeScript and React functional components.
 - Reuse the current data-driven components before adding new abstractions.
 - Preserve NEXT_PUBLIC_BASE_PATH handling through portfolioAssetPath for GitHub Pages.
