@@ -1,0 +1,41 @@
+.visual-lab {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 6rem clamp(1.25rem, 5vw, 5rem) 2rem;
+  background: #000;
+  color: #fff;
+}
+.visual-lab-heading p, .visual-lab-footer {
+  font-family: var(--font-latin);
+  font-size: var(--type-label);
+  letter-spacing: var(--tracking-label);
+  color: #fff;
+}
+.visual-lab-heading p { margin: 0 0 1rem; }
+.visual-lab-heading h1 { margin: 0; font-size: var(--type-section-title); font-weight: 400; }
+.visual-lab-object {
+  position: relative;
+  width: min(70vw, 36rem);
+  height: min(65svh, 40rem);
+  min-height: 18rem;
+  justify-self: center;
+  align-self: center;
+}
+.visual-lab-fallback, .visual-lab-live { position: absolute; inset: 0; }
+.visual-lab-fallback {
+  background: linear-gradient(115deg, #fff 12%, #707070 28%, #f5f5f5 38%, #b8b8b8 52%, #fff 66%, #505050 90%);
+  mask: url('/brand/BEIMU_Symbol_White.svg') center / auto 85% no-repeat;
+  -webkit-mask: url('/brand/BEIMU_Symbol_White.svg') center / auto 85% no-repeat;
+}
+.visual-lab-live { visibility: hidden; }
+.visual-lab-object[data-ready="true"] .visual-lab-live { visibility: visible; }
+.visual-lab-object[data-ready="true"] .visual-lab-fallback { visibility: hidden; }
+.visual-lab-footer { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.visual-lab-footer p { margin: 0; font-family: var(--font-cjk); letter-spacing: 0; }
+@media (max-width: 700px) {
+  .visual-lab { padding-top: 5rem; }
+  .visual-lab-object { width: 85vw; height: 58svh; }
+  .visual-lab-footer { flex-direction: column; gap: .75rem; }
+}

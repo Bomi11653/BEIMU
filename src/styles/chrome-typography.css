@@ -1,0 +1,43 @@
+/* Shared chrome typography: real text, no per-label raster assets. */
+:root {
+  --text-primary: #eceef3;
+  --text-secondary: #c1c5ce;
+  --text-tertiary: #a4aab6;
+  --chrome-text-edge: 0 -.6px 0 #fff, .5px 0 0 #777d8b, 0 1px 0 #252935, 0 2px 1px #000;
+}
+body { color: var(--text-primary); }
+body :is(h1,h2,h3,h4,h5,h6,p,a,button,span,li,dt,dd,strong,em,label,small,figcaption,input,textarea,select) {
+  text-shadow: none;
+}
+/* Body copy retains a bright silver face for legibility at small sizes. */
+body :is(p,li,dt,dd,figcaption,label,small) { color: var(--text-secondary); }
+body :is(a,button,strong) { color: var(--text-primary); }
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  body :is(h1,h2,h3):not(:has(img,video,canvas,svg,picture)) {
+    color: #e6e8ef;
+    background-image: linear-gradient(178deg,#fff 0%,#e0e3eb 20%,#969ca9 34%,#fff 45%,#b2b7c4 52%,#626976 57%,#e9ecf5 70%,#fff 79%,#aab0bc 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 100% 220%;
+    text-shadow: 0 .5px .5px rgba(235,238,255,.25), 0 1.5px 1px rgba(0,0,0,.8);
+  }
+}
+@keyframes chrome-type-shine {
+  0%, 25% { background-position: 50% 0%; }
+  65%, 100% { background-position: 50% 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body :is(h1,h2,h3,h4,h5,h6,p,a,button,span,li,dt,dd,strong,em,label,small,figcaption) { animation: none !important; }
+}
+body a:hover,body button:hover { color: #fff; }
+body a:focus-visible,body button:focus-visible { outline-color: #fff; }
+::selection { background: #0203cc; color: #fff; text-shadow: none; }
+@media (forced-colors: active) {
+  body :is(h1,h2,h3,h4,h5,h6,p,a,button,span,li,dt,dd,strong,em,label,small,figcaption) { background-image: none; -webkit-text-fill-color: currentColor; }
+  body * { text-shadow: none; }
+}
+@media print {
+  body :is(h1,h2,h3,h4,h5,h6,p,a,button,span,li,dt,dd,strong,em,label,small,figcaption) { background-image: none; -webkit-text-fill-color: currentColor; }
+  body * { text-shadow: none; }
+}

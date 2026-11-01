@@ -8,6 +8,8 @@ const basePath = isGithubPages
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Explicit local preview hosts: permit dev resources and HMR over the LAN.
+  allowedDevOrigins: ["192.168.1.8", "127.0.0.1"],
   ...(isStaticExport
     ? {
         output: "export" as const,

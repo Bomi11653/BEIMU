@@ -16,7 +16,7 @@ import { portfolioAssetPath } from "@/data/portfolioCategories";
 import { AboutLanguageShutter } from "./AboutLanguageShutter";
 import { WeChatDialog } from "./WeChatDialog";
 
-export type ProfileStageMode = "about" | "contact";
+export type ProfileStageMode = "about" | "contact" | "combined";
 
 type ProfileContactStageProps = {
   isActive: boolean;
@@ -123,7 +123,7 @@ export function ProfileContactStage({
       }
     };
   }, []);
-  const isAbout = mode === "about";
+  const isAbout = mode !== "contact";
   const bioBlocks =
     aboutLang === "zh"
       ? publicProfile.introductionZh
@@ -162,7 +162,7 @@ export function ProfileContactStage({
         )}
       </div>
       <div className="profile-page-meta profile-page-meta-right">
-        {isAbout ? "ABOUT · 02" : "CONTACT · 05"}
+        {isAbout ? "ABOUT & CONTACT · 03" : "CONTACT · 03"}
       </div>
 
       <div
@@ -440,7 +440,8 @@ export function ProfileContactStage({
               </div>
             </section>
           </>
-        ) : (
+        ) : null}
+        {!isAbout || mode === "combined" ? (
           <section
             id="profile-contact"
             className="platform-directory"
@@ -483,7 +484,7 @@ export function ProfileContactStage({
               ))}
             </div>
           </section>
-        )}
+        ) : null}
       </div>
 
       <WeChatDialog

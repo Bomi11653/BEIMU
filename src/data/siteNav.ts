@@ -31,27 +31,15 @@ export const siteNavItems: SiteNavItem[] = [
     href: "/?stage=0",
   },
   {
-    id: "about",
-    label: "介绍",
-    labelShort: "介绍",
-    href: "/?stage=1",
-  },
-  {
     id: "works",
-    label: "作品",
-    labelShort: "作品",
+    label: "案例展示",
+    labelShort: "案例展示",
     href: "/?stage=2",
   },
   {
-    id: "download",
-    label: "下载",
-    labelShort: "下载",
-    href: "/?stage=3",
-  },
-  {
     id: "contact",
-    label: "联系",
-    labelShort: "联系",
+    label: "关于与联系",
+    labelShort: "关于与联系",
     href: "/?stage=4",
   },
 ];
@@ -85,9 +73,9 @@ export function resolveActiveSiteNavId(
 
   if (pathname === "/" || pathname === "") {
     const homeStage = parseHomeStageQuery(stage);
-    if (homeStage === 1) return "about";
+    if (homeStage === 1) return "contact";
     if (homeStage === 2) return "works";
-    if (homeStage === 3) return "download";
+    if (homeStage === 3) return "contact";
     if (homeStage === 4) return "contact";
     return "home";
   }

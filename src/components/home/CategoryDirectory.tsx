@@ -1,6 +1,7 @@
 "use client";
 
-import { CategoryIndex } from "@/components/works/CategoryIndex";
+import { SelectedCases } from "./SelectedCases";
+import "./selected-cases.css";
 
 export function CategoryDirectory({ isActive }: { isActive: boolean }) {
   return (
@@ -11,7 +12,7 @@ export function CategoryDirectory({ isActive }: { isActive: boolean }) {
       inert={!isActive ? true : undefined}
     >
       <div className="category-index-scroll" data-stage-scroll tabIndex={isActive ? 0 : -1} aria-label="作品分类目录">
-        <CategoryIndex headingId="home-category-title" />
+        <SelectedCases />
       </div>
     </section>
   );

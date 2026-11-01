@@ -1,0 +1,66 @@
+/* Three home modules; retain legacy URL numbers for existing shared links. */
+.home-stage[data-home-layout="three"] .profile-contact-stage.is-combined {
+  opacity: 0;
+  pointer-events: none;
+}
+.home-stage[data-home-layout="three"][data-active-stage="4"] .profile-contact-stage.is-combined {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  pointer-events: auto;
+}
+.profile-contact-stage.is-combined .profile-contact-scroll { scroll-snap-type: none; }
+.home-section-works .selected-cases-heading { padding-top: 2rem; }
+.home-section-works { position: relative; }
+.home-section-works::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: clamp(5rem, 12dvh, 9rem);
+  background: linear-gradient(to top, #000 0%, rgba(0,0,0,.88) 20%, rgba(0,0,0,.4) 58%, transparent 100%);
+  pointer-events: none;
+}
+@media (min-width: 0px) {
+  .home-stage[data-home-layout="three"] {
+    height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    touch-action: pan-y pinch-zoom;
+    overscroll-behavior-y: auto;
+  }
+  .home-stage[data-home-layout="three"] .home-section { position: relative; min-height: 0; }
+  .home-stage[data-home-layout="three"] .home-section-hero { height: 78dvh; min-height: 36rem; }
+  .home-stage[data-home-layout="three"] .home-section-hero .portfolio-stage { min-height: 0; }
+  .home-stage[data-home-layout="three"] .home-section .home-stage-layer {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    pointer-events: auto;
+    transition: none;
+    will-change: auto;
+  }
+  .home-stage[data-home-layout="three"] .home-section:not(.home-section-hero) .home-stage-layer {
+    position: relative;
+    inset: auto;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+  .home-stage[data-home-layout="three"] .category-index-scroll,
+  .home-stage[data-home-layout="three"] .profile-contact-scroll {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    overscroll-behavior: auto;
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+  }
+  .home-stage[data-home-layout="three"] .stage-switch-cue { display: none; }
+  .home-stage[data-home-layout="three"] .capability-carousel-dots { display: none; }
+}
+@media (max-width: 700px) {
+  .home-stage[data-home-layout="three"] .home-section-hero { height: 78dvh; min-height: 35rem; }
+}

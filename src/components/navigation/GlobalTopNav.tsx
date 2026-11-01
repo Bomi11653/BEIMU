@@ -44,6 +44,11 @@ export function GlobalTopNav() {
     const targetUrl = new URL(href, window.location.origin);
     const target = `${targetUrl.pathname}${targetUrl.search}`;
 
+    if (pathname === "/" && targetUrl.pathname === "/") {
+      window.dispatchEvent(new CustomEvent<SiteNavEventDetail>(SITE_NAV_EVENT, { detail: { href } }));
+      return;
+    }
+
     if (current === target || current.replace(/\?$/, "") === target) {
       window.dispatchEvent(
         new CustomEvent<SiteNavEventDetail>(SITE_NAV_EVENT, {

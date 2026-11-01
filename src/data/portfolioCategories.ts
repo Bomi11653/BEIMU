@@ -16,6 +16,7 @@ export type PortfolioPreview = {
 };
 
 export type PortfolioGalleryItem = {
+  caption?: string;
   thumbnailSrc?: string;
   id: string;
   kind: "image" | "video";
@@ -50,7 +51,7 @@ export type PortfolioProject = {
   gallery: PortfolioGalleryItem[];
   detailStatus: "ready" | "summary";
   externalUrl?: string;
-  galleryLayout?: "sequence";
+  galleryLayout?: "sequence" | "editorial";
 };
 
 export type PortfolioCategory = {
@@ -196,7 +197,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         slug: "ice-lock-cold-river",
         titleZh: "冰锁寒川",
         titleEn: "Ice Lock Cold River",
-        year: "2023",
+        year: "2025",
         roleZh: "3D 场景与视觉叙事",
         roleEn: "3D Environment & Visual Narrative",
         services: ["概念场景", "巨兽雕塑", "冰雪场域"],
@@ -337,29 +338,32 @@ export const portfolioCategories: PortfolioCategory[] = [
       {
         id: "dbsource-pro",
         slug: "dbsource-pro",
-        titleZh: "dBsource Pro",
+        titleZh: "dBsource Pro｜专业音响品牌网站设计与开发",
         titleEn: "dBsource Pro",
-        roleZh: "产品设计与网站开发",
+        roleZh: "前端视觉与页面设计 · 后台设计 · 数据库搭建与管理",
         roleEn: "Product Design & Web Development",
-        services: ["信息架构", "界面设计", "前端开发"],
-        summary: "AI 网站产品设计与开发案例。",
+        services: ["网站视觉设计", "信息结构", "前端实现", "内容管理后台", "数据库搭建与管理"],
+        tools: ["ChatGPT", "Cursor"],
+        summary: "为专业音响品牌搭建集产品展示、应用案例与资料下载于一体的网站，并配套设计内容管理后台。",
+        bodyZh: [{ title: "我的工作", paragraphs: ["负责前端视觉与页面设计、自建后台设计、数据库搭建与管理。使用 ChatGPT 和 Cursor 辅助开发。"] }],
         cover: portfolioAssetPath(
           "/media/works/ai-development/dbsource-pro/poster.jpg",
         ),
-        detailStatus: "summary",
+        detailStatus: "ready",
+        galleryLayout: "editorial",
         gallery: [
-          {
-            id: "dbsource-website-preview",
-            kind: "video",
-            src: portfolioAssetPath(
-              "/media/works/ai-development/dbsource-pro/preview.mp4",
-            ),
-            poster: portfolioAssetPath(
-              "/media/works/ai-development/dbsource-pro/poster.jpg",
-            ),
-            alt: "dBsource Pro 网站预览",
-          },
-        ],
+          ["品牌首页", "首页用声波形态呼应音响品牌，让访客先认识品牌，再通过导航或搜索寻找产品、案例和资料。"],
+          ["产品中心", "把不同系列的音响产品放在同一个页面。客户可以按系列浏览，也可以搜索型号，找到想了解的产品。"],
+          ["产品详情", "进入单个产品后，可以了解它适合什么场合、查看不同角度的图片，并找到报价咨询和资料下载入口。"],
+          ["技术参数", "将尺寸、功率、频率范围等技术信息整理成表格，方便客户和工程人员查找所需参数。"],
+          ["工程案例", "案例页以演出现场画面开场，让访客直观了解音响的使用场景，再选择继续浏览工程或演出案例。"],
+          ["下载中心", "将软件、产品手册和技术资料集中展示，让客户购买前能查资料，使用时也能找到需要的文件。"],
+          ["内容管理后台", "为网站维护人员设计内容管理页面，将产品、案例、下载资料等分开管理，方便找到需要更新的内容。本图为未连接正式内容数据的本地界面。"],
+        ].map(([alt, caption], index) => ({
+          id: `dbsource-case-${index + 1}`, kind: "image" as const, alt, caption,
+          src: portfolioAssetPath(`/media/works/ai-development/dbsource-pro/case-${String(index + 1).padStart(2, "0")}.webp`),
+          thumbnailSrc: portfolioAssetPath(`/media/works/ai-development/dbsource-pro/case-${String(index + 1).padStart(2, "0")}-preview.webp`),
+        })),
         externalUrl: "https://www.dbsource-pro.com/",
       },
       {

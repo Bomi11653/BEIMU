@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import {
   capabilities,
   type CapabilityId,
@@ -18,13 +18,21 @@ import {
 } from "@/hooks/useStageNavigation";
 import { CapabilityCarouselDots } from "./CapabilityCarouselDots";
 import { CategoryDirectory } from "./CategoryDirectory";
-import { DownloadStage } from "./DownloadStage";
 import { PortfolioStage } from "./PortfolioStage";
 import { ProfileContactStage } from "./ProfileContactStage";
 
 const AUTO_ADVANCE_MS = 8500;
 const LAST_STAGE = 4 as HomeStageIndex;
 const initialCapability = capabilities[0];
+// All devices now share continuous scrolling; keep section state for nav only.
+const mobileQuery = "(min-width: 0px)";
+const subscribeMobile = (notify: () => void) => {
+  const media = window.matchMedia(mobileQuery);
+  media.addEventListener("change", notify);
+  return () => media.removeEventListener("change", notify);
+};
+const mobileSnapshot = () => window.matchMedia(mobileQuery).matches;
+const normalizeStage = (stage: HomeStageIndex): HomeStageIndex => stage === 1 ? 4 : stage === 3 ? 4 : stage;
 
 const STAGE_CUE: Record<
   HomeStageIndex,
@@ -32,8 +40,8 @@ const STAGE_CUE: Record<
 > = {
   0: {
     index: "02",
-    label: "ABOUT",
-    aria: "进入介绍",
+    label: "WORKS",
+    aria: "进入案例展示",
   },
   1: {
     index: "03",
@@ -41,9 +49,9 @@ const STAGE_CUE: Record<
     aria: "进入作品目录",
   },
   2: {
-    index: "04",
-    label: "DOWNLOAD",
-    aria: "进入下载",
+    index: "03",
+    label: "ABOUT & CONTACT",
+    aria: "进入关于与联系",
   },
   3: {
     index: "05",
@@ -67,9 +75,10 @@ const STAGE_STATUS: Record<HomeStageIndex, string> = {
 };
 
 export function HomeStage() {
+  const mobile = useSyncExternalStore(subscribeMobile, mobileSnapshot, () => false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const initialStage = parseHomeStageQuery(searchParams.get("stage")) ?? 0;
+  const initialStage = normalizeStage(parseHomeStageQuery(searchParams.get("stage")) ?? 0);
   const [activeStage, setActiveStage] = useState<HomeStageIndex>(
     () => initialStage,
   );
@@ -153,7 +162,10 @@ export function HomeStage() {
     syncingFromUrlRef.current = true;
 
     if (stageFromUrl !== null) {
-      setActiveStage(stageFromUrl);
+      setActiveStage(normalizeStage(stageFromUrl));
+      if (window.matchMedia(mobileQuery).matches) {
+        rootRef.current?.querySelector<HTMLElement>(`[data-home-section="${normalizeStage(stageFromUrl)}"]`)?.scrollIntoView({ block: "start" });
+      }
     } else if (url.pathname === "/" || url.pathname === "") {
       setActiveStage(0);
     }
@@ -171,7 +183,7 @@ export function HomeStage() {
     syncingFromUrlRef.current = true;
 
     if (stageFromUrl !== null) {
-      setActiveStage(stageFromUrl);
+      setActiveStage(normalizeStage(stageFromUrl));
     } else {
       setActiveStage(0);
     }
@@ -212,10 +224,25 @@ export function HomeStage() {
   }, [activeStage, router]);
 
   const nextStage = (
-    activeStage === LAST_STAGE ? 0 : activeStage + 1
+    activeStage === LAST_STAGE ? 0 : activeStage === 0 ? 2 : 4
   ) as HomeStageIndex;
   const cue = STAGE_CUE[activeStage];
   const showCarousel = activeStage === 0;
+
+  useEffect(() => {
+    if (!mobile || !rootRef.current) return;
+    const root = rootRef.current;
+    const initial = normalizeStage(parseHomeStageQuery(window.location.search ? new URLSearchParams(window.location.search).get("stage") : null) ?? 0);
+    root.querySelector<HTMLElement>(`[data-home-section="${initial}"]`)?.scrollIntoView({ block: "start" });
+    const update = () => {
+      const sections = [...root.querySelectorAll<HTMLElement>("[data-home-section]")];
+      const line = root.scrollTop + root.clientHeight * .35;
+      const section = sections.filter(item => item.offsetTop <= line).at(-1);
+      if (section) setActiveStage(Number(section.dataset.homeSection) as HomeStageIndex);
+    };
+    root.addEventListener("scroll", update, { passive: true });
+    return () => root.removeEventListener("scroll", update);
+  }, [mobile]);
 
   useEffect(() => {
     if (activeStage !== 0) return;
@@ -272,26 +299,27 @@ export function HomeStage() {
       data-stage-direction={direction}
       data-stage-transitioning={isTransitioning ? "true" : "false"}
       data-brand-intro={brandIntroActive ? "playing" : "done"}
+      data-home-layout="three"
     >
       <p className="visually-hidden" aria-live="polite">
         {STAGE_STATUS[activeStage]}
       </p>
+      <div className="home-section home-section-hero" data-home-section="0">
       <PortfolioStage
         media={activeMedia}
         isActive={activeStage === 0}
         onIntroActiveChange={setBrandIntroActive}
         onBackgroundClick={advanceToNextCapability}
       />
-      <ProfileContactStage
-        mode="about"
-        isActive={activeStage === 1}
-        onGoToContact={() => goToStage(4)}
-      />
+      </div>
+      <div className="home-section home-section-works" data-home-section="2">
       <CategoryDirectory
-        isActive={activeStage === 2}
+        isActive={mobile || activeStage === 2}
       />
-      <DownloadStage isActive={activeStage === 3} />
-      <ProfileContactStage mode="contact" isActive={activeStage === 4} />
+      </div>
+      <div className="home-section home-section-about" data-home-section="4">
+      <ProfileContactStage mode="combined" isActive={mobile || activeStage === 4} />
+      </div>
 
       {showCarousel && !brandIntroActive ? (
         <CapabilityCarouselDots

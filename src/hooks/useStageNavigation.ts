@@ -16,6 +16,8 @@ const TOUCH_THRESHOLD = 48;
 const TRANSITION_LOCK_MS = 900;
 const REDUCED_MOTION_LOCK_MS = 180;
 const LAST_STAGE: HomeStageIndex = 4;
+const stageOrder: HomeStageIndex[] = [0, 2, 4];
+const adjacent = (stage: HomeStageIndex, delta: number) => stageOrder[Math.max(0, Math.min(2, stageOrder.indexOf(stage) + delta))];
 
 type UseStageNavigationOptions = {
   activeStage: HomeStageIndex;
@@ -79,6 +81,11 @@ export function useStageNavigation({
 
   const goToStage = useCallback(
     (nextStage: HomeStageIndex) => {
+      if (targetRef.current?.dataset.homeLayout === "three") {
+        targetRef.current?.querySelector<HTMLElement>(`[data-home-section="${nextStage}"]`)?.scrollIntoView({ behavior: "auto", block: "start" });
+        onStageChange(nextStage);
+        return;
+      }
       if (nextStage === activeStage || performance.now() < lockUntilRef.current) {
         return;
       }
@@ -105,13 +112,14 @@ export function useStageNavigation({
         unlockTimerRef.current = null;
       }, lockDuration);
     },
-    [activeStage, onStageChange],
+    [activeStage, onStageChange, targetRef],
   );
 
   useEffect(() => {
     const target = targetRef.current;
 
     if (!target) return;
+    if (target.dataset.homeLayout === "three") return;
 
     const handleWheel = (event: WheelEvent) => {
       if (event.ctrlKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
@@ -136,10 +144,7 @@ export function useStageNavigation({
         return;
       }
 
-      const nextStage = Math.min(
-        LAST_STAGE,
-        Math.max(0, activeStage + (wheelDeltaRef.current > 0 ? 1 : -1)),
-      ) as HomeStageIndex;
+      const nextStage = adjacent(activeStage, wheelDeltaRef.current > 0 ? 1 : -1);
 
       goToStage(nextStage);
       wheelDeltaRef.current = 0;
@@ -185,10 +190,7 @@ export function useStageNavigation({
         return;
       }
 
-      const nextStage = Math.min(
-        LAST_STAGE,
-        Math.max(0, activeStage + (deltaY < 0 ? 1 : -1)),
-      ) as HomeStageIndex;
+      const nextStage = adjacent(activeStage, deltaY < 0 ? 1 : -1);
 
       goToStage(nextStage);
     };
@@ -217,9 +219,9 @@ export function useStageNavigation({
 
       if (typingTarget) return;
 
-      if (/^[1-5]$/.test(event.key)) {
+      if (/^[1-3]$/.test(event.key)) {
         event.preventDefault();
-        goToStage((Number(event.key) - 1) as HomeStageIndex);
+        goToStage(stageOrder[Number(event.key) - 1]);
         return;
       }
 
@@ -234,7 +236,7 @@ export function useStageNavigation({
 
       if (["ArrowDown", "PageDown"].includes(event.key)) {
         event.preventDefault();
-        goToStage(Math.min(LAST_STAGE, activeStage + 1) as HomeStageIndex);
+        goToStage(adjacent(activeStage, 1));
       }
 
       if (event.key === "Home") {
@@ -244,7 +246,7 @@ export function useStageNavigation({
 
       if (["ArrowUp", "PageUp"].includes(event.key)) {
         event.preventDefault();
-        goToStage(Math.max(0, activeStage - 1) as HomeStageIndex);
+        goToStage(adjacent(activeStage, -1));
       }
     };
 

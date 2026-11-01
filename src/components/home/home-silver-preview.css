@@ -1,0 +1,78 @@
+.portfolio-stage.is-silver-preview > .stage-media { filter: blur(20px); transform: scale(1.12); }
+.portfolio-stage.is-silver-preview .bottom-blur { display: none; }
+.portfolio-stage.is-silver-preview::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg,#000 0%,rgba(0,0,0,.92) 28%,rgba(0,0,0,.35) 65%); pointer-events: none; }
+.home-mobile-film { display: none; }
+.home-silver-mark { position: absolute; left: 48%; top: 17%; width: 44%; height: 66%; pointer-events: none; transform: translate(var(--silver-x,0px),var(--silver-y,0px)); transition: transform .8s ease-out; }
+.silver-flat-motion { position: absolute; inset: 0; animation: silver-float 8s ease-in-out infinite; }
+.silver-flat-material,.silver-flat-glint { position: absolute; inset: 0; mask: url('/brand/BEIMU_Symbol_White.svg') center / contain no-repeat; -webkit-mask: url('/brand/BEIMU_Symbol_White.svg') center / contain no-repeat; }
+.silver-flat-material { mask: none; -webkit-mask: none; background: url('/brand/beimu-symbol-chrome-v1.png') center / contain no-repeat; }
+.silver-flat-glint { background: linear-gradient(115deg,transparent 35%,rgba(255,255,255,.7) 49%,transparent 60%); background-size: 300% 100%; mix-blend-mode: screen; animation: silver-glint 7s ease-in-out infinite; opacity: .6; }
+.home-silver-mark[data-active="false"] .silver-flat-motion,.home-silver-mark[data-active="false"] .silver-flat-material,.home-silver-mark[data-active="false"] .silver-flat-glint,
+.home-silver-mark[data-paused="true"] * { animation-play-state: paused; }
+.is-silver-preview .stage-content { padding: 0; }
+.silver-home-identity { position: absolute; left: 6%; top: 24%; width: 32%; pointer-events: none; }
+.stage-content:not(.is-revealed) .silver-home-identity > * { opacity: 0; }
+.stage-content.is-revealed .silver-home-identity > * { animation: silver-text-reveal .95s cubic-bezier(.16,1,.3,1) both; }
+.stage-content.is-revealed .silver-home-identity > :nth-child(2) { animation-delay: .12s; }
+.stage-content.is-revealed .silver-home-identity > :nth-child(3) { animation-delay: .24s; }
+.stage-content.is-revealed .silver-home-identity > :nth-child(4) { animation: silver-rule-reveal .9s .34s cubic-bezier(.16,1,.3,1) both; transform-origin: left; }
+.stage-content.is-revealed .silver-home-identity > :nth-child(5) { animation-delay: .44s; }
+.stage-content.is-revealed .silver-home-identity > :nth-child(6) { animation-delay: .56s; }
+.stage-content.is-revealed .silver-home-identity > :nth-child(7) { animation-delay: .7s; }
+.silver-home-name { margin: 0; font-family: Georgia,serif; font-size: clamp(3.5rem,6vw,7rem); line-height: 1; letter-spacing: -.04em; }
+.silver-home-identity h1 { margin: .5rem 0 1.5rem; font-size: var(--type-page-title); font-weight: 350; line-height: 1.2; }
+.silver-home-chrome-name { width: min(100%,24rem); }
+.silver-home-chrome-name img { display: block; width: 100%; height: auto; }
+.silver-home-chrome-name { position: relative; }
+.silver-home-chrome-name::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(110deg,transparent 38%,rgba(255,255,255,.85) 49%,transparent 59%);
+  background-size: 300% 100%;
+  mask: url('/brand/beimu-name-chrome-v1.png') center / contain no-repeat;
+  -webkit-mask: url('/brand/beimu-name-chrome-v1.png') center / contain no-repeat;
+  mix-blend-mode: screen; animation: silver-glint 7s 1s ease-in-out infinite;
+}
+.silver-flat-motion::after {
+  content: ""; position: absolute; left: 43%; top: 9%; width: 1.25rem; height: 1.25rem;
+  background: radial-gradient(circle,#fff 0 8%,rgba(255,255,255,.65) 12%,transparent 45%);
+  clip-path: polygon(50% 0,57% 40%,100% 50%,57% 58%,50% 100%,43% 58%,0 50%,43% 40%);
+  animation: silver-spark 9s 2s ease-in-out infinite; pointer-events: none;
+}
+@keyframes silver-spark { 0%,40%,55%,100% { opacity: 0; transform: scale(.4); } 47% { opacity: .9; transform: scale(1.2); } }
+.silver-home-identity h1.silver-home-name-accessible { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.silver-home-title,.silver-home-services { font-size: var(--type-body); line-height: var(--leading-body); color: var(--text-secondary); }
+.silver-home-services { max-width: 28rem; text-wrap: pretty; }
+.silver-home-rule { height: 1px; background: var(--line-subtle); margin: 1.5rem 0; position: relative; }
+.silver-home-rule::before { content: ""; position: absolute; width: .5rem; height: .5rem; top: -.25rem; background: #0203cc; }
+.silver-home-identity ol { list-style: decimal-leading-zero; padding-left: 1.75rem; margin: 2rem 0; font-family: var(--font-latin); font-size: var(--type-label); letter-spacing: var(--tracking-label); line-height: 2.5; }
+.silver-home-identity a { pointer-events: auto; display: inline-flex; gap: 2rem; align-items: center; min-height: 44px; border-bottom: 1px solid var(--line-subtle); color: inherit; text-decoration: none; font-size: var(--type-nav); }
+.silver-home-identity a:focus-visible { outline: 2px solid white; outline-offset: 4px; }
+.is-silver-preview .portfolio-year,.is-silver-preview .location-label { display: none; }
+.is-silver-preview .home-silver-mark[data-active="true"] { animation: silver-logo-reveal 1.6s .3s cubic-bezier(.16,1,.3,1) both; }
+@keyframes silver-text-reveal { from { opacity: 0; transform: translateY(24px); clip-path: inset(0 0 100% 0); } to { opacity: 1; transform: translateY(0); clip-path: inset(0); } }
+@keyframes silver-rule-reveal { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
+@keyframes silver-logo-reveal { from { opacity: 0; translate: 0 24px; scale: .94; } to { opacity: 1; translate: 0 0; scale: 1; } }
+@keyframes silver-flow { from { background-position: 15% 50%; } to { background-position: 85% 50%; } }
+@keyframes silver-glint { 0%,20% { background-position: 100% 50%; } 80%,100% { background-position: 0% 50%; } }
+@keyframes silver-float { 0%,100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-8px) rotate(1deg); } }
+@keyframes silver-copy-in { from { opacity: 0; translate: 0 14px; } to { opacity: 1; translate: 0 0; } }
+@media (pointer: coarse) {
+  .home-mobile-film { display: block; position: absolute; inset: -4%; width: 108%; height: 108%; object-fit: cover; filter: blur(20px); pointer-events: none; z-index: -1; }
+}
+@media (max-width: 700px) {
+  .portfolio-stage.is-silver-preview::after { background: linear-gradient(180deg,rgba(0,0,0,.82),rgba(0,0,0,.3) 65%,#000); }
+  .silver-home-identity { left: 1.5rem; right: 1.5rem; width: auto; top: calc(var(--global-nav-height) + 2rem); }
+  .silver-home-name { font-size: clamp(2.5rem,12vw,4rem); }
+  .silver-home-chrome-name { width: min(70%,15rem); }
+  .silver-home-identity h1 { font-size: var(--type-section-title); margin: .25rem 0 .75rem; }
+  .silver-home-title,.silver-home-services { font-size: var(--type-nav); margin: .5rem 0; }
+  .silver-home-copy-break { display: none; }
+  .silver-home-services { max-width: 22rem; }
+  .silver-home-rule { margin: 1rem 0; }
+  .silver-home-identity ol { display: none; }
+  .silver-home-identity a { margin-top: .5rem; }
+  .home-silver-mark { left: 20%; top: 43%; width: 60%; height: 40%; }
+  .is-silver-preview .capability-carousel-dots { display: none; }
+}
+@media (max-height: 700px) and (min-width: 701px) { .silver-home-identity { top: 17%; } .silver-home-identity ol { margin: .5rem 0; } }
+@media (prefers-reduced-motion: reduce) { .home-silver-mark,.home-silver-mark *,.silver-home-identity,.silver-home-identity > *,.silver-home-chrome-name::after { animation: none !important; transition: none !important; } .silver-flat-motion::after { display: none; } .home-mobile-film { display: none; } }

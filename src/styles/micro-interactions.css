@@ -1,0 +1,43 @@
+/* Feedback stays on individual controls, never on scroll containers. */
+:root { --feedback-ease: cubic-bezier(.2,.7,.2,1); }
+body :is(a,button,[role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+body :is(a,button,[role="button"]):not(:disabled) {
+  transition: opacity 140ms var(--feedback-ease), box-shadow 180ms var(--feedback-ease), border-color 180ms var(--feedback-ease);
+}
+body :is(a,button,[role="button"]):not(:disabled):active {
+  opacity: .76;
+}
+body :is(a,button,[role="button"]):focus-visible {
+  outline: 2px solid #e5e9f5;
+  outline-offset: 5px;
+}
+.selected-case-action,.silver-home-identity a,.profile-aside-contact-item,
+.contact-platform-link,.global-top-nav-toggle,.project-image-trigger {
+  transition: transform 180ms var(--feedback-ease), opacity 140ms var(--feedback-ease), box-shadow 180ms var(--feedback-ease);
+}
+.selected-case-action:active,.silver-home-identity a:active,.profile-aside-contact-item:active,
+.contact-platform-link:active,.global-top-nav-toggle:active,.project-image-trigger:active {
+  transform: translateY(1px) scale(.985);
+}
+.selected-case-cover,.selected-case-previews a { overflow: hidden; }
+.selected-case-cover img,.selected-case-previews img {
+  transition: transform 450ms var(--feedback-ease), filter 180ms var(--feedback-ease);
+}
+.selected-case-cover:active img,.selected-case-previews a:active img { filter: brightness(.85); }
+.global-top-nav-drawer-link,.selected-case-categories a { min-height: 44px; }
+@media (hover: hover) and (pointer: fine) {
+  .selected-case-cover:hover img { transform: scale(1.015); }
+  .selected-case-previews a:hover img { transform: scale(1.025); }
+  .selected-case-action:hover,.silver-home-identity a:hover { box-shadow: 0 1px 0 #c8d0e3; }
+  .selected-case-categories a:hover,.global-top-nav-drawer-link:hover { opacity: .8; }
+}
+@media (pointer: coarse) {
+  .selected-case-cover img,.selected-case-previews img { transition: filter 120ms ease-out; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body :is(a,button,[role="button"]),.selected-case-cover img,.selected-case-previews img { transition: none; }
+  body :is(a,button,[role="button"]):active { transform: none; }
+}

@@ -77,6 +77,29 @@ try {
     await delay(80);
     await send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
   };
+  if (process.argv[3] === "case") {
+    await navigate("/works/ai-development/dbsource-pro");
+    await until(() => evaluate("document.querySelectorAll('.project-image-trigger').length===7"), "case screenshots");
+    for (const width of [320, 768, 1024, 1440]) {
+      await send("Emulation.setDeviceMetricsOverride", { width, height: 900, deviceScaleFactor: 1, mobile: width < 800 });
+      await delay(200);
+      assert.equal(await evaluate("document.documentElement.scrollWidth<=innerWidth+1"), true, `Case overflow ${width}`);
+      const columns = await evaluate("getComputedStyle(document.querySelector('.project-detail-gallery')).gridTemplateColumns.split(' ').length");
+      assert.equal(columns, width <= 760 ? 1 : 2);
+    }
+    await tap(".project-image-trigger");
+    await until(() => evaluate("!!document.querySelector('dialog[open] img')"), "case zoom");
+    await tap("dialog[open] .project-image-canvas img");
+    await until(() => evaluate("!document.querySelector('dialog[open]')"), "tap image closes");
+    await tap(".project-image-trigger");
+    await evaluate("document.querySelector('dialog[open] .project-image-canvas').click()");
+    await until(() => evaluate("!document.querySelector('dialog[open]')"), "blank closes");
+    await tap(".project-image-trigger");
+    await send("Input.dispatchKeyEvent", { type: "keyDown", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 });
+    await until(() => evaluate("!document.querySelector('dialog[open]')"), "escape closes");
+    console.log("PASS case: seven images, 320/768/1024/1440 layouts, tap image/blank and Esc dismissal");
+    process.exitCode = 0;
+  } else {
   await navigate("/?stage=0");
   await until(() => evaluate("!!document.querySelector('.brand-intro-skip')"), "intro skip");
   await tap(".brand-intro-skip");
@@ -113,6 +136,7 @@ try {
   await until(() => evaluate("!document.querySelector('dialog[open]')"), "dialog close");
   assert.deepEqual(errors, []);
   console.log("PASS touch project navigation, thumbnail/full-image split, zoom and close");
+  }
 } catch (error) {
   if (inspect) console.error(await inspect(`JSON.stringify({url:location.href,visibility:document.visibilityState,stages:[...document.querySelectorAll('main')].map(e=>({data:e.dataset,hidden:e.closest('[hidden]')?.id})),overlays:[...document.querySelectorAll('.brand-intro-overlay')].map(e=>({class:e.className,hidden:e.closest('[hidden]')?.id,rect:e.getBoundingClientRect().toJSON()}))})`));
   throw error;

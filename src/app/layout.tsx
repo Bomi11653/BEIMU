@@ -7,6 +7,9 @@ import "../styles/p5.css";
 import "../styles/route-transition.css";
 import "../styles/work-archive.css";
 import "../styles/mobile-compat.css";
+import "../styles/home-three.css";
+import "../styles/chrome-typography.css";
+import "../styles/micro-interactions.css";
 import { GlobalTopNav } from "@/components/navigation/GlobalTopNav";
 import { RouteTransitionProvider } from "@/components/transitions/RouteTransitionProvider";
 

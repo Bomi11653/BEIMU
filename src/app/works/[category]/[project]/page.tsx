@@ -60,7 +60,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   return (
     <main
       id="main-content"
-      className="project-detail-page"
+      className={`project-detail-page${project.galleryLayout === "editorial" ? " is-editorial-case" : ""}`}
       data-route-focus
       tabIndex={-1}
     >
@@ -164,17 +164,25 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     alt={item.alt}
                     eager={index === 0}
                     objectPosition={item.objectPosition}
+                    dismissOnTap={project.galleryLayout === "editorial"}
                   />
                 )}
                 <figcaption>
                   <span>{String(index + 1).padStart(2, "0")}</span>
-                  <span>{item.alt}</span>
+                  <span>{item.alt}{item.caption ? <p>{item.caption}</p> : null}</span>
                 </figcaption>
               </figure>
             ))}
           </section>
         ) : null}
 
+        <section className="project-contact-invitation" aria-labelledby="project-contact-title">
+          <p>LET’S WORK TOGETHER</p>
+          <h2 id="project-contact-title">你的下一个项目，<br />我们可以从这里开始。</h2>
+          <p className="project-contact-description">告诉我你的项目类型、想实现的效果与时间安排，我们一起讨论适合的设计方向。</p>
+          <Link href="/?stage=4" className="project-contact-action">联系我，讨论项目 <span aria-hidden="true">↗</span></Link>
+          <span className="project-contact-note">微信 · 邮箱 · 各平台入口</span>
+        </section>
         <footer className="project-detail-footer">
           <div>
             <p>
@@ -200,6 +208,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </a>
             )}
             <Link href={category.route}>返回作品列表</Link>
+            <Link href="/?stage=2">继续浏览精选案例 ↗</Link>
           </div>
         </footer>
       </div>
