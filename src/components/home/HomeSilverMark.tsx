@@ -20,5 +20,7 @@ export default function HomeSilverMark({ active }: { active: boolean }) {
     visibility();
     return () => { stage?.removeEventListener("pointermove", move); stage?.removeEventListener("pointerleave", reset); document.removeEventListener("visibilitychange", visibility); reset(); };
   }, [active]);
-  return <div ref={frame} className="home-silver-mark" data-active={active} aria-hidden="true"><div className="silver-flat-motion"><div className="silver-flat-material" /><div className="silver-flat-glint" /></div></div>;
+  return <div ref={frame} className="home-silver-mark" data-active={active} aria-hidden="true">
+    <div className="silver-flat-motion"><div className="silver-flat-material" /><div className="silver-flat-glint" /></div>
+  </div>;
 }

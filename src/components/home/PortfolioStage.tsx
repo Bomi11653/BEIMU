@@ -111,6 +111,16 @@ export function PortfolioStage({
     >
       <BackgroundMedia media={media} revealed={mediaRevealed && isActive} />
       {localSilverPreview ? <MobileHomeVideo media={media} active={mediaRevealed && isActive} /> : null}
+      {localSilverPreview ? <div className="silver-home-metal-layer" aria-hidden="true">
+        <picture>
+          <source media="(max-width: 700px)" srcSet="/brand/beimu-home-metal-frame-mobile-v2.png" />
+          <img className="silver-home-metal-frame" src="/brand/beimu-home-metal-frame-wide-v1.png" alt="" />
+        </picture>
+        <span className="silver-home-metal-sweep" />
+        <span className="silver-mobile-particles" aria-hidden="true">
+          <i /><i /><i /><i /><i /><i /><i /><i />
+        </span>
+      </div> : null}
 
       <div
         className={
